@@ -1,18 +1,17 @@
+*/x64/Release/
+*/x64/Debug/
 x64/Release/
 x64/Debug/
 .vs/
 
-.sln
+*.sln
 
-.vcxproj
-.vcxproj.filters
-.vcxproj.user
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
-.obj
-.idb
-.odb
-.log
-.tlog
-
-
-
+*.obj
+*.idb
+*.odb
+*.log
+*.tlog
