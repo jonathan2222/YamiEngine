@@ -5,7 +5,7 @@
 #include <functional>
 #include <typeindex>
 
-#include "Defines.h"
+#include "../Defines.h"
 #include "Event.h"
 #include "MemberFunction.h"
 

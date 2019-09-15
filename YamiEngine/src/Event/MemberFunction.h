@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "Defines.h"
+#include "../Defines.h"
 #include "Event.h"
 
 class MemberFunctionHandle
