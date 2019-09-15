@@ -22,7 +22,7 @@ project "YamiEngine"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"
 	}
-
+	
 	includedirs
 	{
 		"%{prj.name}/Externals/Include"
@@ -41,7 +41,15 @@ project "YamiEngine"
 	filter "configurations:Debug"
 		defines "YAMI_DEBUG"
 		symbols "On"
+		libdirs
+		{
+			"%{prj.name}/Externals/Lib/Debug/spdlogd.lib"
+		}
 
 	filter "configurations:Release"
 		defines "YAMI_RELEASE"
 		optimize "On"
+		libdirs
+		{
+			"%{prj.name}/Externals/Lib/Release/spdlog.lib"
+		}

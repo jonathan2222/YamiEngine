@@ -1,4 +1,4 @@
-#ifdef _DEBUG
+#ifdef YAMI_DEBUG
 	#include <crtdbg.h>
 #endif
 
@@ -74,7 +74,7 @@ struct SubAB
 
 int main()
 {
-#ifdef _DEBUG
+#ifdef YAMI_DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	spdlog::set_level(spdlog::level::debug);
 #endif
