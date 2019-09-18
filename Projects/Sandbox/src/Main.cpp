@@ -1,5 +1,5 @@
 #ifdef YAMI_DEBUG
-	#include <crtdbg.h>
+#include <crtdbg.h>
 #endif
 
 #include "spdlog/spdlog.h"
@@ -92,7 +92,7 @@ int main()
 	SubAB subAB1("SubAB_1", 1);
 
 	EventManager::Get().PrintInfo();
-	
+
 	EventManager::Get().Unsubscribe(&subAB2, &SubAB::OnB);
 
 	EventManager::Get().Publish(&EventA(1), 1);
