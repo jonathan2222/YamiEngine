@@ -1,5 +1,8 @@
 #pragma once
 
-class Event
+namespace ym
 {
-};
+	class Event
+	{
+	};
+}

@@ -2,11 +2,25 @@
 #include <crtdbg.h>
 #endif
 
+#ifdef YAMI_PLATFORM_WINDOWS
+	#include <Windows.h>
+#endif
+
+#include <gl/GL.h>
+
+// ---------------- Debug printing ----------------
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
+// ---------------- Event testing ----------------
 #include "Event/EventManager.h"
 
+// ---------------- GLFW Testing -----------------
+#include "Graphics/Display.h"
+
+using namespace ym;
+
+// ---------------- Event testing ----------------
 struct EventA : public Event
 {
 	EventA(int a) : a(a) {}
@@ -100,6 +114,20 @@ int main()
 
 	EventManager::Get().PrintInfo();
 
-	std::getchar();
+	Display display{ 600, 400, "Hellow World!" };
+
+	while (!display.shouldClose())
+	{
+		display.pollEvents();
+
+		glBegin(GL_TRIANGLES);
+			glVertex2f(-0.5f, -0.5f);
+			glVertex2f(0.5f, -0.5f);
+			glVertex2f(0.0f, 0.5f);
+		glEnd();
+
+		display.swapBuffers();
+	}
+
 	return 0;
 }

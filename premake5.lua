@@ -1,14 +1,47 @@
 workspace "YamiEngine"
-	architecture "x64"
+	architecture "x86_64"
 	startproject "Sandbox"
 
-	configurations
-	{
-		"Debug",
-		"Release"
-	}
+	configurations { "Debug", "Release" }
+
+	filter "system:windows"
+		cppdialect "C++17"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines { "YAMI_PLATFORM_WINDOWS" }
+
+	filter "configurations:Debug"
+		defines "YAMI_DEBUG"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "YAMI_RELEASE"
+		optimize "On"
+	filter {}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+function includeGLFW()
+	includedirs "Projects/YamiEngine/Externals/Include/"
+end
+
+function linkGLFW()
+	libdirs "Projects/YamiEngine/Externals/Lib/%{cfg.buildcfg}"
+	-- Only the StaticLibrary should link against GLFW.
+	filter "kind:not StaticLib"
+		links "glfw3"
+	filter {} -- Reset the filters for other settings.
+end
+
+function useEngine()
+	includedirs {
+		"Projects/YamiEngine/Externals/Include",
+		"Projects/YamiEngine/src"
+	}
+	links "YamiEngine"
+	linkGLFW()
+end
 
 project "Sandbox"
 	location "Projects/Sandbox"
@@ -24,31 +57,45 @@ project "Sandbox"
 		"Projects/%{prj.name}/src/**.cpp"
 	}
 
-	includedirs
-	{
-		"Projects/YamiEngine/Externals/Include",
-		"Projects/YamiEngine/src"
-	}
-
-	links { "YamiEngine" }
+	useEngine()
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
-		systemversion "latest"
+		links { "opengl32" }
 
-		defines
-		{
-			"YAMI_PLATFORM_WINDOWS"
-		}
+	filter "system:not windows"
+		links { "GL" }
+	
+	filter {}
 
-	filter "configurations:Debug"
-		defines "YAMI_DEBUG"
-		symbols "On"
+function includeCatch()
+	includedirs "Projects/UnitTests/Include"
+	defines "CATCH_CPP11_OR_GREATER"
+end
 
-	filter "configurations:Release"
-		defines "YAMI_RELEASE"
-		optimize "On"
+project "UnitTests"
+	location "Projects/UnitTests"
+	kind "ConsoleApp"
+	language "C++"
+
+	targetdir ("Build/Bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("Build/Obj/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"Projects/%{prj.name}/src/**.h",
+		"Projects/%{prj.name}/src/**.cpp"
+	}
+
+	includeCatch()
+	useEngine()
+
+	filter "system:windows"
+		links { "opengl32" }
+
+	filter "system:not windows"
+		links { "GL" }
+	
+	filter {}
 
 project "YamiEngine"
 	location "Projects/YamiEngine"
@@ -69,28 +116,12 @@ project "YamiEngine"
 		"Projects/%{prj.name}/Externals/Include"
 	}
 
-	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
-		systemversion "latest"
-
-		defines
-		{
-			"YAMI_PLATFORM_WINDOWS"
-		}
+	includeGLFW()
 
 	filter "configurations:Debug"
-		defines "YAMI_DEBUG"
-		symbols "On"
-		libdirs
-		{
-			"Projects/%{prj.name}/Externals/Lib/Debug/spdlogd.lib"
-		}
+		libdirs "Projects/%{prj.name}/Externals/Lib/Debug/spdlogd.lib"
 
 	filter "configurations:Release"
-		defines "YAMI_RELEASE"
-		optimize "On"
-		libdirs
-		{
-			"Projects/%{prj.name}/Externals/Lib/Release/spdlog.lib"
-		}
+		libdirs "Projects/%{prj.name}/Externals/Lib/Release/spdlog.lib"
+
+	filter {}
