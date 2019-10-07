@@ -1,6 +1,6 @@
 workspace "YamiEngine"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "Game"
 
 	configurations { "Debug", "Release" }
 
@@ -20,108 +20,127 @@ workspace "YamiEngine"
 		optimize "On"
 	filter {}
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+OUTPUT_DIR = "%{cfg.buildcfg}_%{cfg.system}_%{cfg.architecture}"
+
+-- ========================================== GLFW ==========================================
 
 function includeGLFW()
-	includedirs "Projects/YamiEngine/Externals/Include/"
+	includedirs "Externals/GLFW/Include/"
 end
 
 function linkGLFW()
-	libdirs "Projects/YamiEngine/Externals/Lib/%{cfg.buildcfg}"
+	libdirs "Externals/GLFW/Lib/%{cfg.buildcfg}"
+
+	filter "system:windows"
+		links { "opengl32" }
+
+	filter "system:not windows"
+		links { "GL" }
+
 	-- Only the StaticLibrary should link against GLFW.
 	filter "kind:not StaticLib"
 		links "glfw3"
 	filter {} -- Reset the filters for other settings.
 end
 
-function useEngine()
-	includedirs {
-		"Projects/YamiEngine/Externals/Include",
-		"Projects/YamiEngine/src"
-	}
-	links "YamiEngine"
-	linkGLFW()
+-- ==============================================================================================
+
+-- ============================================ MISC ============================================
+
+function setTargetAndObjDirs()
+	targetdir ("Build/Bin/" .. OUTPUT_DIR .. "/%{prj.name}")
+	objdir ("Build/Obj/" .. OUTPUT_DIR .. "/%{prj.name}")
 end
 
-project "Sandbox"
-	location "Projects/Sandbox"
-	kind "ConsoleApp"
-	language "C++"
-
-	targetdir ("Build/Bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("Build/Obj/" .. outputdir .. "/%{prj.name}")
-
+function addFiles()
 	files
 	{
 		"Projects/%{prj.name}/src/**.h",
+		"Projects/%{prj.name}/src/**.hpp",
 		"Projects/%{prj.name}/src/**.cpp"
 	}
+end
 
-	useEngine()
+-- ==============================================================================================
 
-	filter "system:windows"
-		links { "opengl32" }
-
-	filter "system:not windows"
-		links { "GL" }
-	
-	filter {}
+-- =========================================== CATCH ============================================
 
 function includeCatch()
-	includedirs "Projects/UnitTests/Include"
+	includedirs "Externals/Catch/Include"
 	defines "CATCH_CPP11_OR_GREATER"
 end
+
+-- ==============================================================================================
+
+-- =========================================== SPDLOG ===========================================
+
+function includeSpdlog()
+	includedirs { "Externals/SPDLOG/Include" }
+end
+
+function useSpdlog()
+	includeSpdlog()
+
+	filter "configurations:Debug"
+		libdirs "Externals/SPDLOG/Lib/Debug/spdlogd.lib"
+
+	filter "configurations:Release"
+		libdirs "Externals/SPDLOG/Lib/Release/spdlog.lib"
+	
+	filter {}
+end
+
+-- ==============================================================================================
+
+function useEngine()
+	includedirs { "Projects/Engine/src" }
+	links "Engine"
+
+	includeGLFW()
+	linkGLFW()
+	includeSpdlog()
+end
+
+-- ========================================== PROJECTS ==========================================
+
+project "Game"
+	location "Projects/Game"
+	kind "ConsoleApp"
+	language "C++"
+
+	setTargetAndObjDirs()
+
+	addFiles();
+
+	useEngine()
+	
+	filter {}
 
 project "UnitTests"
 	location "Projects/UnitTests"
 	kind "ConsoleApp"
 	language "C++"
 
-	targetdir ("Build/Bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("Build/Obj/" .. outputdir .. "/%{prj.name}")
+	setTargetAndObjDirs()
 
-	files
-	{
-		"Projects/%{prj.name}/src/**.h",
-		"Projects/%{prj.name}/src/**.cpp"
-	}
+	addFiles();
 
 	includeCatch()
 	useEngine()
-
-	filter "system:windows"
-		links { "opengl32" }
-
-	filter "system:not windows"
-		links { "GL" }
 	
 	filter {}
 
-project "YamiEngine"
-	location "Projects/YamiEngine"
+project "Engine"
+	location "Projects/Engine"
 	kind "StaticLib"
 	language "C++"
 
-	targetdir ("Build/Bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("Build/Obj/" .. outputdir .. "/%{prj.name}")
+	setTargetAndObjDirs()
 
-	files
-	{
-		"Projects/%{prj.name}/src/**.h",
-		"Projects/%{prj.name}/src/**.cpp"
-	}
-	
-	includedirs
-	{
-		"Projects/%{prj.name}/Externals/Include"
-	}
+	addFiles();
 
 	includeGLFW()
 
-	filter "configurations:Debug"
-		libdirs "Projects/%{prj.name}/Externals/Lib/Debug/spdlogd.lib"
+	useSpdlog()
 
-	filter "configurations:Release"
-		libdirs "Projects/%{prj.name}/Externals/Lib/Release/spdlog.lib"
-
-	filter {}
+	
