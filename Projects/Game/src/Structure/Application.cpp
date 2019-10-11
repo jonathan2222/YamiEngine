@@ -10,7 +10,7 @@
 
 Application::Application()
 {
-	// TODO: Make glfw initialization and input independent from display.
+	// TODO: Make input independent from display.
 	this->m_display = ym::Display::create(ym::DisplayDesc{});
 }
 

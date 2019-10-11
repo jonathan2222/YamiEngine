@@ -15,7 +15,6 @@ ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr)
 ym::GLDisplay::~GLDisplay()
 {
 	glfwDestroyWindow(m_window);
-	glfwTerminate();
 }
 
 bool ym::GLDisplay::shouldClose() const noexcept
@@ -51,7 +50,7 @@ void* ym::GLDisplay::getNativeDisplay()
 void ym::GLDisplay::init(const DisplayDesc& description)
 {
 	m_description = description;
-	glfwInit();
+	
 	GLFWmonitor* monitor = nullptr;
 	if (m_description.fullscreen)
 	{
