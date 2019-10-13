@@ -23,6 +23,11 @@ namespace ym
 	class Display
 	{
 	public:
+		static Display* get();
+
+		/*
+			Creates the display. This is implemented in another class.
+		*/
 		static Display* create(const DisplayDesc& description = DisplayDesc());
 		virtual ~Display() = default;
 
@@ -36,5 +41,8 @@ namespace ym
 		virtual int getHeight() const noexcept = 0;
 
 		virtual void* getNativeDisplay() = 0;
+
+	private:
+		static Display* m_self;
 	};
 };

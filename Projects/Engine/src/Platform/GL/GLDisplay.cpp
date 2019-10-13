@@ -4,7 +4,9 @@
 
 ym::Display* ym::Display::create(const DisplayDesc& description)
 {
-	return new GLDisplay(description);
+	if (m_self != nullptr) delete m_self;
+	m_self = new GLDisplay(description);
+	return m_self;
 }
 
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr)

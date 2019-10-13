@@ -8,10 +8,14 @@
 #endif
 #include <gl/GL.h>
 
+#include "Engine/Core/Input/Input.h"
+#include "Engine/Core/Logger.h"
+
 Application::Application()
 {
 	// TODO: Make input independent from display.
 	this->m_display = ym::Display::create(ym::DisplayDesc{});
+	ym::Input::get()->init();
 }
 
 Application::~Application()
@@ -29,6 +33,9 @@ void Application::run()
 	{
 		// TODO: No platform specific functions in api!!
 		m_display->pollEvents();
+
+		if (ym::Input::get()->isKeyPressed(ym::Key::A))
+			YM_LOG_INFO("Pressed A!");
 
 		glBegin(GL_TRIANGLES);
 		glVertex2f(-0.5f, -0.5f);

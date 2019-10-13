@@ -1,6 +1,6 @@
 #include "IApp.h"
 
-#include "../../Platform/GLFW/GLAPI.h"
+#include "../../Platform/GL/GLAPI.h"
 #include "Logger.h"
 
 ym::IApp::IApp() : m_display(nullptr)
