@@ -99,6 +99,12 @@ function useEngine()
 	includeGLFW()
 	linkGLFW()
 	includeSpdlog()
+	useMaths()
+end
+
+function useMaths()
+	includedirs { "Projects/Maths/src" }
+	links "Maths"
 end
 
 -- ========================================== PROJECTS ==========================================
@@ -130,6 +136,17 @@ project "UnitTests"
 	
 	filter {}
 
+project "Maths"
+	location "Projects/Maths"
+	kind "StaticLib"
+	language "C++"
+
+	setTargetAndObjDirs()
+
+	addFiles();
+	
+	filter {}
+
 project "Engine"
 	location "Projects/Engine"
 	kind "StaticLib"
@@ -142,5 +159,6 @@ project "Engine"
 	includeGLFW()
 
 	useSpdlog()
+	useMaths()
 
 	

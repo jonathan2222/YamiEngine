@@ -13,7 +13,6 @@
 
 Application::Application()
 {
-	// TODO: Make input independent from display.
 	this->m_display = ym::Display::create(ym::DisplayDesc{});
 	ym::Input::get()->init();
 }
@@ -31,11 +30,16 @@ void Application::run()
 {
 	while (!m_display->shouldClose())
 	{
-		// TODO: No platform specific functions in api!!
 		m_display->pollEvents();
 
 		if (ym::Input::get()->isKeyPressed(ym::Key::A))
 			YM_LOG_INFO("Pressed A!");
+
+		if (ym::Input::get()->isMBPressed(ym::MB::LEFT))
+		{
+			ym::Vec2 pos = ym::Input::get()->getMousePos();
+			YM_LOG_INFO("Mouse pos: {}, {}", pos.x, pos.y);
+		}
 
 		glBegin(GL_TRIANGLES);
 		glVertex2f(-0.5f, -0.5f);

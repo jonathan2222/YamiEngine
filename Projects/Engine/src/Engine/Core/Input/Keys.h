@@ -2,14 +2,21 @@
 
 namespace ym
 {
-	enum KeyState
+	enum class KeyState
 	{
 		PRESSED,
 		RELEASED
 	};
 
+	enum class MB
+	{
+		LEFT = 0,
+		RIGHT = 1,
+		MIDDLE = 2
+	};
+
 	// Same layout as GLFW.
-	enum Key
+	enum class Key
 	{
 		UNKNOWN = -1,
 
