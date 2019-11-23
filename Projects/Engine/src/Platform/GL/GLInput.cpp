@@ -8,12 +8,6 @@ std::unordered_map<ym::Key, ym::KeyState> ym::GLInput::m_keyMap = std::unordered
 std::unordered_map<ym::MB, ym::KeyState> ym::GLInput::m_mbMap = std::unordered_map<ym::MB, ym::KeyState>();
 ym::Vec2 ym::GLInput::m_mousePos = ym::Vec2(0.0f);
 
-ym::Input* ym::Input::get()
-{
-	static ym::GLInput input;
-	return &input;
-}
-
 void ym::GLInput::init()
 {
 	GLFWwindow* wnd = static_cast<GLFWwindow*>(Display::get()->getNativeDisplay());

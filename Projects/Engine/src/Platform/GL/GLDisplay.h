@@ -12,7 +12,7 @@ namespace ym
 
 		bool shouldClose() const noexcept override;
 
-		void pollEvents() const noexcept override;
+		void pollEvents() noexcept override;
 
 		void swapBuffers() const noexcept override;
 

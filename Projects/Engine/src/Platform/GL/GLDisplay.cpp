@@ -1,13 +1,7 @@
 #include "GLDisplay.h"
 
 #include <GLFW/glfw3.h>
-
-ym::Display* ym::Display::create(const DisplayDesc& description)
-{
-	if (m_self != nullptr) delete m_self;
-	m_self = new GLDisplay(description);
-	return m_self;
-}
+#include "../../Engine/Core/Input/Config.h"
 
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr)
 {
@@ -24,7 +18,7 @@ bool ym::GLDisplay::shouldClose() const noexcept
 	return glfwWindowShouldClose(m_window) != 0;
 }
 
-void ym::GLDisplay::pollEvents() const noexcept
+void ym::GLDisplay::pollEvents() noexcept
 {
 	glfwPollEvents();
 }

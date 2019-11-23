@@ -3,7 +3,6 @@
 
 #include <Engine/Event/EventManager.h>
 
-
 // ---------------- Event testing ----------------
 struct EventA : public ym::Event
 {

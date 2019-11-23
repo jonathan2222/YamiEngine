@@ -10,11 +10,11 @@
 
 #include "Engine/Core/Input/Input.h"
 #include "Engine/Core/Logger.h"
+#include "Engine/Core/Input/Config.h"
 
 Application::Application()
 {
 	this->m_display = ym::Display::create(ym::DisplayDesc{});
-	ym::Input::get()->init();
 }
 
 Application::~Application()
@@ -23,7 +23,7 @@ Application::~Application()
 }
 
 void Application::processArguments(int argc, char* argv[])
-{
+{	
 }
 
 void Application::run()
@@ -40,12 +40,12 @@ void Application::run()
 			ym::Vec2 pos = ym::Input::get()->getMousePos();
 			YM_LOG_INFO("Mouse pos: {}, {}", pos.x, pos.y);
 		}
-
+		/*
 		glBegin(GL_TRIANGLES);
 		glVertex2f(-0.5f, -0.5f);
 		glVertex2f(0.5f, -0.5f);
 		glVertex2f(0.0f, 0.5f);
-		glEnd();
+		glEnd();*/
 
 		m_display->swapBuffers();
 	}

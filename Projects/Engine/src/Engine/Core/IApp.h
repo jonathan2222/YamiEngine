@@ -3,6 +3,7 @@
 namespace ym
 {
 	class Display;
+	class Input;
 	class API;
 	class IApp
 	{
@@ -16,6 +17,7 @@ namespace ym
 
 	protected:
 		ym::API* m_api;
+		ym::Input* m_input;
 		ym::Display* m_display;
 	};
 };

@@ -2,11 +2,13 @@
 
 #include "../../Engine/Core/API.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 namespace ym
 {
-	class GLAPI : public API
+	class DX11API : public API
 	{
-	public:
 		void init() override;
 		void destroy() override;
 	};
