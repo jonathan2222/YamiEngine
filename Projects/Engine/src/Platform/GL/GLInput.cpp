@@ -42,6 +42,11 @@ bool ym::GLInput::isMBPressed(const MB& button) const
 	return m_mbMap[button] == KeyState::PRESSED;
 }
 
+bool ym::GLInput::isMBReleased(const MB& button) const
+{
+	return m_mbMap[button] == KeyState::RELEASED;
+}
+
 void ym::GLInput::lockMouse() const
 {
 	GLFWwindow* wnd = static_cast<GLFWwindow*>(Display::get()->getNativeDisplay());

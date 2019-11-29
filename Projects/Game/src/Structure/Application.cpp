@@ -35,6 +35,9 @@ void Application::run()
 		if (ym::Input::get()->isKeyPressed(ym::Key::A))
 			YM_LOG_INFO("Pressed A!");
 
+		if (ym::Input::get()->isKeyPressed(ym::Key::LEFT_SHIFT))
+			YM_LOG_INFO("Pressed SHIFT!");
+
 		if (ym::Input::get()->isMBPressed(ym::MB::LEFT))
 		{
 			ym::Vec2 pos = ym::Input::get()->getMousePos();

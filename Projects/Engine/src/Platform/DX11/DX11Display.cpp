@@ -1,6 +1,7 @@
 #include "DX11Display.h"
 
 #include "../../Engine/Core/Logger.h"
+#include "DX11Input.h"
 
 ym::DX11Display* ym::DX11Display::globalDX11DisplayHandle = nullptr;
 
@@ -66,18 +67,70 @@ void* ym::DX11Display::getNativeDisplay()
 
 LRESULT ym::DX11Display::messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
+	// TODO: All keys are not accounted for, like insert, delete, caps-lock, and so on. Make this work!
+	DX11Input* input = dynamic_cast<DX11Input*>(DX11Input::get());
+	int keycode = (int)wparam;
 	switch (umsg)
 	{
+		case WM_LBUTTONDOWN: { input->setMb(MB::LEFT, KeyState::PRESSED); return 0; }
+		case WM_LBUTTONUP: { input->setMb(MB::LEFT, KeyState::RELEASED); return 0; }
+		case WM_RBUTTONDOWN: { input->setMb(MB::RIGHT, KeyState::PRESSED); return 0; }
+		case WM_RBUTTONUP: { input->setMb(MB::RIGHT, KeyState::RELEASED); return 0; }
+		case WM_MBUTTONDOWN: { input->setMb(MB::MIDDLE, KeyState::PRESSED); return 0; }
+		case WM_MBUTTONUP: { input->setMb(MB::MIDDLE, KeyState::RELEASED); return 0; }
 		case WM_KEYDOWN:
 		{
 			// if key 'wparam' is pressed, send it to the input class!
-			// TODO: Do this!
+			if (keycode == VK_SHIFT)
+			{
+				if (GetKeyState(VK_LSHIFT) & 0x8000) keycode = (int)Key::LEFT_SHIFT;
+				if (GetKeyState(VK_RSHIFT) & 0x8000) keycode = (int)Key::RIGHT_SHIFT;
+			}
+			else if (keycode == VK_CONTROL)
+			{
+				if (GetKeyState(VK_LCONTROL) & 0x8000) keycode = (int)Key::LEFT_CONTROL;
+				if (GetKeyState(VK_RCONTROL) & 0x8000) keycode = (int)Key::RIGHT_CONTROL;
+			}
+			else if (keycode == VK_MENU)
+			{
+				if (GetKeyState(VK_LMENU) & 0x8000) keycode = (int)Key::LEFT_ALT;
+				if (GetKeyState(VK_RMENU) & 0x8000) keycode = (int)Key::RIGHT_ALT;
+			}
+			input->setKey(keycode, KeyState::PRESSED);
 			return 0;
 		}
 		case WM_KEYUP:
 		{
 			// if key 'wparam' is released, send it to the input class!
-			// TODO: Do this!
+			if (keycode == VK_SHIFT)
+			{
+				if (input->getKeyState(Key::LEFT_SHIFT) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_LSHIFT) & 0x8000) == 0) keycode = (int)Key::LEFT_SHIFT;
+				if (input->getKeyState(Key::RIGHT_SHIFT) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_RSHIFT) & 0x8000) == 0) keycode = (int)Key::RIGHT_SHIFT;
+			}
+			else if (keycode == VK_CONTROL)
+			{
+				if (input->getKeyState(Key::LEFT_CONTROL) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_LCONTROL) & 0x8000) == 0) keycode = (int)Key::LEFT_CONTROL;
+				if (input->getKeyState(Key::RIGHT_CONTROL) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_RCONTROL) & 0x8000) == 0) keycode = (int)Key::RIGHT_CONTROL;
+			}
+			else if (keycode == VK_MENU)
+			{
+				if (input->getKeyState(Key::LEFT_ALT) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_LMENU) & 0x8000) == 0) keycode = (int)Key::LEFT_ALT;
+				if (input->getKeyState(Key::RIGHT_ALT) == ym::KeyState::PRESSED)
+					if ((GetKeyState(VK_RMENU) & 0x8000) == 0) keycode = (int)Key::RIGHT_ALT;
+			}
+			input->setKey(keycode, KeyState::RELEASED);
+			return 0;
+		}
+		case WM_MOUSEMOVE:
+		{
+			int xPos = LOWORD(lparam);
+			int yPos = HIWORD(lparam);
+			input->setMousePos(xPos, yPos);
 			return 0;
 		}
 		default:

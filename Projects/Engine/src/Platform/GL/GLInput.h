@@ -13,11 +13,12 @@ namespace ym
 		bool isKeyPressed(const Key& key) const override;
 		bool isKeyReleased(const Key& key) const override;
 
-		Vec2 getMousePos() const;
-		bool isMBPressed(const MB& button) const;
+		Vec2 getMousePos() const override;
+		bool isMBPressed(const MB& button) const override;
+		bool isMBReleased(const MB& button) const override;
 
-		void lockMouse() const;
-		void unlockMouse() const;
+		void lockMouse() const override;
+		void unlockMouse() const override;
 
 	private:
 		static void keyCallback(GLFWwindow* wnd, int key, int scancode, int action, int mods);

@@ -20,6 +20,7 @@ namespace ym
 
 		virtual Vec2 getMousePos() const = 0;
 		virtual bool isMBPressed(const MB& button) const = 0;
+		virtual bool isMBReleased(const MB& button) const = 0;
 
 		virtual void lockMouse() const = 0;
 		virtual void unlockMouse() const = 0;

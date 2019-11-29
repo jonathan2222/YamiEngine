@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../Defines.h"
+
 namespace ym
 {
 	enum class KeyState
@@ -8,6 +10,7 @@ namespace ym
 		RELEASED
 	};
 
+#if YM_CURRENT_API_TYPE == YM_API_GL
 	enum class MB
 	{
 		LEFT = 0,
@@ -15,18 +18,15 @@ namespace ym
 		MIDDLE = 2
 	};
 
-	// Same layout as GLFW.
 	enum class Key
 	{
 		UNKNOWN = -1,
 
 		/* Printable keys */
 		SPACE			  = 32,
-		APOSTROPHE        = 39,  /* ' */
 		COMMA             = 44,  /* , */
 		MINUS             = 45,  /* - */
 		PERIOD            = 46,  /* . */
-		SLASH             = 47,  /* / */
 		NUMBER0           = 48,
 		NUMBER1           = 49,
 		NUMBER2           = 50,
@@ -37,8 +37,6 @@ namespace ym
 		NUMBER7           = 55,
 		NUMBER8           = 56,
 		NUMBER9           = 57,
-		SEMICOLON         = 59,  /* ; */
-		EQUAL             = 61,  /* = */
 		A                 = 65,
 		B                 = 66,
 		C                 = 67,
@@ -65,12 +63,6 @@ namespace ym
 		X                 = 88,
 		Y                 = 89,
 		Z                 = 90,
-		LEFT_BRACKET      = 91,  /* [ */
-		BACKSLASH         = 92,  /* \ */
-		RIGHT_BRACKET     = 93,  /* ] */
-		GRAVE_ACCENT      = 96,  /* ` */
-		WORLD_1           = 161, /* non-US #1 */
-		WORLD_2           = 162, /* non-US #2 */
 
 		/* Function keys */
 		ESCAPE            = 256,
@@ -116,7 +108,6 @@ namespace ym
 		F22               = 311,
 		F23               = 312,
 		F24               = 313,
-		F25               = 314,
 		KP_0              = 320,
 		KP_1              = 321,
 		KP_2              = 322,
@@ -132,19 +123,138 @@ namespace ym
 		KP_MULTIPLY       = 332,
 		KP_SUBTRACT       = 333,
 		KP_ADD            = 334,
-		KP_ENTER          = 335,
-		KP_EQUAL          = 336,
 		LEFT_SHIFT        = 340,
 		LEFT_CONTROL      = 341,
 		LEFT_ALT          = 342,
-		LEFT_SUPER        = 343,
 		RIGHT_SHIFT       = 344,
 		RIGHT_CONTROL     = 345,
 		RIGHT_ALT         = 346,
-		RIGHT_SUPER       = 347,
 		MENU              = 348,
 
 		FIRST = SPACE,
 		LAST = MENU
 	};
+#elif YM_CURRENT_API_TYPE == YM_API_DX11
+	enum class MB
+	{
+		LEFT = VK_LBUTTON,
+		RIGHT = VK_RBUTTON,
+		MIDDLE = VK_MBUTTON
+	};
+
+	enum class Key
+	{
+		UNKNOWN = -1,
+
+		/* Printable keys */
+		BACKSPACE				= VK_BACK,
+		TAB						= VK_TAB,
+		ENTER					= VK_RETURN,
+		MENU					= VK_MENU,	/* ALT */
+		PAUSE					= VK_PAUSE,
+		CAPS_LOCK				= VK_CAPITAL, // Not supported yet
+		ESCAPE					= VK_ESCAPE,
+		SPACE					= VK_SPACE,
+		PAGE_UP					= VK_PRIOR,
+		PAGE_DOWN				= VK_NEXT,
+		END						= VK_END,
+		HOME					= VK_HOME,
+		LEFT					= VK_LEFT,
+		UP						= VK_UP,
+		RIGHT					= VK_RIGHT,
+		DOWN					= VK_DOWN,
+		PRINT_SCREEN			= VK_SNAPSHOT,
+		INSERT					= VK_INSERT,
+		DELETE_KEY				= VK_DELETE,
+		NUMBER0					= 0x30,
+		NUMBER1					= 0x31,
+		NUMBER2					= 0x32,
+		NUMBER3					= 0x33,
+		NUMBER4					= 0x34,
+		NUMBER5					= 0x35,
+		NUMBER6					= 0x36,
+		NUMBER7					= 0x37,
+		NUMBER8					= 0x38,
+		NUMBER9					= 0x39,
+		A						= 0x41,
+		B						= 0x42,
+		C						= 0x43,
+		D						= 0x44,
+		E						= 0x45,
+		F						= 0x46,
+		G						= 0x47,
+		H						= 0x48,
+		I						= 0x49,
+		J						= 0x4A,
+		K						= 0x4B,
+		L						= 0x4C,
+		M						= 0x4D,
+		N						= 0x4E,
+		O						= 0x4F,
+		P						= 0x50,
+		Q						= 0x51,
+		R						= 0x52,
+		S						= 0x53,
+		T						= 0x54,
+		U						= 0x55,
+		V						= 0x56,
+		W						= 0x57,
+		X						= 0x58,
+		Y						= 0x59,
+		Z						= 0x5A,
+		KP_0					= VK_NUMPAD0,
+		KP_1					= VK_NUMPAD1,
+		KP_2					= VK_NUMPAD2,
+		KP_3					= VK_NUMPAD3,
+		KP_4					= VK_NUMPAD4,
+		KP_5					= VK_NUMPAD5,
+		KP_6					= VK_NUMPAD6,
+		KP_7					= VK_NUMPAD7,
+		KP_8					= VK_NUMPAD8,
+		KP_9					= VK_NUMPAD9,
+		KP_MULTIPLY				= VK_MULTIPLY,
+		KP_ADD					= VK_ADD,
+		KP_SUBTRACT				= VK_SUBTRACT,
+		KP_DECIMAL				= VK_DECIMAL,
+		KP_DIVIDE				= VK_DIVIDE,
+		F1						= VK_F1,
+		F2						= VK_F2,
+		F3						= VK_F3,
+		F4						= VK_F4,
+		F5						= VK_F5,
+		F6						= VK_F6,
+		F7						= VK_F7,
+		F8						= VK_F8,
+		F9						= VK_F9,
+		F10						= VK_F10, // Not supported yet
+		F11						= VK_F11,
+		F12						= VK_F12,
+		F13						= VK_F13,
+		F14						= VK_F14,
+		F15						= VK_F15,
+		F16						= VK_F16,
+		F17						= VK_F17,
+		F18						= VK_F18,
+		F19						= VK_F19,
+		F20						= VK_F20,
+		F21						= VK_F21,
+		F22						= VK_F22,
+		F23						= VK_F23,
+		F24						= VK_F24,
+		NUM_LOCK				= VK_NUMLOCK, // Not supported yet
+		SCROLL_LOCK				= VK_SCROLL, // Not supported yet
+		LEFT_SHIFT				= VK_LSHIFT,
+		RIGHT_SHIFT				= VK_RSHIFT,
+		LEFT_CONTROL			= VK_LCONTROL,
+		RIGHT_CONTROL			= VK_RCONTROL,
+		LEFT_ALT				= VK_LMENU,
+		RIGHT_ALT				= VK_RMENU,
+		COMMA					= VK_OEM_COMMA,  /* , */
+		MINUS					= VK_OEM_MINUS,  /* - */
+		PERIOD					= VK_OEM_PERIOD,  /* . */
+
+		FIRST = BACKSPACE,
+		LAST = PERIOD
+	};
+#endif
 }

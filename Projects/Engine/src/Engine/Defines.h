@@ -23,6 +23,6 @@
 // Change this to be in config file instead?
 #define YM_API_GL 1
 #define YM_API_DX11 2
-#define YM_CURRENT_API_TYPE YM_API_GL
+#define YM_CURRENT_API_TYPE YM_API_DX11
 
 #define YM_CONFIG_FILE_PATH "./Resources/Config/EngineConfig.json"
