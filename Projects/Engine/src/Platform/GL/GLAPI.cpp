@@ -8,7 +8,7 @@ ym::GLAPI* ym::GLAPI::get()
 	return &api;
 }
 
-void ym::GLAPI::init()
+void ym::GLAPI::init(DisplayDesc& displayDescriptor)
 {
 	glfwInit();
 }

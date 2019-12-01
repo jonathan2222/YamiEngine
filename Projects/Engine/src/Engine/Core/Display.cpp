@@ -9,10 +9,18 @@
 
 ym::DisplayDesc::DisplayDesc() : width(0), height(0), title(""), fullscreen(false)
 {
-	this->width = Config::get()->fetch<int>("Display/defaultWidth");
-	this->height = Config::get()->fetch<int>("Display/defaultHeight");
-	this->title = Config::get()->fetch<std::string>("Display/title");
-	this->fullscreen = Config::get()->fetch<bool>("Display/fullscreen");
+}
+
+void ym::DisplayDesc::init()
+{
+	if(this->width == 0)
+		this->width = Config::get()->fetch<int>("Display/defaultWidth");
+	if (this->height == 0)
+		this->height = Config::get()->fetch<int>("Display/defaultHeight");
+	if(this->title.empty())
+		this->title = Config::get()->fetch<std::string>("Display/title");
+	if(this->fullscreen == false)
+		this->fullscreen = Config::get()->fetch<bool>("Display/fullscreen");
 }
 
 ym::Display* ym::Display::m_self = nullptr;

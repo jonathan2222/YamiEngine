@@ -11,7 +11,7 @@ ym::DX11API* ym::DX11API::get()
 	return &api;
 }
 
-void ym::DX11API::init()
+void ym::DX11API::init(DisplayDesc& displayDescriptor)
 {
 	int error;
 	HRESULT result;
@@ -19,21 +19,24 @@ void ym::DX11API::init()
 	// Create a DirectX graphics interface factory.
 	IDXGIFactory* factory;
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)& factory);
-	YM_ASSERT(FAILED(result), "Could not initiate DirectX11: Failed to create the DirectX factory object!");
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the DirectX factory object!");
 
 	// Create an adapter for the primary graphics interface (video card).
 	IDXGIAdapter* adapter;
 	// Select the first video card available.
 	result = factory->EnumAdapters(0, &adapter);
-	YM_ASSERT(FAILED(result), "Could not initiate DirectX11: Failed to create the DirectX adapter object!");
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the DirectX adapter object!");
 
-	// TODO: Cannot call this here, Display has not yet been initialized!
-	getRefreshRate(factory, adapter);
+	getRefreshRate(factory, adapter, displayDescriptor);
 
 	// Get the adapter (video card) description.
 	DXGI_ADAPTER_DESC adapterDesc;
 	result = adapter->GetDesc(&adapterDesc);
-	YM_ASSERT(FAILED(result), "Could not initiate DirectX11: Failed to fetch adapter description from the video card!");
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch adapter description from the video card!");
+
+	// Release the adapter.
+	adapter->Release();
+	adapter = 0;
 
 	VideoCardInfo& videoCardInfo = getVideoCardInfo();
 	// Store the dedicated video card memory in megabytes.
@@ -65,36 +68,42 @@ void ym::DX11API::destroy()
 
 }
 
-void ym::DX11API::getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter)
+void ym::DX11API::getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, DisplayDesc& displayDescriptor)
 {
 	HRESULT result;
 
 	// Enumerate the primary adapter output (monitor).
 	IDXGIOutput* adapterOutput;
 	result = adapter->EnumOutputs(0, &adapterOutput);
-	YM_ASSERT(FAILED(result), "Could not initiate DirectX11: Failed to create an DirectX adapter for the monitor!");
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create an DirectX adapter for the monitor!");
 
 	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
 	unsigned int numModes = 0;
 	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
-	YM_ASSERT(FAILED(result), "Could not initiate DirectX11: Failed to fetch the monitor's display mode list!");
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch the monitor's display mode list length!");
 
 	// Create a list to hold all the possible display modes for this monitor/video card combination.
 	DXGI_MODE_DESC* displayModeList = new DXGI_MODE_DESC[numModes];
-	YM_ASSERT(!displayModeList, "Could not initiate DirectX11: Failed to allocate memory for the monitor's display mode list!");
+	YM_ASSERT(displayModeList, "Could not initiate DirectX11: Failed to allocate memory for the monitor's display mode list!");
 
-	Display* display = Display::get();
+	// Fill the display mode list structures.
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList);
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch the display mode list!");
+
+	bool gotRefreshRate = false;
 	for (unsigned int i = 0; i < numModes; i++)
 	{
-		if (displayModeList[i].Width == (unsigned int)display->getWidth())
+		if (displayModeList[i].Width == (unsigned int)displayDescriptor.width)
 		{
-			if (displayModeList[i].Height == (unsigned int)display->getHeight())
+			if (displayModeList[i].Height == (unsigned int)displayDescriptor.height)
 			{
 				m_refreshRateNumerator = displayModeList[i].RefreshRate.Numerator;
 				m_refreshRateDenominator = displayModeList[i].RefreshRate.Denominator;
+				gotRefreshRate = true;
 			}
 		}
 	}
+	YM_ASSERT(gotRefreshRate, "Could not initiate DirectX11: Could not find a matching display mode for a with and height of ({0}, {1})!", displayDescriptor.width, displayDescriptor.height);
 
 	// Release the display mode list.
 	delete[] displayModeList;
@@ -103,8 +112,4 @@ void ym::DX11API::getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter)
 	// Release the adapter output.
 	adapterOutput->Release();
 	adapterOutput = 0;
-
-	// Release the adapter.
-	adapter->Release();
-	adapter = 0;
 }

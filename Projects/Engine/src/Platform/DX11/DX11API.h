@@ -14,16 +14,17 @@
 
 namespace ym
 {
+	struct DisplayDesc;
 	class DX11API : public API
 	{
 	public:
 		static DX11API* get();
 
-		void init() override;
+		void init(DisplayDesc& displayDescriptor) override;
 		void destroy() override;
 
 	private:
-		void getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter);
+		void getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, DisplayDesc& displayDescriptor);
 
 		unsigned int m_refreshRateNumerator;
 		unsigned int m_refreshRateDenominator;

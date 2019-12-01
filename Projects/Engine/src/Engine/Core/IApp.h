@@ -2,13 +2,14 @@
 
 namespace ym
 {
+	struct DisplayDesc;
 	class Display;
 	class Input;
 	class API;
 	class IApp
 	{
 	public:
-		IApp();
+		IApp(DisplayDesc& displayDescriptor);
 		virtual ~IApp();
 
 		virtual void processArguments(int argc, char* argv[]) = 0;

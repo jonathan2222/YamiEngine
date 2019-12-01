@@ -12,9 +12,8 @@
 #include "Engine/Core/Logger.h"
 #include "Engine/Core/Input/Config.h"
 
-Application::Application()
+Application::Application(ym::DisplayDesc& displayDescriptor) : IApp(displayDescriptor)
 {
-	this->m_display = ym::Display::create(ym::DisplayDesc{});
 }
 
 Application::~Application()

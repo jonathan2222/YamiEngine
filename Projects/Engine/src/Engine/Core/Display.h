@@ -18,6 +18,8 @@ namespace ym
 			width(0), height(0), title(title), fullscreen(true) {}
 		DisplayDesc(int width, int height, const std::string& title) :
 			width(width), height(height), title(title), fullscreen(false) {}
+
+		void init();
 	};
 
 	class Display
