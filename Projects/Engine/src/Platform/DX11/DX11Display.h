@@ -13,6 +13,7 @@ namespace ym
 		virtual ~DX11Display();
 
 		bool shouldClose() const noexcept override;
+		void close() noexcept override;
 
 		void pollEvents() noexcept override;
 

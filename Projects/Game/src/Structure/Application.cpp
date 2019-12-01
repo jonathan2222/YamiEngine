@@ -32,6 +32,9 @@ void Application::run()
 	{
 		m_display->pollEvents();
 
+		if (ym::Input::get()->isKeyPressed(ym::Key::ESCAPE))
+			m_display->close();
+
 		if (ym::Input::get()->isKeyPressed(ym::Key::A))
 			YM_LOG_INFO("Pressed A!");
 

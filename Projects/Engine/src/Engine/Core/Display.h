@@ -32,6 +32,7 @@ namespace ym
 		virtual ~Display() = default;
 
 		virtual bool shouldClose() const noexcept = 0;
+		virtual void close() noexcept = 0;
 
 		virtual void pollEvents() noexcept = 0;
 

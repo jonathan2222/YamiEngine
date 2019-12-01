@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "../../Engine/Core/Input/Config.h"
 
-ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr)
+ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr), m_shouldClose(false)
 {
 	init(description);
 }
@@ -15,7 +15,12 @@ ym::GLDisplay::~GLDisplay()
 
 bool ym::GLDisplay::shouldClose() const noexcept
 {
-	return glfwWindowShouldClose(m_window) != 0;
+	return glfwWindowShouldClose(m_window) != 0 || m_shouldClose;
+}
+
+void ym::GLDisplay::close() noexcept
+{
+	m_shouldClose = true;
 }
 
 void ym::GLDisplay::pollEvents() noexcept
@@ -46,6 +51,7 @@ void* ym::GLDisplay::getNativeDisplay()
 void ym::GLDisplay::init(const DisplayDesc& description)
 {
 	m_description = description;
+	m_shouldClose = false;
 	
 	GLFWmonitor* monitor = nullptr;
 	if (m_description.fullscreen)

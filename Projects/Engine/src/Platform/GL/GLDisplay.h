@@ -11,6 +11,7 @@ namespace ym
 		virtual ~GLDisplay();
 
 		bool shouldClose() const noexcept override;
+		void close() noexcept override;
 
 		void pollEvents() noexcept override;
 
@@ -24,6 +25,7 @@ namespace ym
 	private:
 		void init(const DisplayDesc& description);
 
+		bool m_shouldClose;
 		GLFWwindow* m_window;
 		DisplayDesc m_description;
 	};

@@ -33,6 +33,11 @@ bool ym::DX11Display::shouldClose() const noexcept
 	return m_shouldClose;
 }
 
+void ym::DX11Display::close() noexcept
+{
+	m_shouldClose = true;
+}
+
 void ym::DX11Display::pollEvents() noexcept
 {
 	if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
