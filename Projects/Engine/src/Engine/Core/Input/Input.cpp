@@ -2,7 +2,7 @@
 
 #include "../../Defines.h"
 #if YM_CURRENT_API_TYPE == YM_API_GL
-	#include "../../../Platform/DX11/DX11Input.h"
+	#include "../../../Platform/GL/GLInput.h"
 #elif YM_CURRENT_API_TYPE == YM_API_DX11
 	#include "../../../Platform/DX11/DX11Input.h"
 #endif
@@ -19,7 +19,7 @@ ym::Input* ym::Input::create()
 	if (m_self != nullptr) delete m_self;
 
 #if YM_CURRENT_API_TYPE == YM_API_GL
-	m_self = new DX11Input();
+	m_self = new GLInput();
 #elif YM_CURRENT_API_TYPE == YM_API_DX11
 	m_self = new DX11Input();
 #endif

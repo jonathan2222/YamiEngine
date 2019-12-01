@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-ym::API* ym::API::get()
+ym::GLAPI* ym::GLAPI::get()
 {
 	static GLAPI api;
 	return &api;
