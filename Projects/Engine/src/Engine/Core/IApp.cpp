@@ -18,6 +18,8 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 
 	m_display = Display::create(displayDescriptor);
 	m_api->init(displayDescriptor);
+	API::VideoCardInfo& gpuInfo = m_api->getVideoCardInfo();
+	YM_LOG_INFO("GPU: {0}", gpuInfo.name.c_str());
 
 	m_input = ym::Input::create();
 	m_input->init();
