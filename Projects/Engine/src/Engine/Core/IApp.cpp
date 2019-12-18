@@ -16,9 +16,8 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 
 	m_api = API::get();
 
-	m_api->init(displayDescriptor);
-
 	m_display = Display::create(displayDescriptor);
+	m_api->init(displayDescriptor);
 
 	m_input = ym::Input::create();
 	m_input->init();

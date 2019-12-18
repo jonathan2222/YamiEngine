@@ -54,7 +54,8 @@ void ym::DX11API::init(DisplayDesc& displayDescriptor)
 	factory->Release();
 	factory = 0;
 
-	// TODO: initiate swap chain, Direct3D device and Direct3D device context
+	createSwapChainDeviceAndContext(displayDescriptor);
+
 	// TODO: create the back buffer and depth buffer
 	// TODO: Create depth stencil state
 	// TODO: Create a rasterizer
@@ -65,7 +66,27 @@ void ym::DX11API::init(DisplayDesc& displayDescriptor)
 
 void ym::DX11API::destroy()
 {
+	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
+	if (m_swapChain)
+		m_swapChain->SetFullscreenState(false, NULL);
 
+	if (m_deviceContext)
+	{
+		m_deviceContext->Release();
+		m_deviceContext = 0;
+	}
+
+	if (m_device)
+	{
+		m_device->Release();
+		m_device = 0;
+	}
+
+	if (m_swapChain)
+	{
+		m_swapChain->Release();
+		m_swapChain = 0;
+	}
 }
 
 void ym::DX11API::getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, DisplayDesc& displayDescriptor)
@@ -112,4 +133,54 @@ void ym::DX11API::getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, D
 	// Release the adapter output.
 	adapterOutput->Release();
 	adapterOutput = 0;
+}
+
+void ym::DX11API::createSwapChainDeviceAndContext(DisplayDesc& displayDescriptor)
+{
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+
+	// Single back buffer.
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferDesc.Width = displayDescriptor.width;
+	swapChainDesc.BufferDesc.Height = displayDescriptor.height;
+	// Set regular 32-bit surface for the back buffer.
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	
+	if (displayDescriptor.vsync)
+	{
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = m_refreshRateNumerator;
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = m_refreshRateDenominator;
+	}
+	else
+	{
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	}
+
+	// Set the usage of the back buffer.
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	// Set the handle for the window to render to.
+	swapChainDesc.OutputWindow = (HWND)Display::get()->getNativeDisplay();
+	// Turn multisampling off.
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+
+	if (displayDescriptor.fullscreen)
+		swapChainDesc.Windowed = false;
+	else
+		swapChainDesc.Windowed = true;
+
+	// Set the scan line ordering and scaling to unspecified.
+	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	// Discard the back buffer contents after presenting.
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	// Don't set the advanced flags.
+	swapChainDesc.Flags = 0;
+	// Set the feature level to DirectX 11.
+	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
+		D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
+	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the swap chain, device and device context!");
 }

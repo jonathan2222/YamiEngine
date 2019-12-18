@@ -25,8 +25,12 @@ namespace ym
 
 	private:
 		void getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, DisplayDesc& displayDescriptor);
+		void createSwapChainDeviceAndContext(DisplayDesc& displayDescriptor);
 
 		unsigned int m_refreshRateNumerator;
 		unsigned int m_refreshRateDenominator;
+		IDXGISwapChain* m_swapChain;
+		ID3D11Device* m_device;
+		ID3D11DeviceContext* m_deviceContext;
 	};
 }
