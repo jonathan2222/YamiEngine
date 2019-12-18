@@ -54,6 +54,7 @@ void ym::DX11API::init(DisplayDesc& displayDescriptor)
 	factory->Release();
 	factory = 0;
 
+	// TODO: This might be put in a renderer specific for DirectX11
 	createSwapChainDeviceAndContext(displayDescriptor);
 	createRTV();
 	createDepthBuffer(displayDescriptor);
