@@ -12,12 +12,13 @@ namespace ym
 		int width;
 		int height;
 		bool fullscreen;
+		bool vsync;
 
 		DisplayDesc();
 		DisplayDesc(const std::string& title) :
-			width(0), height(0), title(title), fullscreen(true) {}
+			width(0), height(0), title(title), fullscreen(true), vsync(false) {}
 		DisplayDesc(int width, int height, const std::string& title) :
-			width(width), height(height), title(title), fullscreen(false) {}
+			width(width), height(height), title(title), fullscreen(false), vsync(false){}
 
 		void init();
 	};

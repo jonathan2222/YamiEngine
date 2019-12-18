@@ -68,4 +68,8 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 	}
 	m_window = glfwCreateWindow(m_description.width, m_description.height, m_description.title.c_str(), monitor, nullptr);
 	glfwMakeContextCurrent(m_window);
+
+	// Enable VSync if set.
+	if(m_description.vsync)
+		glfwSwapInterval(1);
 }

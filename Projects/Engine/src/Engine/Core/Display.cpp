@@ -7,7 +7,7 @@
 	#include "../../Platform/DX11/DX11Display.h"
 #endif
 
-ym::DisplayDesc::DisplayDesc() : width(0), height(0), title(""), fullscreen(false)
+ym::DisplayDesc::DisplayDesc() : width(0), height(0), title(""), fullscreen(false), vsync(false)
 {
 }
 
@@ -21,6 +21,8 @@ void ym::DisplayDesc::init()
 		this->title = Config::get()->fetch<std::string>("Display/title");
 	if(this->fullscreen == false)
 		this->fullscreen = Config::get()->fetch<bool>("Display/fullscreen");
+	if (this->vsync == false)
+		this->vsync = Config::get()->fetch<bool>("Display/vsync");
 }
 
 ym::Display* ym::Display::m_self = nullptr;
