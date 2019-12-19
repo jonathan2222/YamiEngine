@@ -14,8 +14,8 @@
 	#define YM_LOG_SUCCESS(...) SPDLOG_INFO(__VA_ARGS__)
 #else
 	#define YM_LOG_INIT()
-
-	#define YM_LOG_INFO(...)
+	// TODO: Should this be empty?
+	#define YM_LOG_INFO(...) SPDLOG_INFO(__VA_ARGS__)
 	#define YM_LOG_WARN(...)
 	#define YM_LOG_ERROR(...)
 	#define YM_LOG_CRITICAL(...)

@@ -61,10 +61,10 @@ function linkGLEW()
 		links { "GL" }
 
 	filter "kind:StaticLib"
-		links {"glew32s", "OpenGL32"}
+		links "glew32s"
 	-- Only the StaticLibrary should link against GLEW.
 	filter "kind:not StaticLib"
-		links {"glew32s", "OpenGL32"}
+		links "glew32s"
 	filter {} -- Reset the filters for other settings.
 end
 
@@ -178,6 +178,7 @@ project "Engine"
 	location "Projects/Engine"
 	kind "StaticLib"
 	language "C++"
+	defines {"GLEW_STATIC"}
 
 	setTargetAndObjDirs()
 
