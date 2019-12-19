@@ -1,9 +1,10 @@
 #include "Input.h"
 
 #include "../../Defines.h"
-#if YM_CURRENT_API_TYPE == YM_API_GL
-	#include "../../../Platform/GL/GLInput.h"
-#elif YM_CURRENT_API_TYPE == YM_API_DX11
+#include "Config.h"
+
+#include "../../../Platform/GL/GLInput.h"
+#ifdef YAMI_PLATFORM_WINDOWS
 	#include "../../../Platform/DX11/DX11Input.h"
 #endif
 
@@ -18,11 +19,12 @@ ym::Input* ym::Input::create()
 {
 	if (m_self != nullptr) delete m_self;
 
-#if YM_CURRENT_API_TYPE == YM_API_GL
-	m_self = new GLInput();
-#elif YM_CURRENT_API_TYPE == YM_API_DX11
-	m_self = new DX11Input();
-#endif
+	// Convert keys to match the API.
+	KeyConverter::init();
+
+	static std::string type = Config::get()->fetch<std::string>("API/type");
+	if (type == YM_API_GL) return m_self = new GLInput();
+	else if (type == YM_API_DX11) return m_self = new DX11Input();
 
 	return m_self;
 }

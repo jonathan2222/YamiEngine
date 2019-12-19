@@ -1,7 +1,9 @@
 #include "GLDisplay.h"
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "../../Engine/Core/Input/Config.h"
+#include "GLAPI.h"
 
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr), m_shouldClose(false)
 {
@@ -68,6 +70,14 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 	}
 	m_window = glfwCreateWindow(m_description.width, m_description.height, m_description.title.c_str(), monitor, nullptr);
 	glfwMakeContextCurrent(m_window);
+
+	glewExperimental = true; // Needed in core profile
+	if (glewInit() != GLEW_OK)
+	{
+		YM_ASSERT(false, "Failed to initialize GLEW!");
+	}
+
+	GLAPI::get()->initDebug();
 
 	// Enable VSync if set.
 	if(m_description.vsync)

@@ -2,6 +2,7 @@
 
 namespace ym
 {
+	class Renderer;
 	struct DisplayDesc;
 	class Display;
 	class Input;
@@ -20,5 +21,6 @@ namespace ym
 		ym::API* m_api;
 		ym::Input* m_input;
 		ym::Display* m_display;
+		ym::Renderer* m_renderer;
 	};
 };

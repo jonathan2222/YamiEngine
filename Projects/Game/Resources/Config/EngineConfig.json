@@ -1,4 +1,8 @@
 {
+  "API": {
+    "type": "DirectX11"
+  },
+
   "Display": {
     "defaultWidth": 1280,
     "defaultHeight": 720,

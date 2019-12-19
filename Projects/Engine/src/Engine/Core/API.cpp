@@ -1,22 +1,20 @@
 #include "API.h"
 
 #include "../Defines.h"
+#include "Input/Config.h"
 
-#if YM_CURRENT_API_TYPE == YM_API_GL
-	#include "../../Platform/GL/GLAPI.h"
-#elif YM_CURRENT_API_TYPE == YM_API_DX11
+#include "../../Platform/GL/GLAPI.h"
+#ifdef YAMI_PLATFORM_WINDOWS
 	#include "../../Platform/DX11/DX11API.h"
 #endif
 
 ym::API* ym::API::get()
 {
-#if YM_CURRENT_API_TYPE == YM_API_GL
-	YM_LOG_INFO("Using API: OpenGL");
-	return GLAPI::get();
-#elif YM_CURRENT_API_TYPE == YM_API_DX11
-	YM_LOG_INFO("Using API: DirectX11");
-	return DX11API::get();
-#endif
+	static std::string type = Config::get()->fetch<std::string>("API/type");
+	if (type == YM_API_GL) return GLAPI::get();
+	else if (type == YM_API_DX11) return DX11API::get();
+	YM_ASSERT(false, "Could not fetch API: API not supported!");
+	return nullptr;
 }
 
 ym::API::VideoCardInfo& ym::API::getVideoCardInfo()

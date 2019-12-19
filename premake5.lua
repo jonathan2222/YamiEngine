@@ -45,6 +45,31 @@ end
 
 -- ==============================================================================================
 
+-- ========================================== GLEW ==========================================
+
+function includeGLEW()
+	includedirs "Externals/GLEW/Include/"
+end
+
+function linkGLEW()
+	libdirs "Externals/GLEW/Lib/%{cfg.buildcfg}"
+
+	filter "system:windows"
+		links { "opengl32" }
+
+	filter "system:not windows"
+		links { "GL" }
+
+	filter "kind:StaticLib"
+		links {"glew32s", "OpenGL32"}
+	-- Only the StaticLibrary should link against GLEW.
+	filter "kind:not StaticLib"
+		links {"glew32s", "OpenGL32"}
+	filter {} -- Reset the filters for other settings.
+end
+
+-- ==============================================================================================
+
 -- ============================================ MISC ============================================
 
 function setTargetAndObjDirs()
@@ -96,7 +121,9 @@ function useEngine()
 	includedirs { "Projects/Engine/src" }
 	links "Engine"
 
+	includeGLEW()
 	includeGLFW()
+	linkGLEW()
 	linkGLFW()
 	includeSpdlog()
 	useMaths()
@@ -156,6 +183,7 @@ project "Engine"
 
 	addFiles();
 
+	includeGLEW()
 	includeGLFW()
 
 	useSpdlog()

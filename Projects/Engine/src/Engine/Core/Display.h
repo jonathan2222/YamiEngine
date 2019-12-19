@@ -11,14 +11,16 @@ namespace ym
 		std::string title;
 		int width;
 		int height;
+		unsigned int refreshRateNumerator;
+		unsigned int refreshRateDenominator;
 		bool fullscreen;
 		bool vsync;
 
 		DisplayDesc();
 		DisplayDesc(const std::string& title) :
-			width(0), height(0), title(title), fullscreen(true), vsync(false) {}
+			width(0), height(0), title(title), fullscreen(true), vsync(false), refreshRateNumerator(0), refreshRateDenominator(0) {}
 		DisplayDesc(int width, int height, const std::string& title) :
-			width(width), height(height), title(title), fullscreen(false), vsync(false){}
+			width(width), height(height), title(title), fullscreen(false), vsync(false), refreshRateNumerator(0), refreshRateDenominator(0) {}
 
 		void init();
 	};
