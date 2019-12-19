@@ -11,5 +11,8 @@ namespace ym
 
 		void init(DisplayDesc& displayDescriptor) override;
 		void destroy() override;
+
+		void beginScene(float r, float g, float b, float a) override;
+		void endScene() override;
 	};
 }

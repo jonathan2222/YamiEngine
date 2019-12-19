@@ -17,15 +17,10 @@ namespace ym
 
 		void pollEvents() noexcept override;
 
-		void swapBuffers() const noexcept override;
-
-		int getWidth() const noexcept override;
-		int getHeight() const noexcept override;
-
 		void* getNativeDisplay() override;
 
 		LRESULT CALLBACK messageHandler(HWND, UINT, WPARAM, LPARAM);
-		static DX11Display* globalDX11DisplayHandle;
+		static DX11Display* g_DX11DisplayHandle;
 	private:
 		void init(const DisplayDesc& description);
 

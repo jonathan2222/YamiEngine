@@ -11,6 +11,7 @@
 #include "Engine/Core/Input/Input.h"
 #include "Engine/Core/Logger.h"
 #include "Engine/Core/Input/Config.h"
+#include "Engine/Core/Graphics/Renderer.h"
 
 Application::Application(ym::DisplayDesc& displayDescriptor) : IApp(displayDescriptor)
 {
@@ -45,13 +46,9 @@ void Application::run()
 			glm::vec2 pos = ym::Input::get()->getMousePos();
 			YM_LOG_INFO("Mouse pos: {}, {}", pos.x, pos.y);
 		}
-		/*
-		glBegin(GL_TRIANGLES);
-		glVertex2f(-0.5f, -0.5f);
-		glVertex2f(0.5f, -0.5f);
-		glVertex2f(0.0f, 0.5f);
-		glEnd();*/
+		
+		m_renderer->beginScene(1.0f, 0.0f, 0.0f, 1.0f);
 
-		m_display->swapBuffers();
+		m_renderer->endScene();
 	}
 }

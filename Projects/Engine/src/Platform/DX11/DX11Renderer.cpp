@@ -1,6 +1,7 @@
 #include "DX11Renderer.h"
 
 #include "../../Engine/Core/Logger.h"
+#include "../../Engine/Core/Input/Config.h"
 #include "../../Engine/Defines.h"
 
 #include "../../Engine/Core/Display.h"
@@ -86,6 +87,30 @@ void ym::DX11Renderer::destroy()
 	{
 		m_swapChain->Release();
 		m_swapChain = 0;
+	}
+}
+
+void ym::DX11Renderer::beginScene(float r, float g, float b, float a)
+{
+	float color[4] = {r, g, b, a};
+	// Clear back buffer.
+	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+	// Clear depth buffer.
+	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void ym::DX11Renderer::endScene()
+{
+	bool vsync = Config::get()->fetch<bool>("Display/vsync");
+	if (vsync)
+	{
+		// Lock to monitor refresh rate
+		m_swapChain->Present(1, 0);
+	}
+	else
+	{
+		// Present as fast as possible (Swap buffers)
+		m_swapChain->Present(0, 0);
 	}
 }
 

@@ -25,6 +25,17 @@ void ym::DisplayDesc::init()
 		this->vsync = Config::get()->fetch<bool>("Display/vsync");
 }
 
+void ym::DisplayDesc::copy(const DisplayDesc& other)
+{
+	this->title = other.title;
+	this->width = other.width;
+	this->height = other.height;
+	this->refreshRateDenominator = other.refreshRateDenominator;
+	this->refreshRateNumerator = other.refreshRateNumerator;
+	this->fullscreen = other.fullscreen;
+	this->vsync = other.vsync;
+}
+
 ym::Display* ym::Display::m_self = nullptr;
 
 ym::Display* ym::Display::create(const DisplayDesc& description)
@@ -35,7 +46,33 @@ ym::Display* ym::Display::create(const DisplayDesc& description)
 	if (type == YM_API_GL) m_self = new GLDisplay(description);
 	else if (type == YM_API_DX11) m_self = new DX11Display(description);
 
+	m_self->setDescripton(description);
 	return m_self;
+}
+
+void ym::Display::setDescripton(const DisplayDesc& description)
+{
+	m_description.copy(description);
+}
+
+ym::DisplayDesc& ym::Display::getDescription()
+{
+	return m_description;
+}
+
+int ym::Display::getWidth() const
+{
+	return m_description.width;
+}
+
+int ym::Display::getHeight() const
+{
+	return m_description.height;
+}
+
+float ym::Display::getAspectRatio() const
+{
+	return (float)getWidth()/getHeight();
 }
 
 ym::Display* ym::Display::get()

@@ -3,7 +3,7 @@
 #include "../../Engine/Core/Logger.h"
 #include "DX11Input.h"
 
-ym::DX11Display* ym::DX11Display::globalDX11DisplayHandle = nullptr;
+ym::DX11Display* ym::DX11Display::g_DX11DisplayHandle = nullptr;
 
 ym::DX11Display::DX11Display(const DisplayDesc& description) : m_window(nullptr), m_hinstance(nullptr), m_shouldClose(false)
 {
@@ -25,7 +25,7 @@ ym::DX11Display::~DX11Display()
 	m_hinstance = nullptr;
 
 	// Release the pointer to this class.
-	globalDX11DisplayHandle = nullptr;
+	g_DX11DisplayHandle = nullptr;
 }
 
 bool ym::DX11Display::shouldClose() const noexcept
@@ -48,21 +48,6 @@ void ym::DX11Display::pollEvents() noexcept
 
 	if (m_msg.message == WM_QUIT)
 		m_shouldClose = true;
-}
-
-void ym::DX11Display::swapBuffers() const noexcept
-{
-	// TODO: Do this!
-}
-
-int ym::DX11Display::getWidth() const noexcept
-{
-	return m_description.width;
-}
-
-int ym::DX11Display::getHeight() const noexcept
-{
-	return m_description.height;
 }
 
 void* ym::DX11Display::getNativeDisplay()
@@ -259,7 +244,7 @@ LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 		// All other messages pass to the message handler in the DX11Display class.
 		default:
 		{
-			return ym::DX11Display::globalDX11DisplayHandle->messageHandler(hwnd, umessage, wparam, lparam);
+			return ym::DX11Display::g_DX11DisplayHandle->messageHandler(hwnd, umessage, wparam, lparam);
 		}
 	}
 }

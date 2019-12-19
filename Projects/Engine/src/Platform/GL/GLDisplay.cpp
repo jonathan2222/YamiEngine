@@ -30,21 +30,6 @@ void ym::GLDisplay::pollEvents() noexcept
 	glfwPollEvents();
 }
 
-void ym::GLDisplay::swapBuffers() const noexcept
-{
-	glfwSwapBuffers(m_window);
-}
-
-int ym::GLDisplay::getWidth() const noexcept
-{
-	return m_description.width;
-}
-
-int ym::GLDisplay::getHeight() const noexcept
-{
-	return m_description.height;
-}
-
 void* ym::GLDisplay::getNativeDisplay()
 {
 	return m_window;
@@ -82,4 +67,6 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 	// Enable VSync if set.
 	if(m_description.vsync)
 		glfwSwapInterval(1);
+	else
+		glfwSwapInterval(0);
 }

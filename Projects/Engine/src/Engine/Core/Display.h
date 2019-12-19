@@ -21,8 +21,8 @@ namespace ym
 			width(0), height(0), title(title), fullscreen(true), vsync(false), refreshRateNumerator(0), refreshRateDenominator(0) {}
 		DisplayDesc(int width, int height, const std::string& title) :
 			width(width), height(height), title(title), fullscreen(false), vsync(false), refreshRateNumerator(0), refreshRateDenominator(0) {}
-
 		void init();
+		void copy(const DisplayDesc& other);
 	};
 
 	class Display
@@ -36,19 +36,22 @@ namespace ym
 		static Display* create(const DisplayDesc& description);
 		virtual ~Display() = default;
 
+		void setDescripton(const DisplayDesc& description);
+		DisplayDesc& getDescription();
+
 		virtual bool shouldClose() const noexcept = 0;
 		virtual void close() noexcept = 0;
 
 		virtual void pollEvents() noexcept = 0;
 
-		virtual void swapBuffers() const noexcept = 0;
-
-		virtual int getWidth() const noexcept = 0;
-		virtual int getHeight() const noexcept = 0;
-
 		virtual void* getNativeDisplay() = 0;
 
+		int getWidth() const;
+		int getHeight() const;
+		float getAspectRatio() const;
+
 	private:
+		DisplayDesc m_description;
 		static Display* m_self;
 	};
 };

@@ -15,11 +15,6 @@ namespace ym
 
 		void pollEvents() noexcept override;
 
-		void swapBuffers() const noexcept override;
-
-		int getWidth() const noexcept override;
-		int getHeight() const noexcept override;
-
 		void* getNativeDisplay() override;
 
 	private:
