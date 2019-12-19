@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Keys.h"
-#include "Vectors/Vec2.h"
+#include "glm/vec2.hpp"
 
 namespace ym
 {
@@ -18,7 +18,7 @@ namespace ym
 		virtual bool isKeyPressed(const Key& key) const = 0;
 		virtual bool isKeyReleased(const Key& key) const = 0;
 
-		virtual Vec2 getMousePos() const = 0;
+		virtual glm::vec2 getMousePos() const = 0;
 		virtual bool isMBPressed(const MB& button) const = 0;
 		virtual bool isMBReleased(const MB& button) const = 0;
 

@@ -42,7 +42,7 @@ void Application::run()
 
 		if (ym::Input::get()->isMBPressed(ym::MB::LEFT))
 		{
-			ym::Vec2 pos = ym::Input::get()->getMousePos();
+			glm::vec2 pos = ym::Input::get()->getMousePos();
 			YM_LOG_INFO("Mouse pos: {}, {}", pos.x, pos.y);
 		}
 		/*

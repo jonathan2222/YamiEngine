@@ -117,21 +117,26 @@ end
 
 -- ==============================================================================================
 
+-- =========================================== SPDLOG ===========================================
+
+function includeGLM()
+	includedirs { "Externals/GLM/" }
+end
+
+-- ==============================================================================================
+
+-- ==============================================================================================
+
 function useEngine()
 	includedirs { "Projects/Engine/src" }
 	links "Engine"
 
+	includeGLM()
 	includeGLEW()
 	includeGLFW()
 	linkGLEW()
 	linkGLFW()
 	includeSpdlog()
-	useMaths()
-end
-
-function useMaths()
-	includedirs { "Projects/Maths/src" }
-	links "Maths"
 end
 
 -- ========================================== PROJECTS ==========================================
@@ -163,17 +168,6 @@ project "UnitTests"
 	
 	filter {}
 
-project "Maths"
-	location "Projects/Maths"
-	kind "StaticLib"
-	language "C++"
-
-	setTargetAndObjDirs()
-
-	addFiles();
-	
-	filter {}
-
 project "Engine"
 	location "Projects/Engine"
 	kind "StaticLib"
@@ -186,8 +180,8 @@ project "Engine"
 
 	includeGLEW()
 	includeGLFW()
+	includeGLM()
 
 	useSpdlog()
-	useMaths()
 
 	

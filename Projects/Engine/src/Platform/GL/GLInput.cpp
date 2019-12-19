@@ -6,7 +6,7 @@
 
 std::unordered_map<ym::Key, ym::KeyState> ym::GLInput::m_keyMap = std::unordered_map<ym::Key, ym::KeyState>();
 std::unordered_map<ym::MB, ym::KeyState> ym::GLInput::m_mbMap = std::unordered_map<ym::MB, ym::KeyState>();
-ym::Vec2 ym::GLInput::m_mousePos = ym::Vec2(0.0f);
+glm::vec2 ym::GLInput::m_mousePos = glm::vec2(0.0f);
 
 void ym::GLInput::init()
 {
@@ -32,7 +32,7 @@ bool ym::GLInput::isKeyReleased(const Key& key) const
 	return m_keyMap[key] == KeyState::RELEASED;
 }
 
-ym::Vec2 ym::GLInput::getMousePos() const
+glm::vec2 ym::GLInput::getMousePos() const
 {
 	return m_mousePos;
 }

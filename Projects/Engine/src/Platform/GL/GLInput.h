@@ -13,7 +13,7 @@ namespace ym
 		bool isKeyPressed(const Key& key) const override;
 		bool isKeyReleased(const Key& key) const override;
 
-		Vec2 getMousePos() const override;
+		glm::vec2 getMousePos() const override;
 		bool isMBPressed(const MB& button) const override;
 		bool isMBReleased(const MB& button) const override;
 
@@ -28,6 +28,6 @@ namespace ym
 	private:
 		static std::unordered_map<Key, KeyState> m_keyMap;
 		static std::unordered_map<MB, KeyState> m_mbMap;
-		static Vec2 m_mousePos;
+		static glm::vec2 m_mousePos;
 	};
 }

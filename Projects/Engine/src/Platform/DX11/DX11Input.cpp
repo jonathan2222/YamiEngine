@@ -4,7 +4,7 @@
 
 std::unordered_map<ym::Key, ym::KeyState> ym::DX11Input::m_keyMap = std::unordered_map<ym::Key, ym::KeyState>();
 std::unordered_map<ym::MB, ym::KeyState> ym::DX11Input::m_mbMap = std::unordered_map<ym::MB, ym::KeyState>();
-ym::Vec2 ym::DX11Input::m_mousePos = ym::Vec2();
+glm::vec2 ym::DX11Input::m_mousePos = glm::vec2();
 
 void ym::DX11Input::init()
 {
@@ -25,7 +25,7 @@ bool ym::DX11Input::isKeyReleased(const Key& key) const
 	return m_keyMap[key] == KeyState::RELEASED;
 }
 
-ym::Vec2 ym::DX11Input::getMousePos() const
+glm::vec2 ym::DX11Input::getMousePos() const
 {
 	return m_mousePos;
 }
