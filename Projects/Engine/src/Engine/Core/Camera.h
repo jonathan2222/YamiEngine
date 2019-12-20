@@ -5,7 +5,7 @@
 
 namespace ym
 {
-	// TODO: Make a Entity Component System and add the camera as a Entity with a system!
+	// TODO: Make an Entity Component System and add the camera as a Entity with a system!
 	class Camera
 	{
 	public:
