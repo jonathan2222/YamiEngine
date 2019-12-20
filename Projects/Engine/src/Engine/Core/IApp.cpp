@@ -1,8 +1,5 @@
+#include "stdafx.h"
 #include "IApp.h"
-
-#include "../Defines.h"
-#include "Logger.h"
-#include "Input/Config.h"
 
 #include "API.h"
 #include "Display.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Keys.h"
 
 std::unordered_map<ym::KeyConverter::DXKey, ym::Key> ym::KeyConverter::m_keys = std::unordered_map<ym::KeyConverter::DXKey, ym::Key>();

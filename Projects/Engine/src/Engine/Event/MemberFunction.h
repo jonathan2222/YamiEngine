@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include "../Defines.h"
 #include "Event.h"
 
 namespace ym

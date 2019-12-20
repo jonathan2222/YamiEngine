@@ -1,7 +1,5 @@
+#include "stdafx.h"
 #include "API.h"
-
-#include "../Defines.h"
-#include "Input/Config.h"
 
 #include "../../Platform/GL/GLAPI.h"
 #ifdef YAMI_PLATFORM_WINDOWS

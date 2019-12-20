@@ -1,7 +1,5 @@
+#include "stdafx.h"
 #include "Input.h"
-
-#include "../../Defines.h"
-#include "Config.h"
 
 #include "../../../Platform/GL/GLInput.h"
 #ifdef YAMI_PLATFORM_WINDOWS

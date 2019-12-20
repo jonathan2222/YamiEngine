@@ -1,4 +1,6 @@
+#include "stdafx.h"
 #include "EventManager.h"
+
 namespace ym
 {
 	EventManager& EventManager::Get()

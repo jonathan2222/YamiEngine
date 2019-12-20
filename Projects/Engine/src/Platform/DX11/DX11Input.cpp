@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DX11Input.h"
 
 #include "DX11API.h"

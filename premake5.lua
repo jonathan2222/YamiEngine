@@ -176,6 +176,10 @@ project "Engine"
 
 	setTargetAndObjDirs()
 
+	pchheader "stdafx.h"
+	pchsource "Projects/%{prj.name}/src/stdafx.cpp"
+	includedirs { "Projects/%{prj.name}/src/" }
+
 	addFiles();
 
 	includeGLEW()

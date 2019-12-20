@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "DX11Display.h"
 
-#include "../../Engine/Core/Logger.h"
 #include "DX11Input.h"
 
 ym::DX11Display* ym::DX11Display::g_DX11DisplayHandle = nullptr;

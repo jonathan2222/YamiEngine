@@ -1,7 +1,7 @@
+#include "stdafx.h"
 #include "Config.h"
 
 #include <fstream>
-#include "../Logger.h"
 
 #include <iostream>
 

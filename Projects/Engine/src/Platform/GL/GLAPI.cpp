@@ -1,9 +1,8 @@
+#include "stdafx.h"
 #include "GLAPI.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "../../Engine/Defines.h"
-#include "../../Engine/Core/Logger.h"
 
 ym::GLAPI* ym::GLAPI::get()
 {

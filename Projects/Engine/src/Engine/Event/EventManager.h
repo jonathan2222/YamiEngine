@@ -1,14 +1,13 @@
 #pragma once
 
-#include <unordered_map>
-#include <vector>
 #include <functional>
 #include <typeindex>
 
-#include "../Defines.h"
 #include "Event.h"
 #include "MemberFunction.h"
 
+#include <unordered_map>
+#include "../Defines.h"
 #include "spdlog/spdlog.h"
 namespace ym
 {

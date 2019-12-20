@@ -1,8 +1,8 @@
+#include "stdafx.h"
 #include "GLDisplay.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "../../Engine/Core/Input/Config.h"
 #include "GLAPI.h"
 
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr), m_shouldClose(false)

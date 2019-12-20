@@ -1,8 +1,5 @@
+#include "stdafx.h"
 #include "DX11Renderer.h"
-
-#include "../../Engine/Core/Logger.h"
-#include "../../Engine/Core/Input/Config.h"
-#include "../../Engine/Defines.h"
 
 #include "../../Engine/Core/Display.h"
 

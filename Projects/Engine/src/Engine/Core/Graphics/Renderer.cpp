@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "Renderer.h"
 
-#include "../Input/Config.h"
 #include "../../../Platform/GL/GLRenderer.h"
 #ifdef YAMI_PLATFORM_WINDOWS
 	#include "../../../Platform/DX11/DX11Renderer.h"
