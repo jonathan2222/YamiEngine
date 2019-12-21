@@ -1,5 +1,7 @@
 #pragma once
 
+// https://docs.unity3d.com/Packages/com.unity.entities@0.1/manual/ecs_core.html
+
 namespace ym
 {
 	class ECS
