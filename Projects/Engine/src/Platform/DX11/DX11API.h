@@ -10,6 +10,8 @@
 #include <Windows.h>
 
 #include <d3d11.h>
+#include <dxgi1_2.h>
+#include <vector>
 
 namespace ym
 {
@@ -19,10 +21,26 @@ namespace ym
 	public:
 		static DX11API* get();
 
-		void init(DisplayDesc& displayDescriptor) override;
+		void preDisplayInit(DisplayDesc& displayDescriptor) override;
+		void postDisplayInit() override;
 		void destroy() override;
 
+		ID3D11Device* getDevice();
+		ID3D11DeviceContext* getContext();
+		IDXGISwapChain1* getSwapChain();
+
 	private:
-		void getRefreshRate(IDXGIFactory* factory, IDXGIAdapter* adapter, DisplayDesc& displayDescriptor);	
+		void createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType);
+		void createSwapChain();
+		void getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDescriptor);
+		//void createSwapChainDeviceAndContext(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType, DisplayDesc& displayDescriptor);
+		std::vector<IDXGIAdapter*> enumerateAdapters();
+
+		void fillVideoCardInfo(IDXGIAdapter* adapter);
+
+		IDXGIFactory2* m_factory;
+		ID3D11Device* m_device;
+		ID3D11DeviceContext* m_deviceContext;
+		IDXGISwapChain1* m_swapChain;
 	};
 }

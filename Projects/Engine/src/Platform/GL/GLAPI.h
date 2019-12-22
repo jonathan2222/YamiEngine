@@ -11,7 +11,8 @@ namespace ym
 	public:
 		static GLAPI* get();
 
-		void init(DisplayDesc& displayDescriptor) override;
+		void preDisplayInit(DisplayDesc& displayDescriptor) override;
+		void postDisplayInit() override;
 		void destroy() override;
 
 		void initDebug();

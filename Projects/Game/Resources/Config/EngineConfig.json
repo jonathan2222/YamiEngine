@@ -6,7 +6,7 @@
   "Display": {
     "defaultWidth": 1280,
     "defaultHeight": 720,
-    "fullscreen": false,
+    "fullscreen": true,
     "vsync": false,
     "title": "Yami Engine"
   }

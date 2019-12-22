@@ -10,10 +10,14 @@ ym::GLAPI* ym::GLAPI::get()
 	return &api;
 }
 
-void ym::GLAPI::init(DisplayDesc& displayDescriptor)
+void ym::GLAPI::preDisplayInit(DisplayDesc& displayDescriptor)
 {
 	glfwInit();
 	glfwSetErrorCallback(GLAPI::errorCallback);
+}
+
+void ym::GLAPI::postDisplayInit()
+{
 }
 
 void ym::GLAPI::destroy()

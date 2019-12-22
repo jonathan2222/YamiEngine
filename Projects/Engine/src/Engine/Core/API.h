@@ -10,7 +10,8 @@ namespace ym
 	public:
 		static API* get();
 
-		virtual void init(DisplayDesc& displayDescriptor) = 0;
+		virtual void preDisplayInit(DisplayDesc& displayDescriptor) = 0;
+		virtual void postDisplayInit() = 0;
 		virtual void destroy() = 0;
 
 		struct VideoCardInfo

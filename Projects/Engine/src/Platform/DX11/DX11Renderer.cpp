@@ -11,21 +11,25 @@ ym::DX11Renderer* ym::DX11Renderer::get()
 
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 {
-	createSwapChainDeviceAndContext(displayDescriptor);
+	// Fetch the device, device context and the swap chain from the DirectX api.
+	m_device = DX11API::get()->getDevice();
+	m_context = DX11API::get()->getContext();
+	m_swapChain = DX11API::get()->getSwapChain();
+
 	createRTV();
 	createDepthBuffer(displayDescriptor);
 
 	createDepthStencilState();
 	// Set the depth stencil state.
-	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
+	m_context->OMSetDepthStencilState(m_depthStencilState, 1);
 
 	createDepthStencilView();
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
-	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
+	m_context->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
 	createRasterizer();
 	// Set the rasterizer state.
-	m_deviceContext->RSSetState(m_rasterizerState);
+	m_context->RSSetState(m_rasterizerState);
 
 	createAndSetViewport(displayDescriptor);
 
@@ -34,10 +38,6 @@ void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 
 void ym::DX11Renderer::destroy()
 {
-	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
-	if (m_swapChain)
-		m_swapChain->SetFullscreenState(false, NULL);
-
 	if (m_rasterizerState)
 	{
 		m_rasterizerState->Release();
@@ -67,33 +67,15 @@ void ym::DX11Renderer::destroy()
 		m_renderTargetView->Release();
 		m_renderTargetView = 0;
 	}
-
-	if (m_deviceContext)
-	{
-		m_deviceContext->Release();
-		m_deviceContext = 0;
-	}
-
-	if (m_device)
-	{
-		m_device->Release();
-		m_device = 0;
-	}
-
-	if (m_swapChain)
-	{
-		m_swapChain->Release();
-		m_swapChain = 0;
-	}
 }
 
 void ym::DX11Renderer::beginScene(float r, float g, float b, float a)
 {
 	float color[4] = {r, g, b, a};
 	// Clear back buffer.
-	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
+	m_context->ClearRenderTargetView(m_renderTargetView, color);
 	// Clear depth buffer.
-	m_deviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	m_context->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void ym::DX11Renderer::endScene()
@@ -109,56 +91,6 @@ void ym::DX11Renderer::endScene()
 		// Present as fast as possible (Swap buffers)
 		m_swapChain->Present(0, 0);
 	}
-}
-
-void ym::DX11Renderer::createSwapChainDeviceAndContext(DisplayDesc& displayDescriptor)
-{
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-
-	// Single back buffer.
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.BufferDesc.Width = displayDescriptor.width;
-	swapChainDesc.BufferDesc.Height = displayDescriptor.height;
-	// Set regular 32-bit surface for the back buffer.
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-	if (displayDescriptor.vsync)
-	{
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = displayDescriptor.refreshRateNumerator;
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = displayDescriptor.refreshRateDenominator;
-	}
-	else
-	{
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	}
-
-	// Set the usage of the back buffer.
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	// Set the handle for the window to render to.
-	swapChainDesc.OutputWindow = (HWND)Display::get()->getNativeDisplay();
-	// Turn multisampling off.
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-
-	if (displayDescriptor.fullscreen)
-		swapChainDesc.Windowed = false;
-	else
-		swapChainDesc.Windowed = true;
-
-	// Set the scan line ordering and scaling to unspecified.
-	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	// Discard the back buffer contents after presenting.
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	// Don't set the advanced flags.
-	swapChainDesc.Flags = 0;
-	// Set the feature level to DirectX 11.
-	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-	HRESULT result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1,
-		D3D11_SDK_VERSION, &swapChainDesc, &m_swapChain, &m_device, NULL, &m_deviceContext);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the swap chain, device and device context!");
 }
 
 void ym::DX11Renderer::createRTV()
@@ -277,5 +209,5 @@ void ym::DX11Renderer::createAndSetViewport(DisplayDesc& displayDescriptor)
 	viewport.TopLeftY = 0.0f;
 
 	// Create the viewport.
-	m_deviceContext->RSSetViewports(1, &viewport);
+	m_context->RSSetViewports(1, &viewport);
 }

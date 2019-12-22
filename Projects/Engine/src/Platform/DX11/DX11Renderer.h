@@ -17,7 +17,6 @@ namespace ym
 		void endScene() override;
 
 	private:
-		void createSwapChainDeviceAndContext(DisplayDesc& displayDescriptor);
 		void createRTV();
 		void createDepthBuffer(DisplayDesc& displayDescriptor);
 		void createDepthStencilState();
@@ -25,9 +24,10 @@ namespace ym
 		void createRasterizer();
 		void createAndSetViewport(DisplayDesc& displayDescriptor);
 
-		IDXGISwapChain* m_swapChain;
 		ID3D11Device* m_device;
-		ID3D11DeviceContext* m_deviceContext;
+		ID3D11DeviceContext* m_context;
+		IDXGISwapChain1* m_swapChain;
+
 		ID3D11RenderTargetView* m_renderTargetView;
 		ID3D11Texture2D* m_depthStencilBuffer;
 		ID3D11DepthStencilState* m_depthStencilState;
