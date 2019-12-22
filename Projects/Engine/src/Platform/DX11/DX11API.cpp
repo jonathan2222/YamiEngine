@@ -105,9 +105,9 @@ IDXGISwapChain1* ym::DX11API::getSwapChain()
 void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType)
 {
 	UINT flags = 0;
-/*#ifdef YAMI_DEBUG
-	flags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_DEBUGGABLE;
-#endif*/
+#ifdef YAMI_DEBUG
+	flags = D3D11_CREATE_DEVICE_DEBUG;
+#endif
 	// Set the feature level to DirectX 11.1.
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_1;
 
