@@ -10,6 +10,24 @@ ym::DX11Renderer* ym::DX11Renderer::get()
 	return &renderer;
 }
 
+ym::DX11Renderer::DX11Renderer()
+{
+	m_device = nullptr;
+	m_context = nullptr;
+	m_swapChain = nullptr;
+
+	m_renderTargetView = nullptr;
+	m_depthStencilBuffer = nullptr;
+	m_depthStencilState = nullptr;
+	m_depthStencilView = nullptr;
+	m_rasterizerState = nullptr;
+
+	m_vsShader = nullptr;
+	m_psShader = nullptr;
+	m_layout = nullptr;
+	m_matrixBuffer = nullptr;
+}
+
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 {
 	m_psShader = 0;

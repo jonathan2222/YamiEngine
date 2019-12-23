@@ -42,17 +42,27 @@ void ym::Camera::updateProj()
 	m_proj = glm::perspectiveRH(m_fov, aspectRatio, m_nearPlane, m_farPlane);
 }
 
-void ym::Camera::rotatePitch(float angle)
+glm::vec3 ym::Camera::getUp() const
 {
-	// x = cos(y)sin(p)
-	// y = sin(y)sin(p)
-	// z = cos(p)
-
-	//m_dir.x
+	return m_up;
 }
 
-void ym::Camera::rotateYaw(float angle)
+glm::vec3 ym::Camera::getRight() const
 {
+	return glm::normalize(glm::cross(m_dir, m_up));
+}
+
+void ym::Camera::setOrientaion(glm::vec3 up, glm::vec3& right)
+{
+	m_up = glm::normalize(up);
+	m_dir = glm::normalize(glm::cross(up, right));
+	updateView();
+}
+
+void ym::Camera::setPosition(glm::vec3 pos)
+{
+	m_pos = pos;
+	updateView();
 }
 
 glm::mat4 ym::Camera::getView() const

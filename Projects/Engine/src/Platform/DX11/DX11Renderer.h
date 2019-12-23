@@ -16,6 +16,7 @@ namespace ym
 		};
 
 		static DX11Renderer* get();
+		DX11Renderer();
 
 		void init(DisplayDesc& displayDescriptor) override;
 		void destroy() override;

@@ -44,7 +44,7 @@ void ym::Config::load(const std::string& str, json& j)
 			load(newKey, *it);
 		else
 		{
-			ConfigData data;
+			ConfigData data = {};
 			if (it->is_boolean())
 			{
 				data.b = (bool)it.value();

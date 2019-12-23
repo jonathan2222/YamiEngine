@@ -15,6 +15,8 @@
 #include "Engine/Core/Graphics/Model.h"
 #include "Engine/Core/Camera.h"
 
+#include <glm/gtx/rotate_vector.hpp>
+
 Application::Application(ym::DisplayDesc& displayDescriptor) : IApp(displayDescriptor)
 {
 }
@@ -31,14 +33,14 @@ void Application::processArguments(int argc, char* argv[])
 void Application::run()
 {
 	ym::Model* model = ym::Model::create();
-	std::vector<ym::Vertex> vertices = 
+	/*std::vector<ym::Vertex> vertices = 
 	{ 
 		{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, 
 		{glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
 		{glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)}
 	};
-	std::vector<unsigned int> indices = {0, 1, 2};
-	/*std::vector<ym::Vertex> vertices =
+	std::vector<unsigned int> indices = {0, 1, 2};*/
+	std::vector<ym::Vertex> vertices =
 	{
 		{ glm::vec3(-0.5f,-0.5f,-0.5f), glm::vec3(0, 0, 0), },
 		{ glm::vec3(-0.5f,-0.5f, 0.5f), glm::vec3(0, 0, 1), },
@@ -69,7 +71,7 @@ void Application::run()
 
 		1,3,7, // +z
 		1,7,5
-	};*/
+	};
 	model->setData(vertices, indices);
 
 	m_renderer->initShader(L"./Resources/Shader.vs", L"./Resources/Shader.ps");
@@ -80,6 +82,10 @@ void Application::run()
 	glm::mat4 world(1.0f);
 	world[3][3] = 1.0f;
 
+	float defaultSpeed = 0.005f;
+	float factor = 2.f;
+	float rotSpeed = 3.1415f / 180.f * 0.2f;
+
 	while (!m_display->shouldClose())
 	{
 		m_display->pollEvents();
@@ -87,11 +93,67 @@ void Application::run()
 		if (ym::Input::get()->isKeyPressed(ym::Key::ESCAPE))
 			m_display->close();
 
-		if (ym::Input::get()->isKeyPressed(ym::Key::A))
-			YM_LOG_INFO("Pressed A!");
-
+		float speed = defaultSpeed;
 		if (ym::Input::get()->isKeyPressed(ym::Key::LEFT_SHIFT))
-			YM_LOG_INFO("Pressed SHIFT!");
+		{
+			speed = defaultSpeed*factor;
+		}
+
+		if (ym::Input::get()->isKeyPressed(ym::Key::A))
+		{
+			glm::vec3 right = camera.getRight();
+			camera.setPosition(camera.getPos() - right*speed);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::D))
+		{
+			glm::vec3 right = camera.getRight();
+			camera.setPosition(camera.getPos() + right * speed);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::W))
+		{
+			glm::vec3 dir = camera.getDir();
+			camera.setPosition(camera.getPos() + dir * speed);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::S))
+		{
+			glm::vec3 dir = camera.getDir();
+			camera.setPosition(camera.getPos() - dir * speed);
+		}
+
+		if (ym::Input::get()->isKeyPressed(ym::Key::LEFT))
+		{
+			glm::vec3 up = camera.getUp();
+			glm::vec3 right = camera.getRight();
+			const glm::vec3 globalUp(0.0f, 1.0f, 0.0f);
+			right = glm::rotate(right, rotSpeed, globalUp);
+			if(glm::length(up-globalUp) > 0.0001f)
+				up = glm::rotate(up, rotSpeed, globalUp);
+			camera.setOrientaion(up, right);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::RIGHT))
+		{
+			glm::vec3 up = camera.getUp();
+			glm::vec3 right = camera.getRight();
+			const glm::vec3 globalUp(0.0f, 1.0f, 0.0f);
+			right = glm::rotate(right, -rotSpeed, globalUp);
+			if (glm::length(up - globalUp) > 0.0001f)
+				up = glm::rotate(up, -rotSpeed, globalUp);
+			camera.setOrientaion(up, right);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::UP))
+		{
+			glm::vec3 up = camera.getUp();
+			glm::vec3 right = camera.getRight();
+			up = glm::rotate(up, rotSpeed, right);
+			camera.setOrientaion(up, right);
+		}
+		if (ym::Input::get()->isKeyPressed(ym::Key::DOWN))
+		{
+			glm::vec3 up = camera.getUp();
+			glm::vec3 right = camera.getRight();
+			up = glm::rotate(up, -rotSpeed, right);
+			camera.setOrientaion(up, right);
+		}
 
 		if (ym::Input::get()->isMBPressed(ym::MB::LEFT))
 		{

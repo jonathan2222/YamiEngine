@@ -20,8 +20,10 @@ namespace ym
 		void updateView();
 		void updateProj();
 
-		void rotatePitch(float angle);
-		void rotateYaw(float angle);
+		glm::vec3 getUp() const;
+		glm::vec3 getRight() const;
+		void setOrientaion(glm::vec3 up, glm::vec3& right);
+		void setPosition(glm::vec3 pos);
 
 		glm::mat4 getView() const;
 		glm::mat4 getProj() const;
