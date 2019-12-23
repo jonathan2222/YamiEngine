@@ -32,3 +32,11 @@ void ym::GLRenderer::endScene()
 	GLFWwindow* window = (GLFWwindow*)Display::get()->getNativeDisplay();
 	glfwSwapBuffers(window);
 }
+
+void ym::GLRenderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
+{
+}
+
+void ym::GLRenderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj)
+{
+}

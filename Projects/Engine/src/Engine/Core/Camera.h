@@ -20,6 +20,9 @@ namespace ym
 		void updateView();
 		void updateProj();
 
+		void rotatePitch(float angle);
+		void rotateYaw(float angle);
+
 		glm::mat4 getView() const;
 		glm::mat4 getProj() const;
 

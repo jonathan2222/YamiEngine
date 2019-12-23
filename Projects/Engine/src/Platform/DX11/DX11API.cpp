@@ -41,7 +41,7 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 	}
 
 	fillVideoCardInfo(adapter);
-	
+
 	createDevice(adapter, D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN);
 	
 	// Fetch refresh rate from the default adapter.
@@ -92,7 +92,7 @@ ID3D11Device* ym::DX11API::getDevice()
 	return m_device;
 }
 
-ID3D11DeviceContext* ym::DX11API::getContext()
+ID3D11DeviceContext* ym::DX11API::getDeviceContext()
 {
 	return m_deviceContext;
 }

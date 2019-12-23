@@ -2,6 +2,7 @@
 #include "DX11Renderer.h"
 
 #include "../../Engine/Core/Display.h"
+#include <glm/gtc/type_ptr.hpp>
 
 ym::DX11Renderer* ym::DX11Renderer::get()
 {
@@ -11,9 +12,13 @@ ym::DX11Renderer* ym::DX11Renderer::get()
 
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 {
+	m_psShader = 0;
+	m_vsShader = 0;
+	m_layout = 0;
+
 	// Fetch the device, device context and the swap chain from the DirectX api.
 	m_device = DX11API::get()->getDevice();
-	m_context = DX11API::get()->getContext();
+	m_context = DX11API::get()->getDeviceContext();
 	m_swapChain = DX11API::get()->getSwapChain();
 
 	createRTV();
@@ -38,6 +43,30 @@ void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 
 void ym::DX11Renderer::destroy()
 {
+	if (m_matrixBuffer)
+	{
+		m_matrixBuffer->Release();
+		m_matrixBuffer = 0;
+	}
+
+	if (m_layout)
+	{
+		m_layout->Release();
+		m_layout = 0;
+	}
+
+	if (m_psShader)
+	{
+		m_psShader->Release();
+		m_psShader = 0;
+	}
+
+	if (m_vsShader)
+	{
+		m_vsShader->Release();
+		m_vsShader = 0;
+	}
+
 	if (m_rasterizerState)
 	{
 		m_rasterizerState->Release();
@@ -91,6 +120,118 @@ void ym::DX11Renderer::endScene()
 		// Present as fast as possible (Swap buffers)
 		m_swapChain->Present(0, 0);
 	}
+}
+
+void ym::DX11Renderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
+{
+	HRESULT result;
+	ID3DBlob* vertexShaderBuffer = nullptr;
+	ID3DBlob* errorMessageBlob = nullptr;
+
+	// Compile vertex shader.
+	result = D3DCompileFromFile(vertexShader, NULL, NULL, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessageBlob);
+	if (FAILED(result))
+	{
+		if (errorMessageBlob)
+			compileShader(errorMessageBlob, vertexShader);
+		else
+			YM_ASSERT(false, "Failed to initialize vertex shader: Missing file!");
+	}
+
+	result = m_device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), 0, &m_vsShader);
+	YM_ASSERT(FAILED(result) == false, "Failed to create vertex shader!");
+
+	// Compile pixel shader.
+	ID3DBlob* pixelShaderBuffer = nullptr;
+	errorMessageBlob = nullptr;
+	result = D3DCompileFromFile(pixelShader, NULL, NULL, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessageBlob);
+	if (FAILED(result))
+	{
+		if (errorMessageBlob)
+			compileShader(errorMessageBlob, pixelShader);
+		else
+			YM_ASSERT(false, "Failed to initialize pixel shader: Missing file!");
+	}
+
+	result = m_device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), 0, &m_psShader);
+	YM_ASSERT(FAILED(result) == false, "Failed to create pixel shader!");
+
+	// Create the vertex input layout description.
+	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
+	polygonLayout[0].SemanticName = "POSITION";
+	polygonLayout[0].SemanticIndex = 0;
+	polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[0].InputSlot = 0;
+	polygonLayout[0].AlignedByteOffset = 0;
+	polygonLayout[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[0].InstanceDataStepRate = 0;
+
+	polygonLayout[1].SemanticName = "COLOR";
+	polygonLayout[1].SemanticIndex = 0;
+	polygonLayout[1].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	polygonLayout[1].InputSlot = 0;
+	polygonLayout[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[1].InstanceDataStepRate = 0;
+
+	// Get a count of the elements in the layout.
+	SIZE_T numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
+
+	// Create the vertex input layout.
+	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(), &m_layout);
+	YM_ASSERT(FAILED(result) == false, "Failed to create input layout!");
+
+	// ------------------------------ Release shader blob code ------------------------------
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = 0;
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = 0;
+
+	// ------------------------------ Contant buffer ------------------------------
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
+	result = m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
+	YM_ASSERT(FAILED(result) == false, "Failed to create a constant buffer for the matrtices!");
+}
+
+void ym::DX11Renderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj)
+{
+	// Update constant buffer.
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	result = m_context->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	YM_ASSERT(FAILED(result) == false, "Failed to map (lock) constant buffer!");
+
+	// Get a pointer to the data in the constant buffer.
+	MatrixBufferType* dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+	// Copy the matrices into the constant buffer.
+	dataPtr->world = glm::transpose(world);
+	dataPtr->view = glm::transpose(view);
+	dataPtr->projection = glm::transpose(proj);
+
+	// Unlock the constant buffer.
+	m_context->Unmap(m_matrixBuffer, 0);
+
+	// Set the position of the constant buffer in the vertex shader.
+	unsigned int bufferNumber = 0;
+
+	// Finanly set the constant buffer in the vertex shader with the updated values.
+	m_context->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
+	// Bind shader.
+	m_context->IASetInputLayout(m_layout);
+	m_context->VSSetShader(m_vsShader, NULL, 0);
+	m_context->PSSetShader(m_psShader, NULL, 0);
 }
 
 void ym::DX11Renderer::createRTV()
@@ -210,4 +351,22 @@ void ym::DX11Renderer::createAndSetViewport(DisplayDesc& displayDescriptor)
 
 	// Create the viewport.
 	m_context->RSSetViewports(1, &viewport);
+}
+
+void ym::DX11Renderer::compileShader(ID3DBlob* errorMessageBlob, WCHAR* fileName)
+{
+	// Get a pointer to the error message text buffer.
+	char* compileErrors = (char*)(errorMessageBlob->GetBufferPointer());
+
+	// Get the length of the message.
+	//unsigned long bufferSize = errorMessageBlob->GetBufferSize();
+
+	// Write out the error message.
+	YM_LOG_ERROR(compileErrors);
+
+	// Release the error message.
+	errorMessageBlob->Release();
+	errorMessageBlob = 0;
+
+	YM_ASSERT(false, "Failed to compile shader!");
 }

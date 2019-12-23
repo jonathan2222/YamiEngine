@@ -11,6 +11,7 @@
 
 #include <d3d11.h>
 #include <dxgi1_2.h>
+#include <d3dcompiler.h>
 #include <vector>
 
 namespace ym
@@ -26,14 +27,13 @@ namespace ym
 		void destroy() override;
 
 		ID3D11Device* getDevice();
-		ID3D11DeviceContext* getContext();
+		ID3D11DeviceContext* getDeviceContext();
 		IDXGISwapChain1* getSwapChain();
 
 	private:
 		void createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType);
 		void createSwapChain();
 		void getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDescriptor);
-		//void createSwapChainDeviceAndContext(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType, DisplayDesc& displayDescriptor);
 		std::vector<IDXGIAdapter*> enumerateAdapters();
 
 		void fillVideoCardInfo(IDXGIAdapter* adapter);
