@@ -109,4 +109,5 @@ void Application::run()
 	}
 
 	model->destroy();
+	delete model;
 }
