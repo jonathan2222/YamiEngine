@@ -2,6 +2,8 @@
 
 #include "../../Engine/Core/Graphics/Shader.h"
 
+#include "DX11API.h"
+
 namespace ym
 {
 	class DX11Shader : public Shader
@@ -14,5 +16,6 @@ namespace ym
 		void bind() override;
 
 	private:
+		void compileShader(ID3DBlob* errorMessageBlob, WCHAR* fileName);
 	};
 }
