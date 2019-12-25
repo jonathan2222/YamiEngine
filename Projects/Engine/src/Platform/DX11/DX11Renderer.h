@@ -24,10 +24,15 @@ namespace ym
 		void beginScene(float r, float g, float b, float a) override;
 		void endScene() override;
 
-		void initShader(WCHAR* vertexShader, WCHAR* pixelShader);
-		void bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj);
+		void initShader(WCHAR* vertexShader, WCHAR* pixelShader) override;
+		void bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj) override;
+		
+		void draw(VertexArray* va, IndexBuffer* ib, Topology topology) override;
+		void draw(Model* model) override;
 
 	private:
+		D3D11_PRIMITIVE_TOPOLOGY getD3D11Topology(Topology topology);
+
 		void createRTV();
 		void createDepthBuffer(DisplayDesc& displayDescriptor);
 		void createDepthStencilState();

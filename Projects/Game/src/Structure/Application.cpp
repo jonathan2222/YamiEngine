@@ -11,9 +11,11 @@
 #include "Engine/Core/Input/Input.h"
 #include "Engine/Core/Logger.h"
 #include "Engine/Core/Input/Config.h"
+#include "Engine/Core/Camera.h"
+
 #include "Engine/Core/Graphics/Renderer.h"
 #include "Engine/Core/Graphics/Model.h"
-#include "Engine/Core/Camera.h"
+#include "Engine/Core/Graphics/Vertex.h"
 
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -32,7 +34,7 @@ void Application::processArguments(int argc, char* argv[])
 
 void Application::run()
 {
-	ym::Model* model = ym::Model::create();
+	ym::Model model;
 	/*std::vector<ym::Vertex> vertices = 
 	{ 
 		{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)}, 
@@ -52,6 +54,7 @@ void Application::run()
 		{ glm::vec3( 0.5f, 0.5f,-0.5f), glm::vec3(1, 1, 0), },
 		{ glm::vec3( 0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), },
 	};
+
 	std::vector<unsigned int> indices = 
 	{
 		0,2,1, // -x
@@ -72,7 +75,12 @@ void Application::run()
 		1,3,7, // +z
 		1,7,5
 	};
-	model->setData(vertices, indices);
+
+	ym::Model::Info modelInfo(ym::Topology::TRIANGLE_LIST, ym::Usage::STATIC);
+	ym::AttributeLayout layout;
+	layout.push(3, ym::Type::FLOAT); // Position
+	layout.push(3, ym::Type::FLOAT); // Color
+	model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(ym::Vertex) * vertices.size()), indices.data(), (unsigned int)indices.size(), layout, modelInfo);
 
 	m_renderer->initShader(L"./Resources/Shader.vs", L"./Resources/Shader.ps");
 
@@ -163,13 +171,9 @@ void Application::run()
 		
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-		model->bind();
 		m_renderer->bindShader(world, camera.getView(), camera.getProj());
-		model->draw();
+		m_renderer->draw(&model);
 
 		m_renderer->endScene();
 	}
-
-	model->destroy();
-	delete model;
 }

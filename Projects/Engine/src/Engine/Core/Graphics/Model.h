@@ -1,21 +1,38 @@
 #pragma once
 
-#include <vector>
-#include "Vertex.h"
+#include "VertexArray.h"
+#include "IndexBuffer.h"
 
 namespace ym
 {
 	class Model
 	{
 	public:
-		static Model* create();
+		struct Info
+		{
+			Info(Topology topology = Topology::TRIANGLE_LIST, Usage usage = Usage::STATIC) : topology(topology), usage(usage){}
+			Topology topology;
+			Usage usage;
+		};
 
-		virtual void setData(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) = 0;
-		virtual void bind() = 0;
-		virtual void draw() = 0;
-		virtual void destroy() = 0;
+		Model();
+		virtual ~Model();
 
-		virtual unsigned int getVertexCount() = 0;
-		virtual unsigned int getIndexCount() = 0;
+		void setData(const void* vertices, unsigned int vSize, const void* indices, unsigned int iSize, const AttributeLayout& layout, Info info);
+		void bind();
+
+		unsigned int getVertexCount() const;
+		unsigned int getIndexCount() const;
+
+		VertexArray* getVertexArray();
+		IndexBuffer* getIndexBuffer();
+
+		Info getInfo() const;
+
+	private:
+		VertexArray* m_va;
+		IndexBuffer* m_ib;
+		Info m_info;
+		unsigned int m_vertexCount;
 	};
 }

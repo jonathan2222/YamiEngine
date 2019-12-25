@@ -175,7 +175,7 @@ void ym::DX11Renderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
 	YM_ASSERT(FAILED(result) == false, "Failed to create pixel shader!");
 
 	// Create the vertex input layout description.
-	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
+	// This setup needs to match the Vertex stucture in used int the model and in the shader.
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 	polygonLayout[0].SemanticName = "POSITION";
 	polygonLayout[0].SemanticIndex = 0;
@@ -197,7 +197,7 @@ void ym::DX11Renderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
 	SIZE_T numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 	// Create the vertex input layout.
-	result = m_device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
+	result = m_device->CreateInputLayout(polygonLayout, (UINT)numElements, vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(), &m_layout);
 	YM_ASSERT(FAILED(result) == false, "Failed to create input layout!");
 
@@ -250,6 +250,39 @@ void ym::DX11Renderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& 
 	m_context->IASetInputLayout(m_layout);
 	m_context->VSSetShader(m_vsShader, NULL, 0);
 	m_context->PSSetShader(m_psShader, NULL, 0);
+}
+
+void ym::DX11Renderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology)
+{
+	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
+	va->bind();
+	ib->bind();
+	context->IASetPrimitiveTopology(getD3D11Topology(topology));
+	context->DrawIndexed(ib->getCount(), 0, 0);
+}
+
+void ym::DX11Renderer::draw(Model* model)
+{
+	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
+	model->bind();
+
+	context->IASetPrimitiveTopology(getD3D11Topology(model->getInfo().topology));
+	context->DrawIndexed(model->getIndexBuffer()->getCount(), 0, 0);
+}
+
+D3D11_PRIMITIVE_TOPOLOGY ym::DX11Renderer::getD3D11Topology(Topology topology)
+{
+	switch (topology)
+	{
+	case Topology::POINT_LIST: return D3D_PRIMITIVE_TOPOLOGY_POINTLIST; break;
+	case Topology::LINE_LIST: return D3D_PRIMITIVE_TOPOLOGY_LINELIST; break;
+	case Topology::LINE_STRIP: return D3D_PRIMITIVE_TOPOLOGY_LINESTRIP; break;
+	case Topology::TRIANGLE_STRIP: return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
+	case Topology::TRIANGLE_LIST:
+	default:
+		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		break;
+	}
 }
 
 void ym::DX11Renderer::createRTV()
