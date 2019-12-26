@@ -102,6 +102,33 @@ IDXGISwapChain1* ym::DX11API::getSwapChain()
 	return m_swapChain;
 }
 
+DXGI_FORMAT ym::DX11API::convertFormat(Format format) const
+{
+	switch (format)
+	{
+	case Format::FLOAT_32_R:		return DXGI_FORMAT_R32_FLOAT;
+	case Format::FLOAT_32_RG:		return DXGI_FORMAT_R32G32_FLOAT;
+	case Format::FLOAT_32_RGB:		return DXGI_FORMAT_R32G32B32_FLOAT;
+	case Format::SINT_32_R:			return DXGI_FORMAT_R32_SINT;
+	case Format::SINT_32_RG:		return DXGI_FORMAT_R32G32_SINT;
+	case Format::SINT_32_RGB:		return DXGI_FORMAT_R32G32B32_SINT;
+	case Format::SINT_32_RGBA:		return DXGI_FORMAT_R32G32B32A32_SINT;
+	case Format::UINT_32_R:			return DXGI_FORMAT_R32_UINT;
+	case Format::UINT_32_RG:		return DXGI_FORMAT_R32G32_UINT;
+	case Format::UINT_32_RGB:		return DXGI_FORMAT_R32G32B32_UINT;
+	case Format::UINT_32_RGBA:		return DXGI_FORMAT_R32G32B32A32_UINT;
+	case Format::SINT_8_R:			return DXGI_FORMAT_R8_SINT;
+	case Format::SINT_8_RG:			return DXGI_FORMAT_R8G8_SINT;
+	case Format::SINT_8_RGBA:		return DXGI_FORMAT_R8G8B8A8_SINT;
+	case Format::UINT_8_R:			return DXGI_FORMAT_R8_UINT;
+	case Format::UINT_8_RG:			return DXGI_FORMAT_R8G8_UINT;
+	case Format::UINT_8_RGBA:		return DXGI_FORMAT_R8G8B8A8_UINT;
+	case Format::FLOAT_32_RGBA:
+	default:
+		return DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
+}
+
 void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType)
 {
 	UINT flags = 0;

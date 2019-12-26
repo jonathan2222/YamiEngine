@@ -16,6 +16,17 @@ namespace ym
 		void bind() override;
 
 	private:
-		void compileShader(ID3DBlob* errorMessageBlob, WCHAR* fileName);
+		void createPixelShader(const std::string& path);
+		void createVertexShader(const std::string& path);
+		void compileShader(ID3DBlob* errorMessageBlob);
+
+		void createLayout(ShaderLayout& layout);
+
+		std::wstring s2ws(const std::string& s) const;
+
+		ID3D11VertexShader* m_vsShader;
+		ID3D11PixelShader* m_psShader;
+		ID3D11InputLayout* m_layout;
+		ID3DBlob* m_vertexShaderBuffer;
 	};
 }

@@ -16,17 +16,11 @@ namespace ym
 		UINT_32_RG,
 		UINT_32_RGB,
 		UINT_32_RGBA,
-		FLOAT_8_R,
-		FLOAT_8_RG,
-		FLOAT_8_RGB,
-		FLOAT_8_RGBA,
 		SINT_8_R,
 		SINT_8_RG,
-		SINT_8_RGB,
 		SINT_8_RGBA,
 		UINT_8_R,
 		UINT_8_RG,
-		UINT_8_RGB,
 		UINT_8_RGBA
 	};
 

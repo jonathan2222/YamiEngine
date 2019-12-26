@@ -13,6 +13,7 @@
 #include <dxgi1_2.h>
 #include <d3dcompiler.h>
 #include <vector>
+#include "../../Engine/Core/Graphics/Types.h"
 
 namespace ym
 {
@@ -29,6 +30,8 @@ namespace ym
 		ID3D11Device* getDevice();
 		ID3D11DeviceContext* getDeviceContext();
 		IDXGISwapChain1* getSwapChain();
+
+		DXGI_FORMAT convertFormat(Format format) const;
 
 	private:
 		void createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType);

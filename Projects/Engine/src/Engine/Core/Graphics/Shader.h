@@ -3,6 +3,8 @@
 #include <string>
 #include "ShaderLayout.h"
 
+#define YM_SHADER_PATH "./Resources/Shaders/"
+
 namespace ym
 {
 	class Shader
