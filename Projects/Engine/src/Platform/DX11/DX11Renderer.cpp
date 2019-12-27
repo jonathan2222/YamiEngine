@@ -142,6 +142,7 @@ void ym::DX11Renderer::endScene()
 
 void ym::DX11Renderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
 {
+	/*
 	HRESULT result;
 	ID3DBlob* vertexShaderBuffer = nullptr;
 	ID3DBlob* errorMessageBlob = nullptr;
@@ -219,10 +220,12 @@ void ym::DX11Renderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = m_device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	YM_ASSERT(FAILED(result) == false, "Failed to create a constant buffer for the matrtices!");
+	*/
 }
 
 void ym::DX11Renderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj)
 {
+	/*
 	// Update constant buffer.
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -250,22 +253,24 @@ void ym::DX11Renderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& 
 	m_context->IASetInputLayout(m_layout);
 	m_context->VSSetShader(m_vsShader, NULL, 0);
 	m_context->PSSetShader(m_psShader, NULL, 0);
+	*/
 }
 
-void ym::DX11Renderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology)
+void ym::DX11Renderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)
 {
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	va->bind();
 	ib->bind();
+	shader->bind();
 	context->IASetPrimitiveTopology(getD3D11Topology(topology));
 	context->DrawIndexed(ib->getCount(), 0, 0);
 }
 
-void ym::DX11Renderer::draw(Model* model)
+void ym::DX11Renderer::draw(Model* model, Shader* shader)
 {
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	model->bind();
-
+	shader->bind();
 	context->IASetPrimitiveTopology(getD3D11Topology(model->getInfo().topology));
 	context->DrawIndexed(model->getIndexBuffer()->getCount(), 0, 0);
 }

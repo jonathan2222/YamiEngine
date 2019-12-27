@@ -8,13 +8,6 @@ namespace ym
 	class DX11Renderer : public Renderer
 	{
 	public:
-		struct MatrixBufferType
-		{
-			glm::mat4 world;
-			glm::mat4 view;
-			glm::mat4 projection;
-		};
-
 		static DX11Renderer* get();
 		DX11Renderer();
 
@@ -27,8 +20,8 @@ namespace ym
 		void initShader(WCHAR* vertexShader, WCHAR* pixelShader) override;
 		void bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj) override;
 		
-		void draw(VertexArray* va, IndexBuffer* ib, Topology topology) override;
-		void draw(Model* model) override;
+		void draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader) override;
+		void draw(Model* model, Shader* shader) override;
 
 	private:
 		D3D11_PRIMITIVE_TOPOLOGY getD3D11Topology(Topology topology);

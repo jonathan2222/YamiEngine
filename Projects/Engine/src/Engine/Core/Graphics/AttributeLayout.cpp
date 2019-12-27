@@ -5,9 +5,9 @@ ym::AttributeLayout::AttributeLayout() : m_stride(0)
 {
 }
 
-void ym::AttributeLayout::push(unsigned int count, Type type)
+void ym::AttributeLayout::push(Format format, const std::string& semanticName)
 {
-	Attribute attribute(count, m_stride, type);
+	Attribute attribute(format, semanticName, m_stride);
 	m_stride += attribute.getSize();
 	m_attributes.push_back(attribute);
 }
@@ -22,10 +22,12 @@ const std::vector<ym::AttributeLayout::Attribute>& ym::AttributeLayout::getAttri
 	return m_attributes;
 }
 
-ym::AttributeLayout::Attribute::Attribute(unsigned int count, unsigned int offset, Type type)
-	: m_count(count), m_offset(offset), m_type(type)
+ym::AttributeLayout::Attribute::Attribute(Format format, const std::string& semanticName, unsigned int offset) : 
+	m_offset(offset), m_semanticName(semanticName), m_size(0), m_type(Type::FLOAT), m_format(format)
 {
-	m_size = sizeofType(type) * count;
+	m_count = countOfFormat(format);
+	m_type = typeOfFormat(format);
+	m_size = sizeOfType(m_type) * m_count;
 }
 
 unsigned int ym::AttributeLayout::Attribute::getCount() const
@@ -46,4 +48,14 @@ unsigned int ym::AttributeLayout::Attribute::getOffset() const
 ym::Type ym::AttributeLayout::Attribute::getType() const
 {
 	return m_type;
+}
+
+ym::Format ym::AttributeLayout::Attribute::getFormat() const
+{
+	return m_format;
+}
+
+const std::string& ym::AttributeLayout::Attribute::getSemanticName() const
+{
+	return m_semanticName;
 }

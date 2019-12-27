@@ -11,22 +11,26 @@ namespace ym
 		class Attribute
 		{
 		public:
-			Attribute(unsigned int count, unsigned int offset, Type type);
+			Attribute(Format format, const std::string& semanticName, unsigned int offset);
 
 			unsigned int getCount() const;
 			unsigned int getSize() const;
 			unsigned int getOffset() const;
 			Type getType() const;
+			Format getFormat() const;
+			const std::string& getSemanticName() const;
 
 		private:
 			unsigned int m_offset = 0;
 			unsigned int m_count = 0;
 			unsigned int m_size;
 			Type m_type;
+			Format m_format;
+			std::string m_semanticName;
 		};
 
 		AttributeLayout();
-		void push(unsigned int count, Type type);
+		void push(Format format, const std::string& semanticName);
 
 		unsigned int getStride() const;
 		const std::vector<Attribute>& getAttributes() const;

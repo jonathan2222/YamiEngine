@@ -48,5 +48,7 @@ namespace ym
 		UCHAR
 	};
 
-	unsigned int sizeofType(Type type);
+	unsigned int sizeOfType(Type type);
+	unsigned int countOfFormat(Format format);
+	Type typeOfFormat(Format format);
 }

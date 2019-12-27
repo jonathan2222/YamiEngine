@@ -48,7 +48,7 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 	getRefreshRate(adapters[0], displayDescriptor);
 
 	// Release the adapters.
-	UINT len = adapters.size();
+	UINT len = (UINT)adapters.size();
 	for (auto& ad : adapters)
 		ad->Release();
 	adapter = 0;
@@ -64,6 +64,11 @@ void ym::DX11API::postDisplayInit()
 
 void ym::DX11API::destroy()
 {
+#ifdef YAMI_DEBUG
+	m_device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_debug));
+	m_debug->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_DETAIL);
+#endif
+
 	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
 	if (m_swapChain)
 		m_swapChain->SetFullscreenState(false, NULL);
@@ -133,7 +138,7 @@ void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType
 {
 	UINT flags = 0;
 #ifdef YAMI_DEBUG
-	flags = D3D11_CREATE_DEVICE_DEBUG;
+	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 	// Set the feature level to DirectX 11.1.
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_1;
@@ -239,7 +244,6 @@ void ym::DX11API::getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDesc
 
 std::vector<IDXGIAdapter*> ym::DX11API::enumerateAdapters()
 {
-	HRESULT result;
 	IDXGIAdapter* pAdapter;
 	std::vector <IDXGIAdapter*> vAdapters;
 

@@ -12,15 +12,16 @@ namespace ym
 		DX11Shader();
 		virtual ~DX11Shader();
 
-		void load(const std::string& fileName, ShaderLayout layout) override;
+		void load(const std::string& fileName, AttributeLayout& layout) override;
 		void bind() override;
+		void* getId() override;
 
 	private:
 		void createPixelShader(const std::string& path);
 		void createVertexShader(const std::string& path);
 		void compileShader(ID3DBlob* errorMessageBlob);
 
-		void createLayout(ShaderLayout& layout);
+		void createLayout(AttributeLayout& layout);
 
 		std::wstring s2ws(const std::string& s) const;
 

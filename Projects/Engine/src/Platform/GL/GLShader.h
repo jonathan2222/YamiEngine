@@ -10,8 +10,9 @@ namespace ym
 		GLShader();
 		virtual ~GLShader();
 
-		void load(const std::string& fileName, ShaderLayout layout) override;
+		void load(const std::string& fileName, AttributeLayout& layout) override;
 		void bind() override;
+		void* getId() override;
 
 	private:
 	};

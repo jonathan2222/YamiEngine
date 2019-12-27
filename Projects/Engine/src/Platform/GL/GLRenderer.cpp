@@ -43,12 +43,12 @@ void ym::GLRenderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& pr
 	YM_LOG_ERROR("Missing implementation of 'bindShader' for the GLRenderer!");
 }
 
-void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology)
+void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)
 {
 	YM_LOG_ERROR("Missing implementation of 'draw' for the GLRenderer!");
 }
 
-void ym::GLRenderer::draw(Model* model)
+void ym::GLRenderer::draw(Model* model, Shader* shader)
 {
 	YM_LOG_ERROR("Missing implementation of 'draw' for the GLRenderer!");
 }

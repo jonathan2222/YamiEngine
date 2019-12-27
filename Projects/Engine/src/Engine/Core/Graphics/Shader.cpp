@@ -6,6 +6,14 @@
 #include "../../../Platform/DX11/DX11Shader.h"
 #endif
 
+ym::Shader::Shader()
+{
+}
+
+ym::Shader::~Shader()
+{
+}
+
 ym::Shader* ym::Shader::create()
 {
 	static std::string type = Config::get()->fetch<std::string>("API/type");

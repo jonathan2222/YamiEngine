@@ -45,5 +45,9 @@ namespace ym
 		ID3D11Device* m_device;
 		ID3D11DeviceContext* m_deviceContext;
 		IDXGISwapChain1* m_swapChain;
+
+		#ifdef YAMI_DEBUG
+		ID3D11Debug* m_debug;
+		#endif
 	};
 }
