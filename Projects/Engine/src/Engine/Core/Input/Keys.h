@@ -1,6 +1,9 @@
 #pragma once
 
 #include <unordered_map>
+#ifdef YAMI_PLATFORM_WINDOWS
+	#include <Windows.h>
+#endif
 
 namespace ym
 {
@@ -134,6 +137,7 @@ namespace ym
 		LAST = MENU
 	};
 
+#ifdef YAMI_PLATFORM_WINDOWS
 	class MBConverter
 	{
 	public:
@@ -269,4 +273,5 @@ namespace ym
 	private:
 		static std::unordered_map<DXKey, Key> m_keys;
 	};
+#endif
 }

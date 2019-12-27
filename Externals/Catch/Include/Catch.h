@@ -1,3 +1,4 @@
+#include "..\..\..\Projects\Engine\src\Utils\Timer.h"
 /*
  *  Catch v2.9.2
  *  Generated: 2019-08-08 13:35:12.279703

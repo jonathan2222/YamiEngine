@@ -2,12 +2,6 @@
 
 #include <Engine/Core/Display.h>
 
-// Only for test, should be moved.
-#ifdef YAMI_PLATFORM_WINDOWS
-	#include <Windows.h>
-#endif
-#include <gl/GL.h>
-
 #include "Engine/Core/Input/Input.h"
 #include "Engine/Core/Logger.h"
 #include "Engine/Core/Input/Config.h"
@@ -18,6 +12,8 @@
 #include "Engine/Core/Graphics/Vertex.h"
 #include "Engine/Core/Graphics/Shader.h"
 #include "Engine/Core/Graphics/UniformBuffer.h"
+
+#include "Utils/Timer.h"
 
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -101,22 +97,27 @@ void Application::run()
 	uniformBuffer->setShader(*shader, 0, 0);
 	uniformBuffer->setData(&(matrixBuffer.world[0][0]), sizeof(MatrixBuffer));
 
-	float defaultSpeed = 0.005f;
+	float defaultSpeed = 2.0f;
 	float factor = 2.f;
-	float rotSpeed = 3.1415f / 180.f * 0.2f;
+	float defaultRotSpeed = 3.1415f / 180.f * 90.0f;
 
+	ym::Timer timer;
+	float dt = 0.16f;
+	float debugTimer = 1.0f;
 	while (!m_display->shouldClose())
 	{
+		timer.start();
 		m_display->pollEvents();
 
 		if (ym::Input::get()->isKeyPressed(ym::Key::ESCAPE))
 			m_display->close();
 
-		float speed = defaultSpeed;
+		float speed = defaultSpeed*dt;
 		if (ym::Input::get()->isKeyPressed(ym::Key::LEFT_SHIFT))
 		{
-			speed = defaultSpeed*factor;
+			speed = defaultSpeed*factor*dt;
 		}
+		float rotSpeed = defaultRotSpeed * dt;
 
 		if (ym::Input::get()->isKeyPressed(ym::Key::A))
 		{
@@ -190,6 +191,13 @@ void Application::run()
 		m_renderer->draw(&model, shader);
 
 		m_renderer->endScene();
+		dt = timer.stop();
+		debugTimer += dt;
+		if (debugTimer >= 1.0f)
+		{
+			debugTimer = 0.0f;
+			YM_LOG_INFO("dt: {0:.2f} ms (FPS: {1:.2f})", dt*1000.f, 1.0f/dt);
+		}
 	}
 
 	delete shader;

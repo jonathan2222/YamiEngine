@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Keys.h"
 
+#ifdef YAMI_PLATFORM_WINDOWS
 std::unordered_map<ym::KeyConverter::DXKey, ym::Key> ym::KeyConverter::m_keys = std::unordered_map<ym::KeyConverter::DXKey, ym::Key>();
 
 void ym::KeyConverter::init()
@@ -141,3 +142,5 @@ ym::MB ym::MBConverter::convertToMB(DXMB mb)
 		break;
 	}
 }
+
+#endif
