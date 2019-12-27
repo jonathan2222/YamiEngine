@@ -47,8 +47,6 @@ void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 	m_context->RSSetState(m_rasterizerState);
 
 	createAndSetViewport(displayDescriptor);
-
-	// TODO: Create camera stuff.
 }
 
 void ym::DX11Renderer::destroy()

@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "GLRenderer.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "../../Engine/Core/Display.h"
 
 ym::GLRenderer* ym::GLRenderer::get()
@@ -44,10 +41,30 @@ void ym::GLRenderer::endScene()
 
 void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)
 {
-	YM_LOG_ERROR("Missing implementation of 'draw' for the GLRenderer!");
+	va->bind();
+	ib->bind();
+	shader->bind();
+	glDrawElements(getGLTopology(topology), ib->getCount(), GL_UNSIGNED_INT, 0);
 }
 
 void ym::GLRenderer::draw(Model* model, Shader* shader)
 {
-	YM_LOG_ERROR("Missing implementation of 'draw' for the GLRenderer!");
+	model->bind();
+	shader->bind();
+	glDrawElements(getGLTopology(model->getInfo().topology), model->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+}
+
+GLenum ym::GLRenderer::getGLTopology(Topology topology)
+{
+	switch (topology)
+	{
+	case Topology::POINT_LIST: return GL_POINTS; break;
+	case Topology::LINE_LIST: return GL_LINES; break;
+	case Topology::LINE_STRIP: return GL_LINE_STRIP; break;
+	case Topology::TRIANGLE_STRIP: return GL_TRIANGLE_STRIP; break;
+	case Topology::TRIANGLE_LIST:
+	default:
+		return GL_TRIANGLES;
+		break;
+	}
 }

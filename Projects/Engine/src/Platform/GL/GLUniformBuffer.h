@@ -18,5 +18,7 @@ namespace ym
 
 	private:
 		unsigned int m_size;
+		GLuint m_id;
+		GLuint m_bindingPoint;
 	};
 }

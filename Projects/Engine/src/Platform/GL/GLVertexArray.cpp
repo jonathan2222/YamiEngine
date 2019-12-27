@@ -27,7 +27,8 @@ void ym::GLVertexArray::addBuffer(VertexBuffer* vb, const AttributeLayout& layou
 		glEnableVertexAttribArray(m_nextLocation);
 		
 		GLenum type = GLAPI::get()->convertType(attribute.getType());
-		glVertexAttribPointer(m_nextLocation, attribute.getSize(), type, GL_FALSE, layout.getStride(), (void*)attribute.getOffset());
+		unsigned int offset = attribute.getOffset();
+		glVertexAttribPointer(m_nextLocation, attribute.getSize(), type, GL_FALSE, layout.getStride(), (void*)(&offset));
 		m_nextLocation++;
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include"../../Engine/Core/Graphics/Renderer.h"
+#include "GLAPI.h"
 
 namespace ym
 {
@@ -18,5 +19,8 @@ namespace ym
 
 		void draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader) override;
 		void draw(Model* model, Shader* shader) override;
+
+	private:
+		GLenum getGLTopology(Topology topology);
 	};
 }

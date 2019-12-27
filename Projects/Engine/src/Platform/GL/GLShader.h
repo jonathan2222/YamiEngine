@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Engine/Core/Graphics/Shader.h"
+#include "GLAPI.h"
 
 namespace ym
 {
@@ -15,5 +16,14 @@ namespace ym
 		void* getId() override;
 
 	private:
+		void init(const std::string& vertex, const std::string& fragment);
+
+		bool addShaderPart(const std::string& name, GLuint type);
+		GLuint loadShaderPart(const std::string& name, GLuint type);
+		bool compileShaderPart(GLuint id, GLuint type);
+		bool link();
+
+		GLuint m_id;
+		std::vector<GLuint> m_ids;
 	};
 }

@@ -3,6 +3,7 @@
 #include "../../Engine/Core/API.h"
 #include "../../Engine/Core/Graphics/Types.h"
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace ym
 {

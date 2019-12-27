@@ -1,7 +1,7 @@
 {
   "API": {
-    "type": "DirectX11",
-    "debug": false
+    "type": "OpenGL",
+    "debug": true
   },
 
   "Display": {

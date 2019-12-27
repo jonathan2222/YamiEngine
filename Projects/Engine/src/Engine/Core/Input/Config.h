@@ -1,6 +1,11 @@
 #pragma once
 
+#pragma warning( push )
+#pragma warning( disable : 26444 )
+#pragma warning( disable : 26451 )
+#pragma warning( disable : 28020 )
 #include "../../../Utils/json.hpp"
+
 using json = nlohmann::json;
 #include "../../Defines.h"
 
@@ -82,3 +87,5 @@ namespace ym
 		return it->second.b;
 	}
 }
+
+#pragma warning( pop )

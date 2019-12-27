@@ -36,6 +36,8 @@ void ym::Config::readFile(const std::string& fileName)
 	}
 }
 
+#pragma warning( push )
+#pragma warning( disable : 26444 )
 void ym::Config::load(const std::string& str, json& j)
 {
 	for (auto it = j.begin(); it != j.end(); it++) {
@@ -70,3 +72,4 @@ void ym::Config::load(const std::string& str, json& j)
 		}
 	}
 }
+#pragma warning( pop )
