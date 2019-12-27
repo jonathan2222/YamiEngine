@@ -41,6 +41,21 @@ void ym::GLAPI::initDebug()
 #endif
 }
 
+GLenum ym::GLAPI::convertType(Type type) const
+{
+	switch (type)
+	{
+	case Type::INT:		return GL_INT; break;
+	case Type::CHAR:	return GL_BYTE; break;
+	case Type::UINT:	return GL_UNSIGNED_INT; break;
+	case Type::UCHAR:	return GL_UNSIGNED_BYTE; break;
+	case Type::FLOAT:
+	default:
+		return GL_FLOAT;
+		break;
+	}
+}
+
 void ym::GLAPI::errorCallback(int error, const char* description)
 {
 	YM_ASSERT(false, "{0}", description);

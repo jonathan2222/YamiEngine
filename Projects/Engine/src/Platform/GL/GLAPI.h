@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Engine/Core/API.h"
+#include "../../Engine/Core/Graphics/Types.h"
 #include <GL/glew.h>
 
 namespace ym
@@ -16,6 +17,8 @@ namespace ym
 		void destroy() override;
 
 		void initDebug();
+
+		GLenum convertType(Type type) const;
 
 	private:
 		static void errorCallback(int error, const char* description);
