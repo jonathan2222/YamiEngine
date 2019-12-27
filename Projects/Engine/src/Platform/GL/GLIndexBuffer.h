@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Engine/Core/Graphics/IndexBuffer.h"
+#include "GLAPI.h"
 
 namespace ym
 {
@@ -12,5 +13,8 @@ namespace ym
 
 		void setData(const void* data, unsigned int count, Usage usage) override;
 		void bind() override;
+
+	private:
+		GLuint m_id;
 	};
 }
