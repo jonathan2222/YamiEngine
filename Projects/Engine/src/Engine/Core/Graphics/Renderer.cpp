@@ -6,6 +6,14 @@
 	#include "../../../Platform/DX11/DX11Renderer.h"
 #endif
 
+ym::Renderer::Renderer()
+{
+}
+
+ym::Renderer::~Renderer()
+{
+}
+
 ym::Renderer* ym::Renderer::get()
 {
 	static std::string type = Config::get()->fetch<std::string>("API/type");

@@ -44,7 +44,7 @@ void ym::DX11UniformBuffer::setData(const void* data, unsigned int size)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	ID3D11Device* device = DX11API::get()->getDevice();
 	HRESULT result = device->CreateBuffer(&matrixBufferDesc, &initData, &m_buffer);
-	YM_ASSERT(FAILED(result) == false, "Failed to create a constant buffer for the matrtices!");
+	YM_ASSERT(FAILED(result) == false, "Failed to create a constant buffer!");
 }
 
 bool ym::DX11UniformBuffer::updateData(const void* data, unsigned int size, unsigned int offset)

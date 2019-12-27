@@ -14,6 +14,9 @@ namespace ym
 	class Renderer
 	{
 	public:
+		Renderer();
+		virtual ~Renderer();
+
 		static Renderer* get();
 
 		virtual void init(DisplayDesc& displayDescriptor) = 0;
@@ -21,9 +24,6 @@ namespace ym
 
 		virtual void beginScene(float r, float g, float b, float a) = 0;
 		virtual void endScene() = 0;
-
-		virtual void initShader(WCHAR* vertexShader, WCHAR* pixelShader) = 0;
-		virtual void bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj) = 0;
 
 		virtual void draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader) = 0;
 		virtual void draw(Model* model, Shader* shader) = 0;

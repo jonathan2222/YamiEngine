@@ -12,6 +12,10 @@ ym::GLRenderer* ym::GLRenderer::get()
 	return &renderer;
 }
 
+ym::GLRenderer::GLRenderer()
+{
+}
+
 void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 {
 }
@@ -31,16 +35,6 @@ void ym::GLRenderer::endScene()
 {
 	GLFWwindow* window = (GLFWwindow*)Display::get()->getNativeDisplay();
 	glfwSwapBuffers(window);
-}
-
-void ym::GLRenderer::initShader(WCHAR* vertexShader, WCHAR* pixelShader)
-{
-	YM_LOG_ERROR("Missing implementation of 'initShader' for the GLRenderer!");
-}
-
-void ym::GLRenderer::bindShader(glm::mat4& world, glm::mat4& view, glm::mat4& proj)
-{
-	YM_LOG_ERROR("Missing implementation of 'bindShader' for the GLRenderer!");
 }
 
 void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)

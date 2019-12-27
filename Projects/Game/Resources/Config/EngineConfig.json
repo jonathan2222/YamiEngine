@@ -1,6 +1,7 @@
 {
   "API": {
-    "type": "DirectX11"
+    "type": "DirectX11",
+    "debug": false
   },
 
   "Display": {

@@ -127,9 +127,7 @@ void ym::DX11Shader::createLayout(AttributeLayout& layout)
 	for (unsigned int i = 0; i < numElements; i++)
 	{
 		const AttributeLayout::Attribute& attribute = attributes[i];
-		LPCSTR test = attribute.getSemanticName().c_str();
-		polygonLayout[i].SemanticName = test;
-		YM_LOG_INFO("SemanticName: {0}", test);
+		polygonLayout[i].SemanticName = attribute.getSemanticName().c_str();
 		polygonLayout[i].SemanticIndex = 0;
 		polygonLayout[i].Format = DX11API::get()->convertFormat(attribute.getFormat());
 		polygonLayout[i].InputSlot = 0;

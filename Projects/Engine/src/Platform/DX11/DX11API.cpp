@@ -64,11 +64,6 @@ void ym::DX11API::postDisplayInit()
 
 void ym::DX11API::destroy()
 {
-#ifdef YAMI_DEBUG
-	m_device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_debug));
-	m_debug->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_DETAIL);
-#endif
-
 	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
 	if (m_swapChain)
 		m_swapChain->SetFullscreenState(false, NULL);
@@ -78,18 +73,28 @@ void ym::DX11API::destroy()
 		m_deviceContext->Release();
 		m_deviceContext = 0;
 	}
-
-	if (m_device)
-	{
-		m_device->Release();
-		m_device = 0;
-	}
-
+	
 	if (m_swapChain)
 	{
 		m_swapChain->Release();
 		m_swapChain = 0;
 	}
+
+	if (m_device)
+	{
+#ifdef YAMI_DEBUG
+		static bool shouldDebug = Config::get()->fetch<bool>("API/debug");
+		if (shouldDebug)
+		{
+			m_device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&m_debug));
+			m_debug->ReportLiveDeviceObjects(D3D11_RLDO_FLAGS::D3D11_RLDO_SUMMARY);
+			m_debug->Release();
+		}
+#endif
+		m_device->Release();
+		m_device = 0;
+	}
+
 }
 
 ID3D11Device* ym::DX11API::getDevice()

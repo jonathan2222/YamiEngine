@@ -87,8 +87,6 @@ void Application::run()
 	ym::Shader* shader = ym::Shader::create();
 	shader->load("Test", layout);
 
-	//m_renderer->initShader(L"./Resources/Shader.vs", L"./Resources/Shader.ps");
-
 	ym::Camera camera({0.0f, 0.0f, 2.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f, 0.0f}, 0.01f, 100.0f, 3.1415f / 4);
 	camera.updateView();
 	camera.updateProj();
@@ -183,7 +181,6 @@ void Application::run()
 		
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
-		//m_renderer->bindShader(world, camera.getView(), camera.getProj());
 		matrixBuffer.world = glm::transpose(world);
 		matrixBuffer.projection = glm::transpose(camera.getProj());
 		matrixBuffer.view = glm::transpose(camera.getView());
