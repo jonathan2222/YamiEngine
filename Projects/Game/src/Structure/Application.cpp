@@ -82,7 +82,8 @@ void Application::run()
 	ym::AttributeLayout layout;
 	layout.push(ym::Format::FLOAT_32_RGB, "POSITION");
 	layout.push(ym::Format::FLOAT_32_RGB, "COLOR");
-	model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(ym::Vertex) * vertices.size()), indices.data(), (unsigned int)indices.size(), layout, modelInfo);
+	model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(ym::Vertex) * vertices.size()), 
+		indices.data(), (unsigned int)indices.size(), layout, modelInfo);
 
 	ym::Shader* shader = ym::Shader::create();
 	shader->load("Test", layout);
@@ -97,8 +98,8 @@ void Application::run()
 	matrixBuffer.world = glm::transpose(world);
 	matrixBuffer.projection = glm::transpose(camera.getProj());
 	matrixBuffer.view = glm::transpose(camera.getView());
-	uniformBuffer->setData(&(matrixBuffer.world[0][0]), sizeof(MatrixBuffer));
 	uniformBuffer->setShader(*shader, 0, 0);
+	uniformBuffer->setData(&(matrixBuffer.world[0][0]), sizeof(MatrixBuffer));
 
 	float defaultSpeed = 0.005f;
 	float factor = 2.f;
@@ -180,10 +181,10 @@ void Application::run()
 		}
 		
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
-
-		matrixBuffer.world = glm::transpose(world);
-		matrixBuffer.projection = glm::transpose(camera.getProj());
-		matrixBuffer.view = glm::transpose(camera.getView());
+		
+		matrixBuffer.world = world;
+		matrixBuffer.projection = camera.getProj();
+		matrixBuffer.view = camera.getView();
 		uniformBuffer->updateData(&(matrixBuffer.world[0][0]), sizeof(MatrixBuffer), 0);
 		uniformBuffer->bind(YM_SHADER_TYPE_VERTEX);
 		m_renderer->draw(&model, shader);

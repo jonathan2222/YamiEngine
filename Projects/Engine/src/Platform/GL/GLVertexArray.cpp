@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GLVertexArray.h"
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 ym::GLVertexArray::GLVertexArray() : m_id(0), m_nextLocation(0)
 {
 	glGenVertexArrays(1, &m_id);
@@ -28,7 +30,7 @@ void ym::GLVertexArray::addBuffer(VertexBuffer* vb, const AttributeLayout& layou
 		
 		GLenum type = GLAPI::get()->convertType(attribute.getType());
 		unsigned int offset = attribute.getOffset();
-		glVertexAttribPointer(m_nextLocation, attribute.getSize(), type, GL_FALSE, layout.getStride(), (void*)(&offset));
+		glVertexAttribPointer(m_nextLocation, attribute.getCount(), type, GL_FALSE, layout.getStride(), BUFFER_OFFSET(offset));
 		m_nextLocation++;
 	}
 }

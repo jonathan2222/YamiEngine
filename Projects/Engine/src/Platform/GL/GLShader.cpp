@@ -42,7 +42,10 @@ void ym::GLShader::init(const std::string& vertex, const std::string& fragment)
 	m_id = glCreateProgram();
 
 	if (vertex.empty() || fragment.empty())
+	{
+		YM_ASSERT(false, "Path to the vertex or fragment shader was not given!");
 		return;
+	}
 
 	if (addShaderPart(vertex, GL_VERTEX_SHADER) == false)
 		return;

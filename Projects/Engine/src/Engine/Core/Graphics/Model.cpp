@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Model.h"
 
-ym::Model::Model() : m_info(Info())
+ym::Model::Model() : m_info(Info()), m_vertexCount(0)
 {
 	m_va = VertexArray::create();
 	m_ib = IndexBuffer::create();

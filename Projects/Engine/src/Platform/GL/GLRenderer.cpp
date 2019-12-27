@@ -17,6 +17,7 @@ void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
 	glViewport(0, 0, (GLsizei)displayDescriptor.width, (GLsizei)displayDescriptor.height);
@@ -51,7 +52,7 @@ void ym::GLRenderer::draw(Model* model, Shader* shader)
 {
 	model->bind();
 	shader->bind();
-	glDrawElements(getGLTopology(model->getInfo().topology), model->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, 0);
+	glDrawElements(getGLTopology(model->getInfo().topology), model->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, (void*)0);
 }
 
 GLenum ym::GLRenderer::getGLTopology(Topology topology)
