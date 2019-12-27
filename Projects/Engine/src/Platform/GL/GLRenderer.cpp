@@ -18,6 +18,11 @@ ym::GLRenderer::GLRenderer()
 
 void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 {
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glViewport(0, 0, (GLsizei)displayDescriptor.width, (GLsizei)displayDescriptor.height);
 }
 
 void ym::GLRenderer::destroy()

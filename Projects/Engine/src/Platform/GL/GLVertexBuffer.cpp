@@ -1,33 +1,55 @@
 #include "stdafx.h"
 #include "GLVertexBuffer.h"
 
-ym::GLVertexBuffer::GLVertexBuffer()
+ym::GLVertexBuffer::GLVertexBuffer() : m_id(0)
 {
-	YM_LOG_ERROR("Missing implementation for 'VertexBuffer' in GLVertexBuffer!");
 }
 
 ym::GLVertexBuffer::~GLVertexBuffer()
 {
+	if (glIsBuffer(m_id) == GL_TRUE)
+	{
+		glDeleteBuffers(1, &m_id);
+		m_id = 0;
+	}
 }
 
 void ym::GLVertexBuffer::setData(const void* data, unsigned int size, Usage usage)
 {
-	YM_LOG_ERROR("Missing implementation for 'setData' in GLVertexBuffer!");
+	if (glIsBuffer(m_id) == GL_TRUE)
+	{
+		glDeleteBuffers(1, &m_id);
+		m_id = 0;
+	}
+	m_size = size;
+
+	// Create buffer.
+	glGenBuffers(1, &m_id);
+
+	// Bind.
+	glBindBuffer(GL_ARRAY_BUFFER, m_id);
+
+	// Set the data for the buffer.
+	GLenum glUsage = GL_STATIC_DRAW;
+	if (usage == Usage::STATIC) glUsage = GL_STATIC_DRAW;
+	if (usage == Usage::DYNAMIC) glUsage = GL_DYNAMIC_DRAW;
+	glBufferData(GL_ARRAY_BUFFER, m_size, data, glUsage);
+
+	// Unbind.
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void ym::GLVertexBuffer::bind()
 {
-	YM_LOG_ERROR("Missing implementation for 'bind' in GLVertexBuffer!");
+	glBindBuffer(GL_ARRAY_BUFFER, m_id);
 }
 
 void* ym::GLVertexBuffer::getBuffer()
 {
-	YM_LOG_ERROR("Missing implementation for 'getBuffer' in GLVertexBuffer!");
-	return nullptr; // Should return the id of the buffer.
+	return &m_id;
 }
 
 unsigned int ym::GLVertexBuffer::getSize()
 {
-	YM_LOG_ERROR("Missing implementation for 'getSize' in GLVertexBuffer!");
-	return 0;
+	return m_size;
 }
