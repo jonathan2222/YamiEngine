@@ -2,6 +2,7 @@
 #include "IApp.h"
 
 #include "API.h"
+#include "ImGuiImpl.h"
 #include "Display.h"
 #include "Input/Input.h"
 #include "Graphics/Renderer.h"
@@ -35,10 +36,14 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 
 	m_layerManager = LayerManager::get();
 	m_layerManager->setApp(this);
+
+	m_imGuiImpl = ImGuiImpl::create();
+	m_imGuiImpl->setUp();
 }
 
 ym::IApp::~IApp()
 {
+	m_imGuiImpl->cleanUp();
 	m_renderer->destroy();
 
 	delete m_display;
@@ -64,7 +69,10 @@ void ym::IApp::run()
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 		
 		m_layerManager->onRender();
+
+		m_imGuiImpl->startFrame();
 		m_layerManager->onRenderImGui();
+		m_imGuiImpl->endFrame();
 
 		m_renderer->endScene();
 

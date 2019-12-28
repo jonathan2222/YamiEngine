@@ -13,6 +13,10 @@ ym::GLRenderer::GLRenderer()
 {
 }
 
+void ym::GLRenderer::resize(unsigned int width, unsigned int height)
+{
+}
+
 void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 {
 	glEnable(GL_DEPTH_TEST);
@@ -21,10 +25,13 @@ void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 	glCullFace(GL_BACK);
 
 	glViewport(0, 0, (GLsizei)displayDescriptor.width, (GLsizei)displayDescriptor.height);
+
+	activate();
 }
 
 void ym::GLRenderer::destroy()
 {
+	deactivate();
 }
 
 void ym::GLRenderer::beginScene(float r, float g, float b, float a)

@@ -53,6 +53,7 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 		m_description.width = mode->width;
 		m_description.height = mode->height;
 	}
+
 	m_window = glfwCreateWindow(m_description.width, m_description.height, m_description.title.c_str(), monitor, nullptr);
 	glfwMakeContextCurrent(m_window);
 

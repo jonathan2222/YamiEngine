@@ -8,6 +8,7 @@
 
 ym::Renderer::Renderer()
 {
+	deactivate();
 }
 
 ym::Renderer::~Renderer()
@@ -21,4 +22,19 @@ ym::Renderer* ym::Renderer::get()
 	else if (type == YM_API_DX11) return DX11Renderer::get();
 	YM_ASSERT(false, "Could not fetch Renderer: API not supported!");
 	return nullptr;
+}
+
+bool ym::Renderer::isActive() const
+{
+	return m_isActive;
+}
+
+void ym::Renderer::activate()
+{
+	m_isActive = true;
+}
+
+void ym::Renderer::deactivate()
+{
+	m_isActive = false;
 }

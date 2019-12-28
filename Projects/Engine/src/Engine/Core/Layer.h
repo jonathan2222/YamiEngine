@@ -11,6 +11,8 @@
 
 #include "LayerManager.h"
 
+#include "ImGuiImpl.h"
+
 namespace ym
 {
 	class Layer

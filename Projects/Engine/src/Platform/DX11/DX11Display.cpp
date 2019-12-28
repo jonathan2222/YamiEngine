@@ -198,7 +198,6 @@ void ym::DX11Display::init(const DisplayDesc& description)
 	}
 	else
 	{
-		// If windowed then set it to 800x600 resolution.
 		screenWidth = m_description.width;
 		screenHeight = m_description.height;
 
@@ -206,6 +205,13 @@ void ym::DX11Display::init(const DisplayDesc& description)
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
 		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 		dwStyle = WS_OVERLAPPEDWINDOW;
+
+		// Adjust the size, so that the drawing area becomes the m_description.width and m_description.height!.
+		RECT wr = { 0, 0, screenWidth, screenHeight };
+		AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+		// Get the new size of the window.
+		screenWidth = wr.right - wr.left;
+		screenHeight = wr.bottom - wr.top;
 	}
 
 	// Create the window with the screen settings and get the handle to it.
@@ -223,10 +229,30 @@ void ym::DX11Display::init(const DisplayDesc& description)
 	//ShowCursor(false);
 }
 
+#ifndef WM_DPICHANGED
+#define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers
+#endif
+
+#include "DX11Renderer.h"
+
+// For ImGui::GetIO().
+//#include "DX11ImGuiImpl.h"
+
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, umessage, wparam, lparam))
+		return true;
+
 	switch (umessage)
 	{
+		case WM_SIZE:
+		{
+			if (Renderer::get()->isActive() && wparam != SIZE_MINIMIZED)
+				Renderer::get()->resize((unsigned int)LOWORD(lparam), (unsigned int)HIWORD(lparam));
+			return 0;
+		}
+
 		// Check if the window is being destroyed.
 		case WM_DESTROY:
 		{
@@ -240,6 +266,26 @@ LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 			PostQuitMessage(0);
 			return 0;
 		}
+		/*
+		case WM_SYSCOMMAND:
+		{
+			// Disable ALT application menu
+			if ((wparam & 0xfff0) == SC_KEYMENU)
+				return 0;
+			break;
+		}*/
+		/*
+		case WM_DPICHANGED:
+		{
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+			{
+				//const int dpi = HIWORD(wparam);
+				//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+				const RECT* suggested_rect = (RECT*)lparam;
+				::SetWindowPos(hwnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+			}
+			break;
+		}*/
 
 		// All other messages pass to the message handler in the DX11Display class.
 		default:

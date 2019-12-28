@@ -5,6 +5,7 @@
 
 namespace ym
 {
+	class ImGuiImpl;
 	class LayerManager;
 	class Renderer;
 	struct DisplayDesc;
@@ -32,5 +33,6 @@ namespace ym
 		ym::Display* m_display;
 		ym::Renderer* m_renderer;
 		ym::LayerManager* m_layerManager;
+		ym::ImGuiImpl* m_imGuiImpl;
 	};
 };

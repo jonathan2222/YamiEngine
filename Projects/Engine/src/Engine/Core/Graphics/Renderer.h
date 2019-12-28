@@ -19,6 +19,8 @@ namespace ym
 
 		static Renderer* get();
 
+		virtual void resize(unsigned int width, unsigned int height) = 0;
+
 		virtual void init(DisplayDesc& displayDescriptor) = 0;
 		virtual void destroy() = 0;
 
@@ -27,5 +29,12 @@ namespace ym
 
 		virtual void draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader) = 0;
 		virtual void draw(Model* model, Shader* shader) = 0;
+
+		bool isActive() const;
+		void activate();
+		void deactivate();
+
+	private:
+		bool m_isActive;
 	};
 }

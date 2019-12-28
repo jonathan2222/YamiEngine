@@ -11,6 +11,8 @@ namespace ym
 		static DX11Renderer* get();
 		DX11Renderer();
 
+		void resize(unsigned int width, unsigned int height) override;
+
 		void init(DisplayDesc& displayDescriptor) override;
 		void destroy() override;
 
@@ -20,10 +22,13 @@ namespace ym
 		void draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader) override;
 		void draw(Model* model, Shader* shader) override;
 
+		ID3D11RenderTargetView* getRenderTarget();
+
 	private:
 		D3D11_PRIMITIVE_TOPOLOGY getD3D11Topology(Topology topology);
 
 		void createRTV();
+		void clearRTV();
 		void createDepthBuffer(DisplayDesc& displayDescriptor);
 		void createDepthStencilState();
 		void createDepthStencilView();

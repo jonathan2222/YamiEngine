@@ -11,6 +11,8 @@ namespace ym
 		static GLRenderer* get();
 		GLRenderer();
 
+		void resize(unsigned int width, unsigned int height) override;
+
 		void init(DisplayDesc& displayDescriptor) override;
 		void destroy() override;
 

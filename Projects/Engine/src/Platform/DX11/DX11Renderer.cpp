@@ -23,9 +23,16 @@ ym::DX11Renderer::DX11Renderer()
 	m_rasterizerState = nullptr;
 }
 
+void ym::DX11Renderer::resize(unsigned int width, unsigned int height)
+{
+	YM_LOG_INFO("Change window size to {0}, {1}.", width, height);
+	clearRTV();
+	m_swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
+	createRTV();
+}
+
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 {
-
 	// Fetch the device, device context and the swap chain from the DirectX api.
 	m_device = DX11API::get()->getDevice();
 	m_context = DX11API::get()->getDeviceContext();
@@ -47,10 +54,14 @@ void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 	m_context->RSSetState(m_rasterizerState);
 
 	createAndSetViewport(displayDescriptor);
+
+	activate();
 }
 
 void ym::DX11Renderer::destroy()
 {
+	deactivate();
+
 	if (m_rasterizerState)
 	{
 		m_rasterizerState->Release();
@@ -75,11 +86,7 @@ void ym::DX11Renderer::destroy()
 		m_depthStencilBuffer = 0;
 	}
 
-	if (m_renderTargetView)
-	{
-		m_renderTargetView->Release();
-		m_renderTargetView = 0;
-	}
+	clearRTV();
 }
 
 void ym::DX11Renderer::beginScene(float r, float g, float b, float a)
@@ -125,6 +132,11 @@ void ym::DX11Renderer::draw(Model* model, Shader* shader)
 	context->DrawIndexed(model->getIndexBuffer()->getCount(), 0, 0);
 }
 
+ID3D11RenderTargetView* ym::DX11Renderer::getRenderTarget()
+{
+	return m_renderTargetView;
+}
+
 D3D11_PRIMITIVE_TOPOLOGY ym::DX11Renderer::getD3D11Topology(Topology topology)
 {
 	switch (topology)
@@ -153,6 +165,15 @@ void ym::DX11Renderer::createRTV()
 
 	backBufferPtr->Release();
 	backBufferPtr = 0;
+}
+
+void ym::DX11Renderer::clearRTV()
+{
+	if (m_renderTargetView)
+	{
+		m_renderTargetView->Release();
+		m_renderTargetView = 0;
+	}
 }
 
 void ym::DX11Renderer::createDepthBuffer(DisplayDesc& displayDescriptor)
