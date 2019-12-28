@@ -1,7 +1,11 @@
 #pragma once
 
+#include "Layer.h"
+#include <vector>
+
 namespace ym
 {
+	class LayerManager;
 	class Renderer;
 	struct DisplayDesc;
 	class Display;
@@ -15,12 +19,18 @@ namespace ym
 
 		virtual void processArguments(int argc, char* argv[]) = 0;
 
-		virtual void run() = 0;
+		virtual void start() = 0;
 
+		void run();
+
+		LayerManager* getLayerManager();
+
+		friend class LayerManager;
 	protected:
 		ym::API* m_api;
 		ym::Input* m_input;
 		ym::Display* m_display;
 		ym::Renderer* m_renderer;
+		ym::LayerManager* m_layerManager;
 	};
 };
