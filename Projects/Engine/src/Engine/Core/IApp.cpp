@@ -37,15 +37,23 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 	m_layerManager = LayerManager::get();
 	m_layerManager->setApp(this);
 
-	m_imGuiImpl = ImGuiImpl::create();
-	m_imGuiImpl->setUp();
-	m_display->setImGuiImpl(m_imGuiImpl);
+	bool activateImGUI = Config::get()->fetch<bool>("ImGUI/active");
+	if (activateImGUI)
+	{
+		m_imGuiImpl = ImGuiImpl::create();
+		m_imGuiImpl->setUp();
+		m_display->setImGuiImpl(m_imGuiImpl);
+	}
 }
 
 ym::IApp::~IApp()
 {
-	m_imGuiImpl->cleanUp();
-	delete m_imGuiImpl;
+	bool activateImGUI = Config::get()->fetch<bool>("ImGUI/active");
+	if (activateImGUI)
+	{
+		m_imGuiImpl->cleanUp();
+		delete m_imGuiImpl;
+	}
 	m_renderer->destroy();
 
 	delete m_display;
@@ -55,7 +63,11 @@ ym::IApp::~IApp()
 
 void ym::IApp::run()
 {
+	bool activateImGUI = Config::get()->fetch<bool>("ImGUI/active");
+
 	start();
+
+	// Initiate layers
 	m_layerManager->onStart();
 
 	ym::Timer timer;
@@ -66,16 +78,24 @@ void ym::IApp::run()
 		timer.start();
 		m_display->pollEvents();
 
+		// Update layers
 		m_layerManager->onUpdate(dt);
 
+		// Begin frame
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 		
+		// Render layers
 		m_layerManager->onRender();
 
-		m_imGuiImpl->startFrame();
-		m_layerManager->onRenderImGui();
-		m_imGuiImpl->endFrame();
+		// Render debug information with ImGUI
+		if (activateImGUI)
+		{
+			m_imGuiImpl->startFrame();
+			m_layerManager->onRenderImGui();
+			m_imGuiImpl->endFrame();
+		}
 
+		// End frame
 		m_renderer->endScene();
 
 		dt = timer.stop();
@@ -87,6 +107,7 @@ void ym::IApp::run()
 		}
 	}
 
+	// Shutdown layers
 	m_layerManager->onQuit();
 }
 

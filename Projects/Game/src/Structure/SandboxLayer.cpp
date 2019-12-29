@@ -154,6 +154,8 @@ void SandboxLayer::onRender()
 
 void SandboxLayer::onRenderImGui()
 {
+	// If ImGUI/activate is true than this will result in irregular behaviour of the win32 window's menue buttons!
+
 	static bool show_demo_window = false;
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);

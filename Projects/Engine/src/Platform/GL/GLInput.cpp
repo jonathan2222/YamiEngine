@@ -63,8 +63,8 @@ void ym::GLInput::unlockMouse() const
 
 void ym::GLInput::keyCallback(GLFWwindow* wnd, int key, int scancode, int action, int mods)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		Key ymKey = (Key)key;
 		if (action == GLFW_PRESS)
@@ -76,8 +76,8 @@ void ym::GLInput::keyCallback(GLFWwindow* wnd, int key, int scancode, int action
 
 void ym::GLInput::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		m_mousePos.x = (float)xpos;
 		m_mousePos.y = (float)ypos;
@@ -86,8 +86,8 @@ void ym::GLInput::cursorPositionCallback(GLFWwindow* window, double xpos, double
 
 void ym::GLInput::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		MB ymButton = (MB)button;
 		if (action == GLFW_PRESS)

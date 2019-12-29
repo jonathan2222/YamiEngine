@@ -10,5 +10,9 @@
     "fullscreen": false,
     "vsync": false,
     "title": "Yami Engine"
+  },
+
+  "ImGUI": {
+    "active": false
   }
 }

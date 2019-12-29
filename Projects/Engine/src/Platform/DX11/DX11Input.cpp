@@ -55,8 +55,8 @@ void ym::DX11Input::unlockMouse() const
 
 void ym::DX11Input::setKey(int keyCode, KeyState state)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		Key key = (Key)keyCode;
 		setKey(key, state);
@@ -65,8 +65,8 @@ void ym::DX11Input::setKey(int keyCode, KeyState state)
 
 void ym::DX11Input::setKey(Key key, KeyState state)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		m_keyMap[key] = state;
 	}
@@ -74,8 +74,8 @@ void ym::DX11Input::setKey(Key key, KeyState state)
 
 void ym::DX11Input::setMb(int mbCode, KeyState state)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		MB mb = (MB)mbCode;
 		setMb(mb, state);
@@ -84,8 +84,8 @@ void ym::DX11Input::setMb(int mbCode, KeyState state)
 
 void ym::DX11Input::setMb(MB mb, KeyState state)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		m_mbMap[mb] = state;
 	}
@@ -93,8 +93,8 @@ void ym::DX11Input::setMb(MB mb, KeyState state)
 
 void ym::DX11Input::setMousePos(int x, int y)
 {
-	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
-	if (canReciveInput)
+	ImGuiImpl* imGuiImpl = Display::get()->getImGuiImpl();
+	if (imGuiImpl == nullptr || (imGuiImpl != nullptr && imGuiImpl->needInput() == false))
 	{
 		m_mousePos.x = (float)x;
 		m_mousePos.y = (float)y;
