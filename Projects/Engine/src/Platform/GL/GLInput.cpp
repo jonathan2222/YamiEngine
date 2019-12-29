@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "../../Engine/Core/Display.h"
 #include "../../Engine/Core/Input/Keys.h"
+#include "../../Engine/Core/ImGuiImpl.h"
 
 std::unordered_map<ym::Key, ym::KeyState> ym::GLInput::m_keyMap = std::unordered_map<ym::Key, ym::KeyState>();
 std::unordered_map<ym::MB, ym::KeyState> ym::GLInput::m_mbMap = std::unordered_map<ym::MB, ym::KeyState>();
@@ -62,24 +63,36 @@ void ym::GLInput::unlockMouse() const
 
 void ym::GLInput::keyCallback(GLFWwindow* wnd, int key, int scancode, int action, int mods)
 {
-	Key ymKey = (Key)key;
-	if (action == GLFW_PRESS)
-		m_keyMap[ymKey] = KeyState::PRESSED;
-	if (action == GLFW_RELEASE)
-		m_keyMap[ymKey] = KeyState::RELEASED;
+	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
+	if (canReciveInput)
+	{
+		Key ymKey = (Key)key;
+		if (action == GLFW_PRESS)
+			m_keyMap[ymKey] = KeyState::PRESSED;
+		if (action == GLFW_RELEASE)
+			m_keyMap[ymKey] = KeyState::RELEASED;
+	}
 }
 
 void ym::GLInput::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	m_mousePos.x = (float)xpos;
-	m_mousePos.y = (float)ypos;
+	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
+	if (canReciveInput)
+	{
+		m_mousePos.x = (float)xpos;
+		m_mousePos.y = (float)ypos;
+	}
 }
 
 void ym::GLInput::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	MB ymButton = (MB)button;
-	if (action == GLFW_PRESS)
-		m_mbMap[ymButton] = KeyState::PRESSED;
-	if (action == GLFW_RELEASE)
-		m_mbMap[ymButton] = KeyState::RELEASED;
+	bool canReciveInput = Display::get()->getImGuiImpl()->needInput() == false;
+	if (canReciveInput)
+	{
+		MB ymButton = (MB)button;
+		if (action == GLFW_PRESS)
+			m_mbMap[ymButton] = KeyState::PRESSED;
+		if (action == GLFW_RELEASE)
+			m_mbMap[ymButton] = KeyState::RELEASED;
+	}
 }

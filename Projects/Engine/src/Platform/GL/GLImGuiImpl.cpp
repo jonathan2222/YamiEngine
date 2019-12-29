@@ -16,6 +16,8 @@ ym::GLImGuiImpl::~GLImGuiImpl()
 
 void ym::GLImGuiImpl::setUp()
 {
+	activate();
+
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -72,6 +74,8 @@ void ym::GLImGuiImpl::endFrame()
 
 void ym::GLImGuiImpl::cleanUp()
 {
+	deactivate();
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

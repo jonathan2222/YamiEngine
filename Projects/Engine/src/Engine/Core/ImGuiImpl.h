@@ -14,5 +14,15 @@ namespace ym
 		virtual void startFrame() = 0;
 		virtual void endFrame() = 0;
 		virtual void cleanUp() = 0;
+
+		bool isActive();
+		void activate();
+		void deactivate();
+
+		bool needInput();
+
+	private:
+		bool m_isActive = false;
+		bool m_needInput = false;
 	};
 }

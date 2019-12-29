@@ -39,6 +39,7 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 
 	m_imGuiImpl = ImGuiImpl::create();
 	m_imGuiImpl->setUp();
+	m_display->setImGuiImpl(m_imGuiImpl);
 }
 
 ym::IApp::~IApp()

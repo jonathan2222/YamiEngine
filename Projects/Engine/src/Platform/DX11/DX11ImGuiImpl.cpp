@@ -46,6 +46,8 @@ void ym::DX11ImGuiImpl::setUp()
 	ID3D11Device* device = DX11API::get()->getDevice();
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	ImGui_ImplDX11_Init(device, context);
+
+	activate();
 }
 
 void ym::DX11ImGuiImpl::startFrame()
@@ -60,12 +62,10 @@ void ym::DX11ImGuiImpl::endFrame()
 {
 	ImGui::Render();
 
-	//float clearColor[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	DX11Renderer* renderer = dynamic_cast<DX11Renderer*>(Renderer::get());
 	ID3D11RenderTargetView* rtv = renderer->getRenderTarget();
 	context->OMSetRenderTargets(1, &rtv, NULL);
-	//context->ClearRenderTargetView(rtv, (float*)& clearColor);
 
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -80,6 +80,8 @@ void ym::DX11ImGuiImpl::endFrame()
 
 void ym::DX11ImGuiImpl::cleanUp()
 {
+	deactivate();
+
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();

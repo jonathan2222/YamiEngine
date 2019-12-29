@@ -2,6 +2,9 @@
 #include "DX11Display.h"
 
 #include "DX11Input.h"
+#include "DX11Renderer.h"
+// For ImGui::GetIO().
+#include "DX11ImGuiImpl.h"
 
 ym::DX11Display* ym::DX11Display::g_DX11DisplayHandle = nullptr;
 
@@ -133,6 +136,7 @@ LRESULT ym::DX11Display::messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
 void ym::DX11Display::init(const DisplayDesc& description)
 {
 	m_description = description;
+	ym::DX11Display::g_DX11DisplayHandle = this;
 
 	WNDCLASSEX wc;
 	DEVMODE dmScreenSettings;
@@ -232,11 +236,6 @@ void ym::DX11Display::init(const DisplayDesc& description)
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers
 #endif
-
-#include "DX11Renderer.h"
-
-// For ImGui::GetIO().
-//#include "DX11ImGuiImpl.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)

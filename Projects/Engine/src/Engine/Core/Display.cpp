@@ -74,6 +74,16 @@ float ym::Display::getAspectRatio() const
 	return (float)getWidth()/getHeight();
 }
 
+void ym::Display::setImGuiImpl(ImGuiImpl* imGuiImpl)
+{
+	m_imGuiImpl = imGuiImpl;
+}
+
+ym::ImGuiImpl* ym::Display::getImGuiImpl()
+{
+	return m_imGuiImpl;
+}
+
 ym::Display* ym::Display::get()
 {
 	return m_self;

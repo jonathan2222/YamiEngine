@@ -25,6 +25,7 @@ namespace ym
 		void copy(const DisplayDesc& other);
 	};
 
+	class ImGuiImpl;
 	class Display
 	{
 	public:
@@ -50,7 +51,11 @@ namespace ym
 		int getHeight() const;
 		float getAspectRatio() const;
 
+		void setImGuiImpl(ImGuiImpl* imGuiImpl);
+		ym::ImGuiImpl* getImGuiImpl();
+
 	private:
+		ym::ImGuiImpl* m_imGuiImpl = nullptr;
 		DisplayDesc m_description;
 		static Display* m_self;
 	};
