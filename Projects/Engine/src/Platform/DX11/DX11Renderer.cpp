@@ -25,10 +25,10 @@ ym::DX11Renderer::DX11Renderer()
 
 void ym::DX11Renderer::resize(unsigned int width, unsigned int height)
 {
-	YM_LOG_INFO("Change window size to {0}, {1}.", width, height);
 	clearRTV();
 	m_swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
 	createRTV();
+	createAndSetViewport((float)width, (float)height);
 }
 
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
@@ -53,7 +53,7 @@ void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 	// Set the rasterizer state.
 	m_context->RSSetState(m_rasterizerState);
 
-	createAndSetViewport(displayDescriptor);
+	createAndSetViewport((float)displayDescriptor.width, (float)displayDescriptor.height);
 
 	activate();
 }
@@ -265,12 +265,12 @@ void ym::DX11Renderer::createRasterizer()
 	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the rasterizer state!");
 }
 
-void ym::DX11Renderer::createAndSetViewport(DisplayDesc& displayDescriptor)
+void ym::DX11Renderer::createAndSetViewport(float width, float height)
 {
 	D3D11_VIEWPORT viewport;
 	// Setup the viewport for rendering.
-	viewport.Width = (float)displayDescriptor.width;
-	viewport.Height = (float)displayDescriptor.height;
+	viewport.Width = width;
+	viewport.Height = height;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;

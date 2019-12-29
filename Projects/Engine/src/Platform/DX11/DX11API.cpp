@@ -164,8 +164,8 @@ void ym::DX11API::createSwapChain()
 	swapChainDesc.Stereo = FALSE;
 	swapChainDesc.Width = (UINT)displayDiscription.width;
 	swapChainDesc.Height = (UINT)displayDiscription.height;
-	// Single back buffer.
-	swapChainDesc.BufferCount = 1;
+	// Double back buffer.
+	swapChainDesc.BufferCount = 2;
 	// Set the usage of the back buffer.
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	// Turn multisampling off.

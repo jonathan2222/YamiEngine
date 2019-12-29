@@ -15,6 +15,7 @@ ym::GLRenderer::GLRenderer()
 
 void ym::GLRenderer::resize(unsigned int width, unsigned int height)
 {
+	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
 }
 
 void ym::GLRenderer::init(DisplayDesc& displayDescriptor)

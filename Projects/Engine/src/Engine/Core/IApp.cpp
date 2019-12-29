@@ -78,13 +78,13 @@ void ym::IApp::run()
 		timer.start();
 		m_display->pollEvents();
 
-		// Update layers
+		// Update the active layer
 		m_layerManager->onUpdate(dt);
 
 		// Begin frame
 		m_renderer->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 		
-		// Render layers
+		// Render the active layer
 		m_layerManager->onRender();
 
 		// Render debug information with ImGUI

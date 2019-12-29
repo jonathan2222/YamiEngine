@@ -19,6 +19,9 @@ namespace ym
 
 	private:
 		void init(const DisplayDesc& description);
+		static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
+
+		static GLDisplay* g_glDisplayPtr;
 
 		bool m_shouldClose;
 		GLFWwindow* m_window;

@@ -33,7 +33,7 @@ namespace ym
 		void createDepthStencilState();
 		void createDepthStencilView();
 		void createRasterizer();
-		void createAndSetViewport(DisplayDesc& displayDescriptor);
+		void createAndSetViewport(float width, float height);
 
 		ID3D11Device* m_device;
 		ID3D11DeviceContext* m_context;

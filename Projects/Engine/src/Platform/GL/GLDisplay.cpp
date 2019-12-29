@@ -5,6 +5,10 @@
 #include <GLFW/glfw3.h>
 #include "GLAPI.h"
 
+#include "../../Engine/Core/Graphics/Renderer.h"
+
+ym::GLDisplay* ym::GLDisplay::g_glDisplayPtr = nullptr;
+
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr), m_shouldClose(false)
 {
 	init(description);
@@ -37,6 +41,7 @@ void* ym::GLDisplay::getNativeDisplay()
 
 void ym::GLDisplay::init(const DisplayDesc& description)
 {
+	g_glDisplayPtr = this;
 	m_description = description;
 	m_shouldClose = false;
 	
@@ -56,6 +61,7 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 
 	m_window = glfwCreateWindow(m_description.width, m_description.height, m_description.title.c_str(), monitor, nullptr);
 	glfwMakeContextCurrent(m_window);
+	glfwSetFramebufferSizeCallback(m_window, GLDisplay::frameBufferSizeCallback);
 
 	glewExperimental = true; // Needed in core profile
 	if (glewInit() != GLEW_OK)
@@ -70,4 +76,17 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 		glfwSwapInterval(1);
 	else
 		glfwSwapInterval(0);
+}
+
+void ym::GLDisplay::frameBufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+	// Resize buffers.
+	if (Renderer::get()->isActive())
+		Renderer::get()->resize(width, height);
+
+	// Update display description.
+	DisplayDesc& description = g_glDisplayPtr->getDescription();
+	description.width = width;
+	description.width = height;
+	description.fullscreen = false;
 }

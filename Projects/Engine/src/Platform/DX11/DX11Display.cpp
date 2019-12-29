@@ -138,8 +138,6 @@ void ym::DX11Display::init(const DisplayDesc& description)
 	m_description = description;
 	ym::DX11Display::g_DX11DisplayHandle = this;
 
-	WNDCLASSEX wc;
-	DEVMODE dmScreenSettings;
 	int posX, posY;
 
 	m_hinstance = GetModuleHandle(NULL);
@@ -159,6 +157,7 @@ void ym::DX11Display::init(const DisplayDesc& description)
 	m_appNameWS = s2ws(m_description.title);
 
 	// Setup the windows class with default settings.
+	WNDCLASSEX wc;
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = ym::WndProc;
 	wc.cbClsExtra = 0;
@@ -185,11 +184,12 @@ void ym::DX11Display::init(const DisplayDesc& description)
 	if (m_description.fullscreen)
 	{
 		// If full screen set the screen to maximum size of the users desktop and 32bit.
+		DEVMODE dmScreenSettings;
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
 		dmScreenSettings.dmPelsWidth = (unsigned long)screenWidth;
 		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
-		dmScreenSettings.dmBitsPerPel = 32;
+		dmScreenSettings.dmBitsPerPel = 32; // Color resolution, in bits per pixel.
 		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
 		// Change the display settings to full screen.
@@ -205,17 +205,17 @@ void ym::DX11Display::init(const DisplayDesc& description)
 		screenWidth = m_description.width;
 		screenHeight = m_description.height;
 
-		// Place the window in the middle of the screen.
-		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
-		dwStyle = WS_OVERLAPPEDWINDOW;
-
 		// Adjust the size, so that the drawing area becomes the m_description.width and m_description.height!.
+		dwStyle = WS_OVERLAPPEDWINDOW;
 		RECT wr = { 0, 0, screenWidth, screenHeight };
-		AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+		AdjustWindowRect(&wr, dwStyle, FALSE);
 		// Get the new size of the window.
 		screenWidth = wr.right - wr.left;
 		screenHeight = wr.bottom - wr.top;
+
+		// Place the window in the middle of the screen.
+		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
+		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 	}
 
 	// Create the window with the screen settings and get the handle to it.
@@ -273,7 +273,7 @@ LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 				return 0;
 			break;
 		}*/
-		/*
+		
 		case WM_DPICHANGED:
 		{
 			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
@@ -283,8 +283,8 @@ LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 				const RECT* suggested_rect = (RECT*)lparam;
 				::SetWindowPos(hwnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
 			}
-			break;
-		}*/
+			return 0;
+		}
 
 		// All other messages pass to the message handler in the DX11Display class.
 		default:

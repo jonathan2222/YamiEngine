@@ -44,20 +44,20 @@ void ym::LayerManager::onStart()
 
 void ym::LayerManager::onUpdate(float dt)
 {
-	for (Layer*& layer : m_layers)
-		layer->onUpdate(dt);
+	// Update the active layer
+	m_layers.back()->onUpdate(dt);
 }
 
 void ym::LayerManager::onRender()
 {
-	for (Layer*& layer : m_layers)
-		layer->onRender();
+	// Render the active layer
+	m_layers.back()->onRender();
 }
 
 void ym::LayerManager::onRenderImGui()
 {
-	for (Layer*& layer : m_layers)
-		layer->onRenderImGui();
+	// Render imGui on the active layer
+	m_layers.back()->onRenderImGui();
 }
 
 void ym::LayerManager::onQuit()
