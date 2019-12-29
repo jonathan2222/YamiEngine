@@ -13,6 +13,6 @@
   },
 
   "ImGUI": {
-    "active": false
+    "active": true
   }
 }
