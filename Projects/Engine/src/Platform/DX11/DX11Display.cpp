@@ -243,7 +243,7 @@ LRESULT CALLBACK ym::WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lpa
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, umessage, wparam, lparam))
 		return true;
-
+		
 	switch (umessage)
 	{
 		case WM_SIZE:

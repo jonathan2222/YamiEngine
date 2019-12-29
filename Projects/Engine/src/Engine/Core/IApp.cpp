@@ -44,6 +44,7 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 ym::IApp::~IApp()
 {
 	m_imGuiImpl->cleanUp();
+	delete m_imGuiImpl;
 	m_renderer->destroy();
 
 	delete m_display;
