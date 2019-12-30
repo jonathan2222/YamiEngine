@@ -13,11 +13,13 @@ ym::Config* ym::Config::get()
 
 void ym::Config::init(const std::string& fileName)
 {
+	YM_PROFILER_FUNCTION();
 	readFile(fileName);
 }
 
 void ym::Config::readFile(const std::string& fileName)
 {
+	YM_PROFILER_FUNCTION();
 	std::ifstream file(fileName);
 
 	json j;
@@ -40,6 +42,7 @@ void ym::Config::readFile(const std::string& fileName)
 #pragma warning( disable : 26444 )
 void ym::Config::load(const std::string& str, json& j)
 {
+	YM_PROFILER_FUNCTION();
 	for (auto it = j.begin(); it != j.end(); it++) {
 		std::string newKey = str + (str.empty() ? "" : "/") + it.key();
 		if (it->is_object())

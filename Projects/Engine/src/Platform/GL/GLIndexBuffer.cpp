@@ -7,6 +7,8 @@ ym::GLIndexBuffer::GLIndexBuffer() : m_id(0)
 
 ym::GLIndexBuffer::~GLIndexBuffer()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -16,6 +18,8 @@ ym::GLIndexBuffer::~GLIndexBuffer()
 
 void ym::GLIndexBuffer::setData(const void* data, unsigned int count, Usage usage)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -41,5 +45,7 @@ void ym::GLIndexBuffer::setData(const void* data, unsigned int count, Usage usag
 
 void ym::GLIndexBuffer::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
 }

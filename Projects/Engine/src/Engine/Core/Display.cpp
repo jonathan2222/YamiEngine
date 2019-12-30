@@ -12,6 +12,7 @@ ym::DisplayDesc::DisplayDesc() : width(0), height(0), title(""), fullscreen(fals
 
 void ym::DisplayDesc::init()
 {
+	YM_PROFILER_FUNCTION();
 	if(this->width == 0)
 		this->width = Config::get()->fetch<int>("Display/defaultWidth");
 	if (this->height == 0)

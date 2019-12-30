@@ -11,6 +11,8 @@ glm::vec2 ym::DX11Input::m_mousePos = glm::vec2();
 
 void ym::DX11Input::init()
 {
+	YM_PROFILER_FUNCTION();
+
 	for (int i = (int)Key::FIRST; i <= (int)Key::LAST; i++)
 		m_keyMap[(Key)i] = KeyState::RELEASED;
 

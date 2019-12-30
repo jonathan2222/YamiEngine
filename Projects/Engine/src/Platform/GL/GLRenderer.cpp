@@ -20,6 +20,8 @@ void ym::GLRenderer::resize(unsigned int width, unsigned int height)
 
 void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
@@ -32,11 +34,15 @@ void ym::GLRenderer::init(DisplayDesc& displayDescriptor)
 
 void ym::GLRenderer::destroy()
 {
+	YM_PROFILER_FUNCTION();
+
 	deactivate();
 }
 
 void ym::GLRenderer::beginScene(float r, float g, float b, float a)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glClearColor(r, g, b, a);
 	// Clear back buffer and depth buffer.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -44,12 +50,16 @@ void ym::GLRenderer::beginScene(float r, float g, float b, float a)
 
 void ym::GLRenderer::endScene()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	GLFWwindow* window = (GLFWwindow*)Display::get()->getNativeDisplay();
 	glfwSwapBuffers(window);
 }
 
 void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	va->bind();
 	ib->bind();
 	shader->bind();
@@ -58,6 +68,8 @@ void ym::GLRenderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, S
 
 void ym::GLRenderer::draw(Model* model, Shader* shader)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	model->bind();
 	shader->bind();
 	glDrawElements(getGLTopology(model->getInfo().topology), model->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, (void*)0);

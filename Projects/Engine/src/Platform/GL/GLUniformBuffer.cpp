@@ -8,6 +8,8 @@ ym::GLUniformBuffer::GLUniformBuffer() : m_size(0), m_id(0), m_bindingPoint(0)
 
 ym::GLUniformBuffer::~GLUniformBuffer()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -17,6 +19,8 @@ ym::GLUniformBuffer::~GLUniformBuffer()
 
 void ym::GLUniformBuffer::setShader(Shader& shader, unsigned int index, unsigned int bindingPoint)
 {
+	YM_PROFILER_FUNCTION();
+
 	glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 	m_bindingPoint = bindingPoint;
 	GLuint shaderID = *(GLuint*)shader.getId();
@@ -26,6 +30,8 @@ void ym::GLUniformBuffer::setShader(Shader& shader, unsigned int index, unsigned
 
 void ym::GLUniformBuffer::setData(const void* data, unsigned int size)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -42,6 +48,8 @@ void ym::GLUniformBuffer::setData(const void* data, unsigned int size)
 
 bool ym::GLUniformBuffer::updateData(const void* data, unsigned int size, unsigned int offset)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	if (offset + size <= m_size) {
 		glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, m_size, data);
@@ -54,5 +62,7 @@ bool ym::GLUniformBuffer::updateData(const void* data, unsigned int size, unsign
 
 void ym::GLUniformBuffer::bind(unsigned int typesMask)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 }

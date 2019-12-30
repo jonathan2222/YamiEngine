@@ -21,6 +21,8 @@ void ym::DX11UniformBuffer::setShader(Shader& shader, unsigned int index, unsign
 
 void ym::DX11UniformBuffer::setData(const void* data, unsigned int size)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_buffer)
 	{
 		m_buffer->Release();
@@ -49,6 +51,8 @@ void ym::DX11UniformBuffer::setData(const void* data, unsigned int size)
 
 bool ym::DX11UniformBuffer::updateData(const void* data, unsigned int size, unsigned int offset)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	if (offset + size <= m_size)
 	{
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -72,6 +76,8 @@ bool ym::DX11UniformBuffer::updateData(const void* data, unsigned int size, unsi
 
 void ym::DX11UniformBuffer::bind(unsigned int typesMask)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	if ((typesMask & YM_SHADER_TYPE_VERTEX) != 0)
 		context->VSSetConstantBuffers(m_bufferSlot, 1, &m_buffer);

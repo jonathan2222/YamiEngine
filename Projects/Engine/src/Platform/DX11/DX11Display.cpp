@@ -10,11 +10,13 @@ ym::DX11Display* ym::DX11Display::g_DX11DisplayHandle = nullptr;
 
 ym::DX11Display::DX11Display(const DisplayDesc& description) : m_window(nullptr), m_hinstance(nullptr), m_shouldClose(false)
 {
+	YM_PROFILER_FUNCTION();
 	init(description);
 }
 
 ym::DX11Display::~DX11Display()
 {
+	YM_PROFILER_FUNCTION();
 	// Fix the display settings if leaving full screen mode.
 	if (m_description.fullscreen)
 		ChangeDisplaySettings(NULL, 0);
@@ -60,6 +62,7 @@ void* ym::DX11Display::getNativeDisplay()
 
 LRESULT ym::DX11Display::messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// TODO: All keys are not accounted for, like insert, delete, caps-lock, and so on. Make this work!
 	DX11Input* input = dynamic_cast<DX11Input*>(DX11Input::get());
 	int keycode = (int)wparam;
@@ -135,6 +138,7 @@ LRESULT ym::DX11Display::messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
 
 void ym::DX11Display::init(const DisplayDesc& description)
 {
+	YM_PROFILER_FUNCTION();
 	m_description = description;
 	ym::DX11Display::g_DX11DisplayHandle = this;
 

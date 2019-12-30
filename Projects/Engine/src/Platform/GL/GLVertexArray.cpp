@@ -5,11 +5,15 @@
 
 ym::GLVertexArray::GLVertexArray() : m_id(0), m_nextLocation(0)
 {
+	YM_PROFILER_FUNCTION();
+
 	glGenVertexArrays(1, &m_id);
 }
 
 ym::GLVertexArray::~GLVertexArray()
 {
+	YM_PROFILER_FUNCTION();
+
 	for (VertexBuffer*& vb : m_vbos)
 		delete vb;
 	m_vbos.clear();
@@ -19,6 +23,8 @@ ym::GLVertexArray::~GLVertexArray()
 
 void ym::GLVertexArray::addBuffer(VertexBuffer* vb, const AttributeLayout& layout)
 {
+	YM_PROFILER_FUNCTION();
+
 	m_vbos.push_back(vb);
 
 	bind();
@@ -37,5 +43,7 @@ void ym::GLVertexArray::addBuffer(VertexBuffer* vb, const AttributeLayout& layou
 
 void ym::GLVertexArray::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glBindVertexArray(m_id);
 }

@@ -11,6 +11,7 @@ ym::DX11API* ym::DX11API::get()
 
 void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
 	HRESULT result;
 
 	// Create a DirectX graphics interface factory.
@@ -56,6 +57,7 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 
 void ym::DX11API::postDisplayInit()
 {
+	YM_PROFILER_FUNCTION();
 	createSwapChain();
 	// Release the factory.
 	m_factory->Release();
@@ -64,6 +66,7 @@ void ym::DX11API::postDisplayInit()
 
 void ym::DX11API::destroy()
 {
+	YM_PROFILER_FUNCTION();
 	// Before shutting down set to windowed mode or when you release the swap chain it will throw an exception.
 	if (m_swapChain)
 		m_swapChain->SetFullscreenState(false, NULL);
@@ -141,6 +144,7 @@ DXGI_FORMAT ym::DX11API::convertFormat(Format format) const
 
 void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType)
 {
+	YM_PROFILER_FUNCTION();
 	UINT flags = 0;
 #ifdef YAMI_DEBUG
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -156,6 +160,7 @@ void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType
 
 void ym::DX11API::createSwapChain()
 {
+	YM_PROFILER_FUNCTION();
 	DisplayDesc displayDiscription = DX11Display::get()->getDescription();
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc;
@@ -202,6 +207,7 @@ void ym::DX11API::createSwapChain()
 
 void ym::DX11API::getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
 	HRESULT result;
 
 	// Enumerate the primary adapter output (monitor).
@@ -249,6 +255,7 @@ void ym::DX11API::getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDesc
 
 std::vector<IDXGIAdapter*> ym::DX11API::enumerateAdapters()
 {
+	YM_PROFILER_FUNCTION();
 	IDXGIAdapter* pAdapter;
 	std::vector <IDXGIAdapter*> vAdapters;
 
@@ -260,6 +267,8 @@ std::vector<IDXGIAdapter*> ym::DX11API::enumerateAdapters()
 
 void ym::DX11API::fillVideoCardInfo(IDXGIAdapter* adapter)
 {
+	YM_PROFILER_FUNCTION();
+
 	HRESULT result;
 	// Get the adapter (video card) description.
 	DXGI_ADAPTER_DESC adapterDesc;

@@ -11,3 +11,5 @@
 #include "Engine/Defines.h"
 #include "Engine/Core/Logger.h"
 #include "Engine/Core/Input/Config.h"
+
+#include "Utils/InstrumentationTimer.h"

@@ -7,12 +7,16 @@ ym::DX11IndexBuffer::DX11IndexBuffer() : m_buffer(nullptr)
 
 ym::DX11IndexBuffer::~DX11IndexBuffer()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_buffer)
 		m_buffer->Release();
 }
 
 void ym::DX11IndexBuffer::setData(const void* data, unsigned int count, Usage usage)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_buffer)
 	{
 		m_buffer->Release();
@@ -46,6 +50,8 @@ void ym::DX11IndexBuffer::setData(const void* data, unsigned int count, Usage us
 
 void ym::DX11IndexBuffer::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	context->IASetIndexBuffer(m_buffer, DXGI_FORMAT_R32_UINT, 0);
 }

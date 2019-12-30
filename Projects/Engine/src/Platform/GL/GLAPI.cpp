@@ -12,6 +12,7 @@ ym::GLAPI* ym::GLAPI::get()
 
 void ym::GLAPI::preDisplayInit(DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
 	glfwInit();
 	glfwSetErrorCallback(GLAPI::errorCallback);
 
@@ -22,6 +23,7 @@ void ym::GLAPI::preDisplayInit(DisplayDesc& displayDescriptor)
 
 void ym::GLAPI::postDisplayInit()
 {
+	YM_PROFILER_FUNCTION();
 }
 
 void ym::GLAPI::destroy()
@@ -31,6 +33,7 @@ void ym::GLAPI::destroy()
 
 void ym::GLAPI::initDebug()
 {
+	YM_PROFILER_FUNCTION();
 	const GLubyte* renderer = glGetString(GL_RENDERER);
 	API::VideoCardInfo& videoCardInfo = GLAPI::get()->getVideoCardInfo();
 	videoCardInfo.name = std::string((char*)renderer);

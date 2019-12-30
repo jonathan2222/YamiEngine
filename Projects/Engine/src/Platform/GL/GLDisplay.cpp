@@ -11,6 +11,7 @@ ym::GLDisplay* ym::GLDisplay::g_glDisplayPtr = nullptr;
 
 ym::GLDisplay::GLDisplay(const DisplayDesc& description) : m_window(nullptr), m_shouldClose(false)
 {
+	YM_PROFILER_FUNCTION();
 	init(description);
 }
 
@@ -41,6 +42,8 @@ void* ym::GLDisplay::getNativeDisplay()
 
 void ym::GLDisplay::init(const DisplayDesc& description)
 {
+	YM_PROFILER_FUNCTION();
+
 	g_glDisplayPtr = this;
 	m_description = description;
 	m_shouldClose = false;
@@ -80,6 +83,7 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 
 void ym::GLDisplay::frameBufferSizeCallback(GLFWwindow* window, int width, int height)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// Resize buffers.
 	if (Renderer::get()->isActive())
 		Renderer::get()->resize(width, height);

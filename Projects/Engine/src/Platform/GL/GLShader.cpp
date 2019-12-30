@@ -14,6 +14,8 @@ ym::GLShader::~GLShader()
 
 void ym::GLShader::load(const std::string& fileName, AttributeLayout& layout)
 {
+	YM_PROFILER_FUNCTION();
+
 	// Fetch the right shader.
 	std::string finalPath = std::string(YM_SHADER_PATH) + std::string("GL/") + fileName;
 	std::string vertexShaderPath = finalPath + ".vs";
@@ -24,6 +26,8 @@ void ym::GLShader::load(const std::string& fileName, AttributeLayout& layout)
 
 void ym::GLShader::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glUseProgram(m_id);
 }
 
@@ -34,6 +38,8 @@ void* ym::GLShader::getId()
 
 void ym::GLShader::init(const std::string& vertex, const std::string& fragment)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_id != 0)
 	{
 		glDeleteProgram(m_id);
@@ -57,6 +63,8 @@ void ym::GLShader::init(const std::string& vertex, const std::string& fragment)
 
 bool ym::GLShader::addShaderPart(const std::string& name, GLuint type)
 {
+	YM_PROFILER_FUNCTION();
+
 	GLuint shaderPartID = loadShaderPart(name, type);
 	if (shaderPartID != 0) {
 		if (compileShaderPart(shaderPartID, type)) {
@@ -70,6 +78,8 @@ bool ym::GLShader::addShaderPart(const std::string& name, GLuint type)
 
 GLuint ym::GLShader::loadShaderPart(const std::string& name, GLuint type)
 {
+	YM_PROFILER_FUNCTION();
+
 	GLuint id = glCreateShader(type);
 	if (id == 0) {
 		YM_ASSERT(false, "Could not create shader: {0}", name.c_str());
@@ -96,6 +106,8 @@ GLuint ym::GLShader::loadShaderPart(const std::string& name, GLuint type)
 
 bool ym::GLShader::compileShaderPart(GLuint id, GLuint type)
 {
+	YM_PROFILER_FUNCTION();
+
 	char buff[1024];
 	memset(buff, 0, 1024);
 	GLint compileResult = GL_FALSE;
@@ -112,6 +124,8 @@ bool ym::GLShader::compileShaderPart(GLuint id, GLuint type)
 
 bool ym::GLShader::link()
 {
+	YM_PROFILER_FUNCTION();
+
 	glLinkProgram(m_id);
 
 	char buff[1024];

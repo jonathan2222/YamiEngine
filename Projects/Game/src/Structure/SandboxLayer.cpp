@@ -144,6 +144,7 @@ void SandboxLayer::onUpdate(float dt)
 
 void SandboxLayer::onRender()
 {
+	
 	m_matrixBuffer.world = m_world;
 	m_matrixBuffer.projection = m_camera->getProj();
 	m_matrixBuffer.view = m_camera->getView();

@@ -16,6 +16,8 @@ ym::GLImGuiImpl::~GLImGuiImpl()
 
 void ym::GLImGuiImpl::setUp()
 {
+	YM_PROFILER_FUNCTION();
+
 	activate();
 
 	// Setup Dear ImGui context
@@ -48,6 +50,8 @@ void ym::GLImGuiImpl::setUp()
 
 void ym::GLImGuiImpl::startFrame()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -56,6 +60,8 @@ void ym::GLImGuiImpl::startFrame()
 
 void ym::GLImGuiImpl::endFrame()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -74,6 +80,8 @@ void ym::GLImGuiImpl::endFrame()
 
 void ym::GLImGuiImpl::cleanUp()
 {
+	YM_PROFILER_FUNCTION();
+
 	deactivate();
 
 	ImGui_ImplOpenGL3_Shutdown();

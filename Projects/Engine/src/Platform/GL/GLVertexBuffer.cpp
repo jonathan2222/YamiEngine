@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "GLVertexBuffer.h"
 
-ym::GLVertexBuffer::GLVertexBuffer() : m_id(0)
+ym::GLVertexBuffer::GLVertexBuffer() : m_id(0), m_size(0)
 {
 }
 
 ym::GLVertexBuffer::~GLVertexBuffer()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -16,6 +18,8 @@ ym::GLVertexBuffer::~GLVertexBuffer()
 
 void ym::GLVertexBuffer::setData(const void* data, unsigned int size, Usage usage)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (glIsBuffer(m_id) == GL_TRUE)
 	{
 		glDeleteBuffers(1, &m_id);
@@ -41,6 +45,8 @@ void ym::GLVertexBuffer::setData(const void* data, unsigned int size, Usage usag
 
 void ym::GLVertexBuffer::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	glBindBuffer(GL_ARRAY_BUFFER, m_id);
 }
 

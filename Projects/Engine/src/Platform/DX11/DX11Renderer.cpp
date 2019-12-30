@@ -25,6 +25,8 @@ ym::DX11Renderer::DX11Renderer()
 
 void ym::DX11Renderer::resize(unsigned int width, unsigned int height)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	clearRTV();
 	m_swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
 	createRTV();
@@ -33,6 +35,8 @@ void ym::DX11Renderer::resize(unsigned int width, unsigned int height)
 
 void ym::DX11Renderer::init(DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
+
 	// Fetch the device, device context and the swap chain from the DirectX api.
 	m_device = DX11API::get()->getDevice();
 	m_context = DX11API::get()->getDeviceContext();
@@ -91,6 +95,8 @@ void ym::DX11Renderer::destroy()
 
 void ym::DX11Renderer::beginScene(float r, float g, float b, float a)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	float color[4] = {r, g, b, a};
 	// Clear back buffer.
 	m_context->ClearRenderTargetView(m_renderTargetView, color);
@@ -100,6 +106,8 @@ void ym::DX11Renderer::beginScene(float r, float g, float b, float a)
 
 void ym::DX11Renderer::endScene()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	bool vsync = Config::get()->fetch<bool>("Display/vsync");
 	if (vsync)
 	{
@@ -115,6 +123,8 @@ void ym::DX11Renderer::endScene()
 
 void ym::DX11Renderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology, Shader* shader)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	va->bind();
 	ib->bind();
@@ -125,6 +135,8 @@ void ym::DX11Renderer::draw(VertexArray* va, IndexBuffer* ib, Topology topology,
 
 void ym::DX11Renderer::draw(Model* model, Shader* shader)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	model->bind();
 	shader->bind();
@@ -154,6 +166,8 @@ D3D11_PRIMITIVE_TOPOLOGY ym::DX11Renderer::getD3D11Topology(Topology topology)
 
 void ym::DX11Renderer::createRTV()
 {
+	YM_PROFILER_FUNCTION();
+
 	HRESULT result;
 	ID3D11Texture2D* backBufferPtr = 0;
 	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& backBufferPtr);
@@ -169,6 +183,8 @@ void ym::DX11Renderer::createRTV()
 
 void ym::DX11Renderer::clearRTV()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_renderTargetView)
 	{
 		m_renderTargetView->Release();
@@ -178,6 +194,8 @@ void ym::DX11Renderer::clearRTV()
 
 void ym::DX11Renderer::createDepthBuffer(DisplayDesc& displayDescriptor)
 {
+	YM_PROFILER_FUNCTION();
+
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
@@ -201,6 +219,8 @@ void ym::DX11Renderer::createDepthBuffer(DisplayDesc& displayDescriptor)
 
 void ym::DX11Renderer::createDepthStencilState()
 {
+	YM_PROFILER_FUNCTION();
+
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
 
@@ -232,6 +252,8 @@ void ym::DX11Renderer::createDepthStencilState()
 
 void ym::DX11Renderer::createDepthStencilView()
 {
+	YM_PROFILER_FUNCTION();
+
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
@@ -247,6 +269,8 @@ void ym::DX11Renderer::createDepthStencilView()
 
 void ym::DX11Renderer::createRasterizer()
 {
+	YM_PROFILER_FUNCTION();
+
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	rasterizerDesc.AntialiasedLineEnable = false;
@@ -267,6 +291,8 @@ void ym::DX11Renderer::createRasterizer()
 
 void ym::DX11Renderer::createAndSetViewport(float width, float height)
 {
+	YM_PROFILER_FUNCTION();
+
 	D3D11_VIEWPORT viewport;
 	// Setup the viewport for rendering.
 	viewport.Width = width;

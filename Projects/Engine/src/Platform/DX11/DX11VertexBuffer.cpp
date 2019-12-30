@@ -2,18 +2,22 @@
 #include "DX11VertexBuffer.h"
 #include "DX11API.h"
 
-ym::DX11VertexBuffer::DX11VertexBuffer() : m_buffer(nullptr)
+ym::DX11VertexBuffer::DX11VertexBuffer() : m_buffer(nullptr), m_size(0)
 {
 }
 
 ym::DX11VertexBuffer::~DX11VertexBuffer()
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_buffer)
 		m_buffer->Release();
 }
 
 void ym::DX11VertexBuffer::setData(const void* data, unsigned int size, Usage usage)
 {
+	YM_PROFILER_FUNCTION();
+
 	if (m_buffer)
 	{
 		m_buffer->Release();

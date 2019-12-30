@@ -12,6 +12,8 @@ glm::vec2 ym::GLInput::m_mousePos = glm::vec2(0.0f);
 
 void ym::GLInput::init()
 {
+	YM_PROFILER_FUNCTION();
+
 	GLFWwindow* wnd = static_cast<GLFWwindow*>(Display::get()->getNativeDisplay());
 	glfwSetKeyCallback(wnd, GLInput::keyCallback);
 	glfwSetCursorPosCallback(wnd, GLInput::cursorPositionCallback);

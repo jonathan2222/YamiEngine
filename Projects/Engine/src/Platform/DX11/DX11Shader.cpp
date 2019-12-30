@@ -29,6 +29,8 @@ ym::DX11Shader::~DX11Shader()
 
 void ym::DX11Shader::load(const std::string& fileName, AttributeLayout& layout)
 {
+	YM_PROFILER_FUNCTION();
+
 	// Fetch the right shader.
 	std::string finalPath = std::string(YM_SHADER_PATH) + std::string("DX11/") + fileName;
 	std::string vertexShaderPath = finalPath + ".vs";
@@ -43,6 +45,8 @@ void ym::DX11Shader::load(const std::string& fileName, AttributeLayout& layout)
 
 void ym::DX11Shader::bind()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 	context->IASetInputLayout(m_layout);
 	context->VSSetShader(m_vsShader, NULL, 0);
@@ -57,6 +61,8 @@ void* ym::DX11Shader::getId()
 
 void ym::DX11Shader::createPixelShader(const std::string& path)
 {
+	YM_PROFILER_FUNCTION();
+
 	HRESULT result;
 	ID3DBlob* pixelShaderBuffer = nullptr;
 	ID3DBlob* errorMessageBlob = nullptr;
@@ -82,6 +88,8 @@ void ym::DX11Shader::createPixelShader(const std::string& path)
 
 void ym::DX11Shader::createVertexShader(const std::string& path)
 {
+	YM_PROFILER_FUNCTION();
+
 	HRESULT result;
 	ID3DBlob* errorMessageBlob = nullptr;
 	std::wstring p = s2ws(path);
@@ -104,6 +112,8 @@ void ym::DX11Shader::createVertexShader(const std::string& path)
 
 void ym::DX11Shader::compileShader(ID3DBlob* errorMessageBlob)
 {
+	YM_PROFILER_FUNCTION();
+
 	// Get a pointer to the error message text buffer.
 	char* compileErrors = (char*)(errorMessageBlob->GetBufferPointer());
 
@@ -119,6 +129,8 @@ void ym::DX11Shader::compileShader(ID3DBlob* errorMessageBlob)
 
 void ym::DX11Shader::createLayout(AttributeLayout& layout)
 {
+	YM_PROFILER_FUNCTION();
+
 	// Create the vertex input layout description.
 	// This setup needs to match the Vertex stucture in used in the model and in the shader.
 	size_t numElements = layout.getAttributes().size();

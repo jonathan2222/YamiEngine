@@ -24,12 +24,14 @@ ym::LayerManager::~LayerManager()
 
 void ym::LayerManager::push(Layer* layer)
 {
+	YM_PROFILER_FUNCTION();
 	layer->init(m_app->m_api, m_app->m_input, m_app->m_display, m_app->m_renderer);
 	m_layers.push_back(layer);
 }
 
 void ym::LayerManager::pop()
 {
+	YM_PROFILER_FUNCTION();
 	Layer* layer = m_layers.back();
 	layer->onQuit();
 	delete layer;
@@ -44,18 +46,21 @@ void ym::LayerManager::onStart()
 
 void ym::LayerManager::onUpdate(float dt)
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// Update the active layer
 	m_layers.back()->onUpdate(dt);
 }
 
 void ym::LayerManager::onRender()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// Render the active layer
 	m_layers.back()->onRender();
 }
 
 void ym::LayerManager::onRenderImGui()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// Render imGui on the active layer
 	m_layers.back()->onRenderImGui();
 }

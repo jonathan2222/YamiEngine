@@ -6,6 +6,7 @@ std::unordered_map<ym::KeyConverter::DXKey, ym::Key> ym::KeyConverter::m_keys = 
 
 void ym::KeyConverter::init()
 {
+	YM_PROFILER_FUNCTION();
 	for (int i = (int)DXKey::FIRST; i <= (int)DXKey::LAST; i++)
 	{
 		Key value = Key::UNKNOWN;

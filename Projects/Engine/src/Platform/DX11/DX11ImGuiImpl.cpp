@@ -17,6 +17,7 @@ ym::DX11ImGuiImpl::~DX11ImGuiImpl()
 
 void ym::DX11ImGuiImpl::setUp()
 {
+	YM_PROFILER_FUNCTION();
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -52,6 +53,7 @@ void ym::DX11ImGuiImpl::setUp()
 
 void ym::DX11ImGuiImpl::startFrame()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -60,6 +62,8 @@ void ym::DX11ImGuiImpl::startFrame()
 
 void ym::DX11ImGuiImpl::endFrame()
 {
+	YM_PROFILER_RENDERING_FUNCTION();
+
 	ImGui::Render();
 
 	ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
@@ -80,6 +84,7 @@ void ym::DX11ImGuiImpl::endFrame()
 
 void ym::DX11ImGuiImpl::cleanUp()
 {
+	YM_PROFILER_FUNCTION();
 	deactivate();
 
 	ImGui_ImplDX11_Shutdown();

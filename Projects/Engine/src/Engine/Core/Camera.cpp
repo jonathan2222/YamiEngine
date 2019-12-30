@@ -32,11 +32,13 @@ glm::vec3 ym::Camera::getDir() const
 
 void ym::Camera::updateView()
 {
+	YM_PROFILER_FUNCTION();
 	m_view = glm::lookAtRH(m_pos, m_pos + m_dir, m_up);
 }
 
 void ym::Camera::updateProj()
 {
+	YM_PROFILER_FUNCTION();
 	// TODO: Make it possible to change the type of projection!!
 	float aspectRatio = Display::get()->getAspectRatio();
 	m_proj = glm::perspectiveRH(m_fov, aspectRatio, m_nearPlane, m_farPlane);
@@ -54,6 +56,7 @@ glm::vec3 ym::Camera::getRight() const
 
 void ym::Camera::setOrientaion(glm::vec3 up, glm::vec3& right)
 {
+	YM_PROFILER_FUNCTION();
 	m_up = glm::normalize(up);
 	m_dir = glm::normalize(glm::cross(up, right));
 	updateView();
