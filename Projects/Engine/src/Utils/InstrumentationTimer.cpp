@@ -22,8 +22,8 @@ void ym::InstrumentationTimer::stop()
 	if (m_active)
 	{
 		m_endTime = std::chrono::high_resolution_clock::now();
-		long long start = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_startTime).time_since_epoch().count();
-		long long end = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_endTime).time_since_epoch().count();
+		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_startTime).time_since_epoch().count();
+		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(m_endTime).time_since_epoch().count();
 
 		Instrumentation::get().write({ m_name, start, end });
 	}

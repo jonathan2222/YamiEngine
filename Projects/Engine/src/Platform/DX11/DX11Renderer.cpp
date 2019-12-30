@@ -117,6 +117,7 @@ void ym::DX11Renderer::endScene()
 	else
 	{
 		// Present as fast as possible (Swap buffers)
+		// This is slow (slower than OpenGL, glfwSwapBuffers is ~2x faster), for some reason.
 		m_swapChain->Present(0, 0);
 	}
 }

@@ -23,7 +23,7 @@ void ym::Instrumentation::beginSession(const std::string& name, const std::strin
 {
 	m_counter = 0;
 	m_file.open(filePath);
-	m_file << "{\"otherData\": {}, \"displayTimeUnit\": \"ns\", \"traceEvents\": [";
+	m_file << "{\"otherData\": {}, \"displayTimeUnit\": \"ms\", \"traceEvents\": [";
 	m_file.flush();
 }
 
