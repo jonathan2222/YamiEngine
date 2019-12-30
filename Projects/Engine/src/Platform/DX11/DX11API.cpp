@@ -21,7 +21,8 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 	// Go through graphics adapters which are compatible with DirectX.
 	IDXGIAdapter* adapter = nullptr;
 	std::vector <IDXGIAdapter*> adapters = enumerateAdapters();
-	DXGI_ADAPTER_DESC descI;
+	adapter = adapters[0];
+	/*DXGI_ADAPTER_DESC descI;
 	DXGI_ADAPTER_DESC descCurrent;
 	for (IDXGIAdapter*& ad : adapters)
 	{
@@ -40,7 +41,7 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 			}
 		}
 	}
-
+	*/
 	fillVideoCardInfo(adapter);
 
 	createDevice(adapter, D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN);
