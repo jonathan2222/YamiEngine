@@ -25,6 +25,5 @@ namespace ym
 
 		bool m_shouldClose;
 		GLFWwindow* m_window;
-		DisplayDesc m_description;
 	};
 }

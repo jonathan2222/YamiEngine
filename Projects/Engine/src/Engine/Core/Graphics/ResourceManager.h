@@ -40,7 +40,11 @@ namespace ym
 		*/
 		void freeImage(Image* image);
 
+		void convertFormat(Image* img, Format newFormat) const;
+
 	private:
+		ResourceManager();
+
 		Format getFormatFromChannelCount(int nChannels) const;
 
 	};

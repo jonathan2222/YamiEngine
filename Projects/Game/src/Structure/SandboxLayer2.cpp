@@ -15,13 +15,14 @@ void SandboxLayer2::onStart()
 	std::vector<MyVertex> vertices =
 	{
 		{ glm::vec3(-0.5f,-0.5f, 0.0f), glm::vec2(0, 0), },
-		{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0, 1), },
-		{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1, 0), }
+		{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0, 4), },
+		{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(4, 0), },
+		{ glm::vec3(0.5f, 0.5f, 0.0f), glm::vec2(4, 4), }
 	};
 
-	std::vector<unsigned int> indices = { 0, 1, 2 };
+	std::vector<unsigned int> indices = { 0, 1, 2, 3 };
 
-	ym::Model::Info modelInfo(ym::Topology::TRIANGLE_LIST, ym::Usage::STATIC);
+	ym::Model::Info modelInfo(ym::Topology::TRIANGLE_STRIP, ym::Usage::STATIC);
 	ym::AttributeLayout layout;
 	layout.push(ym::Format::FLOAT_32_RGB, "POSITION");
 	layout.push(ym::Format::FLOAT_32_RG, "TEXCOORD");
@@ -31,13 +32,13 @@ void SandboxLayer2::onStart()
 	m_shader = ym::Shader::create();
 	m_shader->load("Tests/texture", layout);
 
-	ym::ResourceManager::Image* img = ym::ResourceManager::get().loadImage("test.png", 4);
+	ym::ResourceManager::Image* img = ym::ResourceManager::get().loadImage("flyToYourDream.jpg", 4);
+	ym::ResourceManager::get().convertFormat(img, ym::Format::FLOAT_32_RGBA);
 
 	m_texture = ym::Texture::create();
 	m_sampler.filter = ym::Sampler::Filter::MIN_NEAREST_MAG_NEAREST_MIP_LINEAR;
 	m_sampler.addressMode = ym::Sampler::AddressMode::REPEAT;
-	// TODO: NEED A DIFFERENT FORMAT FOR INTERNAL USE FOR DIRECTX11!!!!
-	m_texture->setData(img, ym::Format::UINT_8_RGBA, m_sampler, ym::Usage::STATIC);
+	m_texture->setData(img, ym::Format::FLOAT_32_RGBA, m_sampler, ym::Usage::STATIC);
 
 	ym::ResourceManager::get().freeImage(img);
 	img = nullptr;

@@ -139,7 +139,7 @@ LRESULT ym::DX11Display::messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPA
 void ym::DX11Display::init(const DisplayDesc& description)
 {
 	YM_PROFILER_FUNCTION();
-	m_description = description;
+	setDescription(description);
 	ym::DX11Display::g_DX11DisplayHandle = this;
 
 	int posX, posY;

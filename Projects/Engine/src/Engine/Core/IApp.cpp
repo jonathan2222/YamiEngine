@@ -30,7 +30,7 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 	m_api->postDisplayInit();
 
 	m_renderer = Renderer::get();
-	m_renderer->init(displayDescriptor);
+	m_renderer->init(m_display->getDescription());
 
 	API::VideoCardInfo& gpuInfo = m_api->getVideoCardInfo();
 	YM_LOG_INFO("GPU: {0}", gpuInfo.name.c_str());
@@ -48,7 +48,6 @@ ym::IApp::IApp(DisplayDesc& displayDescriptor) : m_display(nullptr), m_input(nul
 		m_imGuiImpl->setUp();
 		m_display->setImGuiImpl(m_imGuiImpl);
 	}
-
 }
 
 ym::IApp::~IApp()

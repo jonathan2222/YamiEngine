@@ -95,8 +95,6 @@ void ym::DX11Shader::setTexture(const std::string& name, Texture* texture, Sampl
 		// Create the SRV if it was just added.
 		if (uDataRTV->justAdded)
 		{
-			YM_LOG_WARN("Create RTV");
-
 			uDataRTV->justAdded = false;
 			HRESULT result;
 			ID3D11Device* device = DX11API::get()->getDevice();
@@ -135,8 +133,6 @@ void ym::DX11Shader::setTexture(const std::string& name, Texture* texture, Sampl
 		// Create the sampler if it was just added.
 		if (uDataSampler->justAdded)
 		{
-			YM_LOG_WARN("Create Sampler");
-
 			uDataSampler->justAdded = false;
 			HRESULT result;
 			ID3D11Device* device = DX11API::get()->getDevice();
@@ -191,7 +187,6 @@ ym::DX11Shader::UniformData* ym::DX11Shader::addUniform(const std::string& name)
 		result = m_psReflector->GetResourceBindingDescByName(name.c_str(), &binding);
 		if (SUCCEEDED(result))
 		{
-			YM_LOG_WARN("GetResourceBindingDescByName on pixel shader return TRUE!");
 			uData.shaderType = YM_SHADER_TYPE_PIXEL;
 			uData.binding = binding;
 		}
@@ -202,7 +197,6 @@ ym::DX11Shader::UniformData* ym::DX11Shader::addUniform(const std::string& name)
 			result = m_vsReflector->GetResourceBindingDescByName(name.c_str(), &binding);
 			if (SUCCEEDED(result))
 			{
-				YM_LOG_WARN("GetResourceBindingDescByName on vertex shader return TRUE!");
 				uData.shaderType = YM_SHADER_TYPE_VERTEX;
 				uData.binding = binding;
 			}

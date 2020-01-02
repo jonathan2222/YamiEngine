@@ -12,6 +12,11 @@
 #include "../../../Utils/stb_image.h"
 #pragma warning( pop )
 
+ym::ResourceManager::ResourceManager()
+{
+	stbi_set_flip_vertically_on_load((int)true);
+}
+
 ym::ResourceManager& ym::ResourceManager::get()
 {
 	static ResourceManager resourceManager;
@@ -20,6 +25,8 @@ ym::ResourceManager& ym::ResourceManager::get()
 
 ym::ResourceManager::Image* ym::ResourceManager::loadImage(const std::string& fileName, int nChannels)
 {
+	YM_PROFILER_FUNCTION();
+
 	std::string path = std::string(YM_TEXTURE_PATH) + fileName;
 	Image* img = new Image();
 	int width = 0, height = 0, channelCount = 0;
@@ -30,6 +37,7 @@ ym::ResourceManager::Image* ym::ResourceManager::loadImage(const std::string& fi
 	}
 	else
 	{
+		YM_PROFILER_SCOPE("stbi_load");
 		img->data = (void*)stbi_load(path.c_str(), &width, &height, &channelCount, nChannels);
 		img->format = getFormatFromChannelCount(nChannels == 0 ? channelCount : nChannels);
 	}
@@ -56,6 +64,45 @@ void ym::ResourceManager::freeImage(Image* image)
 	}
 	else
 		YM_LOG_WARN("Trying to free an image pointer which is NULL!");
+}
+
+#define YM_CLAMP(x, a, b) ((x) < (a) ? (a) : ((x) > (b) ? (b) : (x)))
+
+void ym::ResourceManager::convertFormat(Image* img, Format newFormat) const
+{
+	YM_PROFILER_FUNCTION();
+
+	unsigned int w = img->width;
+	unsigned int h = img->height;
+	unsigned int size = w * h;
+	if(img->format == Format::UINT_8_RGBA)
+	{
+		unsigned char* oldData = (unsigned char*)img->data;
+		if (newFormat == Format::FLOAT_32_RGBA)
+		{
+			float* newData = new float[size*4u];
+			for (unsigned int i = 0; i < size * 4u; i++)
+				newData[i] = YM_CLAMP((float)oldData[i]/255.f, 0.f, 1.f);
+			delete[] oldData;
+			img->data = newData;
+		}
+		else if (newFormat == Format::SINT_32_RGBA)
+		{
+			YM_LOG_WARN("Conversion is not implemented!");
+		}
+		else if (newFormat == Format::UINT_32_RGBA)
+		{
+			YM_LOG_WARN("Conversion is not implemented!");
+		}
+		else if (newFormat == Format::SINT_8_RGBA)
+		{
+			YM_LOG_WARN("Conversion is not implemented!");
+		}
+	}
+	else
+	{
+		YM_LOG_WARN("Conversion is not implemented!");
+	}
 }
 
 ym::Format ym::ResourceManager::getFormatFromChannelCount(int nChannels) const

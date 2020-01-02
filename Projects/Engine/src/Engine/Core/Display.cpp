@@ -46,11 +46,10 @@ ym::Display* ym::Display::create(const DisplayDesc& description)
 	if (type == YM_API_GL) m_self = new GLDisplay(description);
 	else if (type == YM_API_DX11) m_self = new DX11Display(description);
 
-	m_self->setDescripton(description);
 	return m_self;
 }
 
-void ym::Display::setDescripton(const DisplayDesc& description)
+void ym::Display::setDescription(const DisplayDesc& description)
 {
 	m_description.copy(description);
 }

@@ -37,7 +37,7 @@ namespace ym
 		static Display* create(const DisplayDesc& description);
 		virtual ~Display() = default;
 
-		void setDescripton(const DisplayDesc& description);
+		void setDescription(const DisplayDesc& description);
 		DisplayDesc& getDescription();
 
 		virtual bool shouldClose() const noexcept = 0;
@@ -54,9 +54,11 @@ namespace ym
 		void setImGuiImpl(ImGuiImpl* imGuiImpl);
 		ym::ImGuiImpl* getImGuiImpl();
 
+	protected:
+		DisplayDesc m_description;
+
 	private:
 		ym::ImGuiImpl* m_imGuiImpl = nullptr;
-		DisplayDesc m_description;
 		static Display* m_self;
 	};
 };

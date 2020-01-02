@@ -45,7 +45,7 @@ void ym::GLDisplay::init(const DisplayDesc& description)
 	YM_PROFILER_FUNCTION();
 
 	g_glDisplayPtr = this;
-	m_description = description;
+	setDescription(description);
 	m_shouldClose = false;
 	
 	GLFWmonitor* monitor = nullptr;

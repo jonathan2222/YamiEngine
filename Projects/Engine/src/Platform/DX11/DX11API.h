@@ -30,7 +30,7 @@
 		YM_ASSERT(SUCCEEDED(hr), str, (unsigned int)hr, __VA_ARGS__); \
 	}
 #else
-#define YM_DX11_CHECK(hr, msg, ...) YM_ASSERT(SUCCEEDED(hr), msg, __VA_ARGS__);
+#define YM_DX11_ASSERT_CHECK(hr, msg, ...) YM_ASSERT(SUCCEEDED(hr), msg, __VA_ARGS__);
 #endif
 
 #include <vector>

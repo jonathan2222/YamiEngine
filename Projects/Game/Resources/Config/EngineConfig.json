@@ -1,6 +1,6 @@
 {
   "API": {
-    "type": "OpenGL",
+    "type": "DirectX11",
     "debug": true
   },
 

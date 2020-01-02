@@ -27,7 +27,6 @@ namespace ym
 		std::wstring m_appNameWS;
 		HWND m_window;
 		HINSTANCE m_hinstance;
-		DisplayDesc m_description;
 
 		MSG m_msg;
 		bool m_shouldClose;
