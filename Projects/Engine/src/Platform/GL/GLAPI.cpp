@@ -105,9 +105,11 @@ GLenum ym::GLAPI::convertFormat(Format format) const
 	case Format::UINT_32_RGBA:		return GL_RGBA;
 	case Format::SINT_8_R:			return GL_RED;
 	case Format::SINT_8_RG:			return GL_RG;
+	case Format::SINT_8_RGB:		return GL_RGB;
 	case Format::SINT_8_RGBA:		return GL_RGBA;
 	case Format::UINT_8_R:			return GL_RED;
 	case Format::UINT_8_RG:			return GL_RG;
+	case Format::UINT_8_RGB:		return GL_RGB;
 	case Format::UINT_8_RGBA:		return GL_RGBA;
 	case Format::FLOAT_32_R:		return GL_RED;
 	case Format::FLOAT_32_RG:		return GL_RG;

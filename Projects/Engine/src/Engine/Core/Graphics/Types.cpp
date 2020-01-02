@@ -30,6 +30,8 @@ unsigned int ym::countOfFormat(Format format)
 	case Format::UINT_32_RG:
 	case Format::FLOAT_32_RG:
 		return 2; break;
+	case Format::SINT_8_RGB:
+	case Format::UINT_8_RGB:
 	case Format::FLOAT_32_RGB:
 	case Format::SINT_32_RGB:
 	case Format::UINT_32_RGB:
@@ -50,10 +52,12 @@ ym::Type ym::typeOfFormat(Format format)
 	{
 	case Format::SINT_8_R:
 	case Format::SINT_8_RG:
+	case Format::SINT_8_RGB:
 	case Format::SINT_8_RGBA:
 		return Type::SBYTE; break;
 	case Format::UINT_8_R:
 	case Format::UINT_8_RG:
+	case Format::UINT_8_RGB:
 	case Format::UINT_8_RGBA:
 		return Type::UBYTE; break;
 	case Format::SINT_32_R:

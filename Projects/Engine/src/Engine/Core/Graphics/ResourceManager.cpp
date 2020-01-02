@@ -30,7 +30,8 @@ ym::ResourceManager::Image* ym::ResourceManager::loadImage(const std::string& fi
 	}
 	else
 	{
-		img->data = stbi_load(path.c_str(), &width, &height, &channelCount, nChannels);
+		img->data = (void*)stbi_load(path.c_str(), &width, &height, &channelCount, nChannels);
+		img->format = getFormatFromChannelCount(nChannels == 0 ? channelCount : nChannels);
 	}
 
 	img->width = (unsigned int)width;
@@ -55,4 +56,17 @@ void ym::ResourceManager::freeImage(Image* image)
 	}
 	else
 		YM_LOG_WARN("Trying to free an image pointer which is NULL!");
+}
+
+ym::Format ym::ResourceManager::getFormatFromChannelCount(int nChannels) const
+{
+	switch (nChannels)
+	{
+	case 1: return Format::UINT_8_R; break;
+	case 2: return Format::UINT_8_RG; break;
+	case 3: return Format::UINT_8_RGB; break;
+	case 4:
+	default:
+		return Format::UINT_8_RGBA; break;
+	}
 }

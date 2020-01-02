@@ -133,9 +133,11 @@ DXGI_FORMAT ym::DX11API::convertFormat(Format format) const
 	case Format::UINT_32_RGBA:		return DXGI_FORMAT_R32G32B32A32_UINT;
 	case Format::SINT_8_R:			return DXGI_FORMAT_R8_SINT;
 	case Format::SINT_8_RG:			return DXGI_FORMAT_R8G8_SINT;
+	case Format::SINT_8_RGB:		// Assume it should be SINT_8_RGBA, (DirectX does not support this)
 	case Format::SINT_8_RGBA:		return DXGI_FORMAT_R8G8B8A8_SINT;
 	case Format::UINT_8_R:			return DXGI_FORMAT_R8_UINT;
 	case Format::UINT_8_RG:			return DXGI_FORMAT_R8G8_UINT;
+	case Format::UINT_8_RGB:		// Assume it should be UINT_8_RGBA, (DirectX does not support this)
 	case Format::UINT_8_RGBA:		return DXGI_FORMAT_R8G8B8A8_UINT;
 	case Format::FLOAT_32_RGBA:
 	default:

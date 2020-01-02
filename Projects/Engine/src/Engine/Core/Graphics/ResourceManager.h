@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "Types.h"
+
 #define YM_TEXTURE_PATH "./Resources/Textures/"
 
 namespace ym
@@ -13,7 +15,8 @@ namespace ym
 
 		struct Image
 		{
-			unsigned char* data;
+			void* data;
+			Format format;
 			unsigned int width;
 			unsigned int height;
 			unsigned int nChannels;
@@ -36,5 +39,9 @@ namespace ym
 				* image: A pointer to the image structure.
 		*/
 		void freeImage(Image* image);
+
+	private:
+		Format getFormatFromChannelCount(int nChannels) const;
+
 	};
 }
