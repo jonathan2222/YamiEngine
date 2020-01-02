@@ -172,11 +172,11 @@ void ym::DX11Renderer::createRTV()
 	HRESULT result;
 	ID3D11Texture2D* backBufferPtr = 0;
 	result = m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& backBufferPtr);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch the back buffer pointer!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to fetch the back buffer pointer!");
 
 	// Create the render target view with the back buffer pointer.
 	result = m_device->CreateRenderTargetView(backBufferPtr, NULL, &m_renderTargetView);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the RTV!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the RTV!");
 
 	backBufferPtr->Release();
 	backBufferPtr = 0;
@@ -215,7 +215,7 @@ void ym::DX11Renderer::createDepthBuffer(DisplayDesc& displayDescriptor)
 
 	// Create the texture for the depth buffer using the filled out description.
 	HRESULT result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the depth buffer texture!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the depth buffer texture!");
 }
 
 void ym::DX11Renderer::createDepthStencilState()
@@ -248,7 +248,7 @@ void ym::DX11Renderer::createDepthStencilState()
 
 	// Create the depth stencil state.
 	HRESULT result = m_device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the depth stencil state!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the depth stencil state!");
 }
 
 void ym::DX11Renderer::createDepthStencilView()
@@ -265,7 +265,7 @@ void ym::DX11Renderer::createDepthStencilView()
 
 	// Create the depth stencil view.
 	HRESULT result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the depth stencil view!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the depth stencil view!");
 }
 
 void ym::DX11Renderer::createRasterizer()
@@ -287,7 +287,7 @@ void ym::DX11Renderer::createRasterizer()
 
 	// Create the rasterizer state from the description we just filled out.
 	HRESULT result = m_device->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the rasterizer state!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the rasterizer state!");
 }
 
 void ym::DX11Renderer::createAndSetViewport(float width, float height)

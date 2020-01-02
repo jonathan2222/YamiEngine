@@ -36,6 +36,21 @@ void* ym::GLShader::getId()
 	return &m_id;
 }
 
+void ym::GLShader::setTexture(const std::string& name, Texture* texture, Sampler sampler, unsigned int unit)
+{
+	YM_PROFILER_RENDERING_FUNCTION();
+
+	GLint location = addUniform(name);
+	if (location != -1)
+	{
+		glUniform1i(location, (int)unit);
+
+		glActiveTexture(GL_TEXTURE0 + unit);
+		//glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, *(GLuint*)texture->getBuffer());
+	}
+}
+
 void ym::GLShader::init(const std::string& vertex, const std::string& fragment)
 {
 	YM_PROFILER_FUNCTION();
@@ -59,6 +74,26 @@ void ym::GLShader::init(const std::string& vertex, const std::string& fragment)
 		return;
 
 	link();
+}
+
+GLint ym::GLShader::addUniform(const std::string& name)
+{
+	// Check if the uniform already exists.
+	if (m_uniforms.find(name) == m_uniforms.end())
+	{
+		// Fetch its location if it did not already exist.
+		GLint location = glGetUniformLocation(m_id, name.c_str());
+		if (location == -1) {
+			YM_ASSERT(false, "Can't find uniform '{0}'!", name.c_str());
+			return -1;
+		}
+
+		// Add it to the hash map.
+		m_uniforms.insert({ name, location });
+	}
+
+	// Return its location.
+	return m_uniforms[name];
 }
 
 bool ym::GLShader::addShaderPart(const std::string& name, GLuint type)

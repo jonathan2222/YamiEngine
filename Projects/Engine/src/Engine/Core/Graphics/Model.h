@@ -18,6 +18,7 @@ namespace ym
 		Model();
 		virtual ~Model();
 
+		// The vertices should be spcified by the indices in clock wise order!
 		void setData(const void* vertices, unsigned int vSize, const void* indices, unsigned int iSize, const AttributeLayout& layout, Info info);
 		void bind();
 

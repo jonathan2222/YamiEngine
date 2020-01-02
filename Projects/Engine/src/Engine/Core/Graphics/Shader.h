@@ -2,6 +2,7 @@
 
 #include <string>
 #include "AttributeLayout.h"
+#include "Texture.h"
 
 #define YM_SHADER_PATH "./Resources/Shaders/"
 
@@ -26,5 +27,7 @@ namespace ym
 		virtual void load(const std::string& fileName, AttributeLayout& layout) = 0;
 		virtual void bind() = 0;
 		virtual void* getId() = 0;
+
+		virtual void setTexture(const std::string& name, Texture* texture, Sampler sampler, unsigned int unit) = 0;
 	};
 }

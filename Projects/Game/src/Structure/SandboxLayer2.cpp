@@ -1,53 +1,46 @@
-#include "SandboxLayer.h"
+#include "SandboxLayer2.h"
 
 #include <glm/gtx/rotate_vector.hpp>
 #include "Engine/Core/Graphics/Vertex.h"
+#include "Engine/Core/Graphics/ResourceManager.h"
 
-void SandboxLayer::onStart()
+struct MyVertex
 {
-	std::vector<ym::Vertex> vertices =
-	{
-		{ glm::vec3(-0.5f,-0.5f,-0.5f), glm::vec3(0, 0, 0), },
-		{ glm::vec3(-0.5f,-0.5f, 0.5f), glm::vec3(0, 0, 1), },
-		{ glm::vec3(-0.5f, 0.5f,-0.5f), glm::vec3(0, 1, 0), },
-		{ glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0, 1, 1), },
+	glm::vec3 pos;
+	glm::vec2 uv;
+};
 
-		{ glm::vec3(0.5f,-0.5f,-0.5f), glm::vec3(1, 0, 0), },
-		{ glm::vec3(0.5f,-0.5f, 0.5f), glm::vec3(1, 0, 1), },
-		{ glm::vec3(0.5f, 0.5f,-0.5f), glm::vec3(1, 1, 0), },
-		{ glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1, 1, 1), },
+void SandboxLayer2::onStart()
+{
+	std::vector<MyVertex> vertices =
+	{
+		{ glm::vec3(-0.5f,-0.5f, 0.0f), glm::vec2(0, 0), },
+		{ glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0, 1), },
+		{ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1, 0), }
 	};
 
-	std::vector<unsigned int> indices =
-	{
-		0,2,1, // -x
-		1,2,3,
-
-		4,5,6, // +x
-		5,7,6,
-
-		0,1,5, // -y
-		0,5,4,
-
-		2,6,7, // +y
-		2,7,3,
-
-		0,4,6, // -z
-		0,6,2,
-
-		1,3,7, // +z
-		1,7,5
-	};
+	std::vector<unsigned int> indices = { 0, 1, 2 };
 
 	ym::Model::Info modelInfo(ym::Topology::TRIANGLE_LIST, ym::Usage::STATIC);
 	ym::AttributeLayout layout;
 	layout.push(ym::Format::FLOAT_32_RGB, "POSITION");
-	layout.push(ym::Format::FLOAT_32_RGB, "COLOR");
-	m_model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(ym::Vertex) * vertices.size()),
+	layout.push(ym::Format::FLOAT_32_RG, "TEXCOORD");
+	m_model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(MyVertex) * vertices.size()),
 		indices.data(), (unsigned int)indices.size(), layout, modelInfo);
 
 	m_shader = ym::Shader::create();
-	m_shader->load("Test", layout);
+	m_shader->load("Tests/texture", layout);
+
+	ym::ResourceManager::Image* img = ym::ResourceManager::get().loadImage("test.png", 4);
+
+	m_texture = ym::Texture::create();
+	m_sampler.filter = ym::Sampler::Filter::MIN_NEAREST_MAG_NEAREST_MIP_LINEAR;
+	m_sampler.addressMode = ym::Sampler::AddressMode::REPEAT;
+	// TODO: NEED A DIFFERENT FORMAT FOR INTERNAL USE FOR DIRECTX11!!!!
+	m_texture->setData(img, ym::Format::UINT_8_RGBA, m_sampler, ym::Usage::STATIC);
+
+	ym::ResourceManager::get().freeImage(img);
+	img = nullptr;
 
 	m_camera = new ym::Camera({ 0.0f, 0.0f, 2.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 1.0f, 0.0f }, 0.01f, 100.0f, 3.1415f / 4);
 	m_camera->updateView();
@@ -67,7 +60,7 @@ void SandboxLayer::onStart()
 	m_defaultRotSpeed = 3.1415f / 180.f * 90.0f;
 }
 
-void SandboxLayer::onUpdate(float dt)
+void SandboxLayer2::onUpdate(float dt)
 {
 	if (ym::Input::get()->isKeyPressed(ym::Key::ESCAPE))
 		getDisplay()->close();
@@ -142,49 +135,28 @@ void SandboxLayer::onUpdate(float dt)
 	}
 }
 
-void SandboxLayer::onRender()
+void SandboxLayer2::onRender()
 {
 	m_matrixBuffer.world = m_world;
 	m_matrixBuffer.projection = m_camera->getProj();
 	m_matrixBuffer.view = m_camera->getView();
 	m_uniformBuffer->updateData(&(m_matrixBuffer.world[0][0]), sizeof(MatrixBuffer), 0);
 	m_uniformBuffer->bind(YM_SHADER_TYPE_VERTEX);
+
+	m_shader->bind();
+	m_shader->setTexture("tex", m_texture, m_sampler, 0);
+
 	getRenderer()->draw(&m_model, m_shader);
 }
 
-void SandboxLayer::onRenderImGui()
+void SandboxLayer2::onRenderImGui()
 {
-	// If ImGUI/activate is true than this will result in irregular behaviour of the win32 window's menue buttons!
-
-	static bool show_demo_window = false;
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
-	{
-		static float f = 0.0f;
-		static int counter = 0;
-
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		//ImGui::ColorEdit3("clear color", m_clearColor);		// Edit 3 floats representing a color
-
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-	}
 }
 
-void SandboxLayer::onQuit()
+void SandboxLayer2::onQuit()
 {
 	delete m_camera;
 	delete m_shader;
 	delete m_uniformBuffer;
+	delete m_texture;
 }

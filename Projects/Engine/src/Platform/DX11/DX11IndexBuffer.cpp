@@ -45,7 +45,7 @@ void ym::DX11IndexBuffer::setData(const void* data, unsigned int count, Usage us
 
 	// Create buffer.
 	result = device->CreateBuffer(&bufferDesc, &initData, &m_buffer);
-	YM_ASSERT(FAILED(result) == false, "Failed to create index buffer!");
+	YM_DX11_ASSERT_CHECK(result, "Failed to create index buffer!");
 }
 
 void ym::DX11IndexBuffer::bind()

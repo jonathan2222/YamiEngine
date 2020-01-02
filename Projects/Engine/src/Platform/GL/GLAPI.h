@@ -20,6 +20,8 @@ namespace ym
 		void initDebug();
 
 		GLenum convertType(Type type) const;
+		//GLint convertInternalFormat(Format format) const;
+		GLenum convertFormat(Format format) const;
 
 	private:
 		static void errorCallback(int error, const char* description);

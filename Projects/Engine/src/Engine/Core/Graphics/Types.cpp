@@ -5,10 +5,10 @@ unsigned int ym::sizeOfType(Type type)
 {
 	switch (type)
 	{
-	case Type::INT: return 4; break;
-	case Type::CHAR: return 1; break;
+	case Type::SINT: return 4; break;
+	case Type::SBYTE: return 1; break;
 	case Type::UINT: return 4; break;
-	case Type::UCHAR: return 1; break;
+	case Type::UBYTE: return 1; break;
 	case Type::FLOAT:
 	default: return 4;
 	}
@@ -51,14 +51,16 @@ ym::Type ym::typeOfFormat(Format format)
 	case Format::SINT_8_R:
 	case Format::SINT_8_RG:
 	case Format::SINT_8_RGBA:
+		return Type::SBYTE; break;
+	case Format::UINT_8_R:
+	case Format::UINT_8_RG:
+	case Format::UINT_8_RGBA:
+		return Type::UBYTE; break;
 	case Format::SINT_32_R:
 	case Format::SINT_32_RG:
 	case Format::SINT_32_RGB:
 	case Format::SINT_32_RGBA:
-		return Type::INT; break;
-	case Format::UINT_8_R:
-	case Format::UINT_8_RG:
-	case Format::UINT_8_RGBA:
+		return Type::SINT; break;
 	case Format::UINT_32_R:
 	case Format::UINT_32_RG:
 	case Format::UINT_32_RGB:

@@ -47,7 +47,7 @@ void ym::DX11VertexBuffer::setData(const void* data, unsigned int size, Usage us
 
 	// Create it.
 	result = device->CreateBuffer(&bufferDesc, &initData, &m_buffer);
-	YM_ASSERT(FAILED(result) == false, "Failed to create vertex buffer!");
+	YM_DX11_ASSERT_CHECK(result, "Failed to create vertex buffer!");
 }
 
 void ym::DX11VertexBuffer::bind()

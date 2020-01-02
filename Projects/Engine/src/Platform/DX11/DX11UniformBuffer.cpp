@@ -46,7 +46,7 @@ void ym::DX11UniformBuffer::setData(const void* data, unsigned int size)
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	ID3D11Device* device = DX11API::get()->getDevice();
 	HRESULT result = device->CreateBuffer(&matrixBufferDesc, &initData, &m_buffer);
-	YM_ASSERT(FAILED(result) == false, "Failed to create a constant buffer!");
+	YM_DX11_ASSERT_CHECK(result, "Failed to create a constant buffer!");
 }
 
 bool ym::DX11UniformBuffer::updateData(const void* data, unsigned int size, unsigned int offset)
@@ -59,7 +59,7 @@ bool ym::DX11UniformBuffer::updateData(const void* data, unsigned int size, unsi
 		ID3D11DeviceContext* context = DX11API::get()->getDeviceContext();
 
 		HRESULT result = context->Map(m_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-		YM_ASSERT(FAILED(result) == false, "Failed to map (lock) constant buffer!");
+		YM_DX11_ASSERT_CHECK(result, "Failed to map (lock) constant buffer!");
 
 		// Get a pointer to the data in the constant buffer.
 		unsigned char* dataPtr = (unsigned char*)mappedResource.pData;

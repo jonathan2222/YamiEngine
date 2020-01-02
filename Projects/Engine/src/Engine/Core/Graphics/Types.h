@@ -42,10 +42,35 @@ namespace ym
 	enum class Type
 	{
 		FLOAT,
-		INT,
+		SINT,
 		UINT,
-		CHAR,
-		UCHAR
+		SBYTE,
+		UBYTE
+	};
+
+	struct Sampler
+	{
+		enum class AddressMode
+		{
+			CLAMP_TO_EDGE,
+			REPEAT,
+			MIRRORED_REPEAT
+		};
+
+		enum class Filter
+		{
+			MIN_NEAREST_MAG_NEAREST_MIP_NEAREST,
+			MIN_LINEAR_MAG_NEAREST_MIP_NEAREST,
+			MIN_NEAREST_MAG_LINEAR_MIP_NEAREST,
+			MIN_LINEAR_MAG_LINEAR_MIP_NEAREST,
+			MIN_NEAREST_MAG_NEAREST_MIP_LINEAR,
+			MIN_LINEAR_MAG_NEAREST_MIP_LINEAR,
+			MIN_NEAREST_MAG_LINEAR_MIP_LINEAR,
+			MIN_LINEAR_MAG_LINEAR_MIP_LINEAR
+		};
+
+		Filter filter;
+		AddressMode addressMode;
 	};
 
 	unsigned int sizeOfType(Type type);

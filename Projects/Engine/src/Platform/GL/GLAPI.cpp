@@ -52,13 +52,69 @@ GLenum ym::GLAPI::convertType(Type type) const
 {
 	switch (type)
 	{
-	case Type::INT:		return GL_INT; break;
-	case Type::CHAR:	return GL_BYTE; break;
+	case Type::SINT:	return GL_INT; break;
+	case Type::SBYTE:	return GL_BYTE; break;
 	case Type::UINT:	return GL_UNSIGNED_INT; break;
-	case Type::UCHAR:	return GL_UNSIGNED_BYTE; break;
+	case Type::UBYTE:	return GL_UNSIGNED_BYTE; break;
 	case Type::FLOAT:
 	default:
 		return GL_FLOAT;
+		break;
+	}
+}
+/*
+GLint ym::GLAPI::convertInternalFormat(Format format) const
+{
+	switch (format)
+	{
+	case Format::SINT_32_R:			return GL_R32I;
+	case Format::SINT_32_RG:		return GL_RG32I;
+	case Format::SINT_32_RGB:		return GL_RGB32I;
+	case Format::SINT_32_RGBA:		return GL_RGBA32I;
+	case Format::UINT_32_R:			return GL_R32UI;
+	case Format::UINT_32_RG:		return GL_RG32UI;
+	case Format::UINT_32_RGB:		return GL_RGB32UI;
+	case Format::UINT_32_RGBA:		return GL_RGBA32UI;
+	case Format::SINT_8_R:			return GL_R8I;
+	case Format::SINT_8_RG:			return GL_RG8I;
+	case Format::SINT_8_RGBA:		return GL_RGBA8I;
+	case Format::UINT_8_R:			return GL_R8UI;
+	case Format::UINT_8_RG:			return GL_RG8UI;
+	case Format::UINT_8_RGBA:		return GL_RGBA8UI;
+	case Format::FLOAT_32_R:		return GL_R32F;
+	case Format::FLOAT_32_RG:		return GL_RG32F;
+	case Format::FLOAT_32_RGB:		return GL_RGB32F;
+	case Format::FLOAT_32_RGBA:
+	default:
+		return GL_RGBA32F;
+		break;
+	}
+}*/
+
+GLenum ym::GLAPI::convertFormat(Format format) const
+{
+	switch (format)
+	{
+	case Format::SINT_32_R:			return GL_RED;
+	case Format::SINT_32_RG:		return GL_RG;
+	case Format::SINT_32_RGB:		return GL_RGB;
+	case Format::SINT_32_RGBA:		return GL_RGBA;
+	case Format::UINT_32_R:			return GL_RED;
+	case Format::UINT_32_RG:		return GL_RG;
+	case Format::UINT_32_RGB:		return GL_RGB;
+	case Format::UINT_32_RGBA:		return GL_RGBA;
+	case Format::SINT_8_R:			return GL_RED;
+	case Format::SINT_8_RG:			return GL_RG;
+	case Format::SINT_8_RGBA:		return GL_RGBA;
+	case Format::UINT_8_R:			return GL_RED;
+	case Format::UINT_8_RG:			return GL_RG;
+	case Format::UINT_8_RGBA:		return GL_RGBA;
+	case Format::FLOAT_32_R:		return GL_RED;
+	case Format::FLOAT_32_RG:		return GL_RG;
+	case Format::FLOAT_32_RGB:		return GL_RGB;
+	case Format::FLOAT_32_RGBA:
+	default:
+		return GL_RGBA;
 		break;
 	}
 }

@@ -16,7 +16,7 @@ void ym::DX11API::preDisplayInit(DisplayDesc& displayDescriptor)
 
 	// Create a DirectX graphics interface factory.
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory2), (void**)& m_factory);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the DirectX factory object!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the DirectX factory object!");
 
 	// Go through graphics adapters which are compatible with DirectX.
 	IDXGIAdapter* adapter = nullptr;
@@ -143,6 +143,35 @@ DXGI_FORMAT ym::DX11API::convertFormat(Format format) const
 	}
 }
 
+D3D11_FILTER ym::DX11API::convertFilter(Sampler::Filter filter) const
+{
+	switch (filter)
+	{
+	case Sampler::Filter::MIN_NEAREST_MAG_NEAREST_MIP_NEAREST:		return D3D11_FILTER_MIN_MAG_MIP_POINT;
+	case Sampler::Filter::MIN_LINEAR_MAG_NEAREST_MIP_NEAREST:		return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+	case Sampler::Filter::MIN_NEAREST_MAG_LINEAR_MIP_NEAREST:		return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+	case Sampler::Filter::MIN_LINEAR_MAG_LINEAR_MIP_NEAREST:		return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+	case Sampler::Filter::MIN_NEAREST_MAG_NEAREST_MIP_LINEAR:		return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+	case Sampler::Filter::MIN_LINEAR_MAG_NEAREST_MIP_LINEAR:		return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+	case Sampler::Filter::MIN_NEAREST_MAG_LINEAR_MIP_LINEAR:		return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+	case Sampler::Filter::MIN_LINEAR_MAG_LINEAR_MIP_LINEAR:
+	default:
+		return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	}
+}
+
+D3D11_TEXTURE_ADDRESS_MODE ym::DX11API::convertSamplerAddressMode(Sampler::AddressMode addressMode) const
+{
+	switch (addressMode)
+	{
+	case Sampler::AddressMode::CLAMP_TO_EDGE:		return D3D11_TEXTURE_ADDRESS_CLAMP;
+	case Sampler::AddressMode::MIRRORED_REPEAT:		return D3D11_TEXTURE_ADDRESS_MIRROR;
+	case Sampler::AddressMode::REPEAT:
+	default:
+		return D3D11_TEXTURE_ADDRESS_WRAP;
+	}
+}
+
 void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType)
 {
 	YM_PROFILER_FUNCTION();
@@ -156,7 +185,7 @@ void ym::DX11API::createDevice(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType
 	// Create a D3D11Device and a device context.
 	HRESULT result = D3D11CreateDevice(adapter, driverType, NULL, flags,
 		&featureLevel, 1, D3D11_SDK_VERSION, &m_device, NULL, &m_deviceContext);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create the device and device context!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create the device and device context!");
 }
 
 void ym::DX11API::createSwapChain()
@@ -202,7 +231,7 @@ void ym::DX11API::createSwapChain()
 
 	HWND wnd = (HWND)DX11Display::get()->getNativeDisplay();
 	HRESULT result = m_factory->CreateSwapChainForHwnd(m_device, wnd, &swapChainDesc, &fullscreenDesc, NULL, &m_swapChain);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create swap chain!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create swap chain!");
 }
 
 
@@ -214,12 +243,12 @@ void ym::DX11API::getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDesc
 	// Enumerate the primary adapter output (monitor).
 	IDXGIOutput* adapterOutput;
 	result = adapter->EnumOutputs(0, &adapterOutput);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to create an DirectX adapter for the monitor!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to create an DirectX adapter for the monitor!");
 
 	// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
 	unsigned int numModes = 0;
 	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, NULL);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch the monitor's display mode list length!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to fetch the monitor's display mode list length!");
 
 	// Create a list to hold all the possible display modes for this monitor/video card combination.
 	DXGI_MODE_DESC* displayModeList = new DXGI_MODE_DESC[numModes];
@@ -227,7 +256,7 @@ void ym::DX11API::getRefreshRate(IDXGIAdapter* adapter, DisplayDesc& displayDesc
 
 	// Fill the display mode list structures.
 	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &numModes, displayModeList);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch the display mode list!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to fetch the display mode list!");
 
 	bool gotRefreshRate = false;
 	for (unsigned int i = 0; i < numModes; i++)
@@ -274,7 +303,7 @@ void ym::DX11API::fillVideoCardInfo(IDXGIAdapter* adapter)
 	// Get the adapter (video card) description.
 	DXGI_ADAPTER_DESC adapterDesc;
 	result = adapter->GetDesc(&adapterDesc);
-	YM_ASSERT(FAILED(result) == false, "Could not initiate DirectX11: Failed to fetch adapter description from the video card!");
+	YM_DX11_ASSERT_CHECK(result, "Could not initiate DirectX11: Failed to fetch adapter description from the video card!");
 
 	VideoCardInfo& videoCardInfo = getVideoCardInfo();
 	// Store the dedicated video card memory in megabytes.
