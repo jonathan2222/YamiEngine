@@ -8,7 +8,7 @@
     "defaultWidth": 1280,
     "defaultHeight": 720,
     "fullscreen": false,
-    "vsync": false,
+    "vsync": true,
     "title": "Yami Engine"
   },
 

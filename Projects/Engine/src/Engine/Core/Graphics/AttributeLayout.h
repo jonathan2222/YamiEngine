@@ -11,8 +11,9 @@ namespace ym
 		class Attribute
 		{
 		public:
-			Attribute(Format format, const std::string& semanticName, unsigned int offset);
+			Attribute(Format format, const std::string& semanticName, unsigned int offset, unsigned int instanceDivisor);
 
+			unsigned int getInstanceDivisor() const;
 			unsigned int getCount() const;
 			unsigned int getSize() const;
 			unsigned int getOffset() const;
@@ -21,6 +22,7 @@ namespace ym
 			const std::string& getSemanticName() const;
 
 		private:
+			unsigned int m_instanceDivisor = 0;
 			unsigned int m_offset = 0;
 			unsigned int m_count = 0;
 			unsigned int m_size;
@@ -30,7 +32,7 @@ namespace ym
 		};
 
 		AttributeLayout();
-		void push(Format format, const std::string& semanticName);
+		void push(Format format, const std::string& semanticName, unsigned int instanceDivisor);
 
 		unsigned int getStride() const;
 		const std::vector<Attribute>& getAttributes() const;

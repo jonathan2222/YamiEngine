@@ -5,9 +5,9 @@ ym::AttributeLayout::AttributeLayout() : m_stride(0)
 {
 }
 
-void ym::AttributeLayout::push(Format format, const std::string& semanticName)
+void ym::AttributeLayout::push(Format format, const std::string& semanticName, unsigned int instanceDivisor)
 {
-	Attribute attribute(format, semanticName, m_stride);
+	Attribute attribute(format, semanticName, m_stride, instanceDivisor);
 	m_stride += attribute.getSize();
 	m_attributes.push_back(attribute);
 }
@@ -22,12 +22,17 @@ const std::vector<ym::AttributeLayout::Attribute>& ym::AttributeLayout::getAttri
 	return m_attributes;
 }
 
-ym::AttributeLayout::Attribute::Attribute(Format format, const std::string& semanticName, unsigned int offset) : 
-	m_offset(offset), m_semanticName(semanticName), m_size(0), m_type(Type::FLOAT), m_format(format)
+ym::AttributeLayout::Attribute::Attribute(Format format, const std::string& semanticName, unsigned int offset, unsigned int instanceDivisor) :
+	m_offset(offset), m_semanticName(semanticName), m_size(0), m_type(Type::FLOAT), m_format(format), m_instanceDivisor(instanceDivisor)
 {
 	m_count = countOfFormat(format);
 	m_type = typeOfFormat(format);
 	m_size = sizeOfType(m_type) * m_count;
+}
+
+unsigned int ym::AttributeLayout::Attribute::getInstanceDivisor() const
+{
+	return m_instanceDivisor;
 }
 
 unsigned int ym::AttributeLayout::Attribute::getCount() const
