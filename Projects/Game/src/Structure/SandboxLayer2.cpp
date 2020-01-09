@@ -24,8 +24,8 @@ void SandboxLayer2::onStart()
 
 	ym::Model::Info modelInfo(ym::Topology::TRIANGLE_STRIP, ym::Usage::STATIC);
 	ym::AttributeLayout layout;
-	layout.push(ym::Format::FLOAT_32_RGB, "POSITION");
-	layout.push(ym::Format::FLOAT_32_RG, "TEXCOORD");
+	layout.push(ym::Format::FLOAT_32_RGB, "POSITION", 0);
+	layout.push(ym::Format::FLOAT_32_RG, "TEXCOORD", 0);
 	m_model.setData(&(vertices[0].pos.x), (unsigned int)(sizeof(MyVertex) * vertices.size()),
 		indices.data(), (unsigned int)indices.size(), layout, modelInfo);
 

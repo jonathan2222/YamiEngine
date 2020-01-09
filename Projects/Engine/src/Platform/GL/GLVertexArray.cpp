@@ -37,6 +37,11 @@ void ym::GLVertexArray::addBuffer(VertexBuffer* vb, const AttributeLayout& layou
 		GLenum type = GLAPI::get()->convertType(attribute.getType());
 		unsigned int offset = attribute.getOffset();
 		glVertexAttribPointer(m_nextLocation, attribute.getCount(), type, GL_FALSE, layout.getStride(), BUFFER_OFFSET(offset));
+
+		// Set instance divisor, 0 if no instance, 1 if it should change per instance, 2 if every seconds instance and so on.
+		if(attribute.getInstanceDivisor() != 0)
+			glVertexAttribDivisor(m_nextLocation, attribute.getInstanceDivisor());
+
 		m_nextLocation++;
 	}
 }
